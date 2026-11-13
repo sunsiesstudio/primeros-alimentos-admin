@@ -116,7 +116,7 @@ onAuthStateChanged(auth,async u=>{
   $("login").classList.toggle("hide",!!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
-  try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>d.data()))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
+  try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>{const x=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
     $("upd").textContent=`Datos de ${snap.size} cuentas · ${new Date().toLocaleString("es-ES")} · Lectura de Firestore: ${snap.size} documentos`;}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
