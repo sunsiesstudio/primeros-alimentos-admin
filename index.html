@@ -54,6 +54,7 @@ main{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
 .idtags{display:flex;flex-wrap:wrap;gap:4px}.idtags span{font:700 .7rem Montserrat,sans-serif;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}.idtags span:last-child{color:var(--ic);background:color-mix(in srgb,var(--ic) 14%,transparent)}
 .ida{display:flex;gap:6px;padding:10px 14px 14px;flex-wrap:wrap}.ida .btn{margin:0}.ida .idx{margin-left:auto}.ida{flex-wrap:nowrap!important;gap:5px!important}.ida .btn{padding:6px 11px;white-space:nowrap}.idbk{display:inline-flex;align-items:center;gap:5px}.idbk.on{background:var(--ic);border-color:var(--ic);color:#fff}@media(max-width:600px){.ida .btn{padding-left:12px;padding-right:12px}}
 .idw{display:inline-block;font:700 .72rem Montserrat,sans-serif;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--ic) 16%,transparent);color:var(--ic);margin:2px 4px 2px 0}
+.ied{max-width:980px!important}.iedg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:start}.iedp{width:100%;border-radius:16px;display:block;background:#fbf4ea;aspect-ratio:4/5}@media(max-width:760px){.iedg{grid-template-columns:1fr}}
 .idc.is-usada{opacity:.75}.idc.is-descartada{opacity:.5}
 .ideas{padding-left:0;list-style:none;margin:0}
 .ideas li{background:var(--soft);border-radius:16px;padding:12px 14px;margin-bottom:8px}
@@ -434,11 +435,11 @@ function buildIdeas(){const S=window.__IDX;if(!S)return [];const {N,foods,alg,ta
   I({id:"x-semana-"+monday(today),ico:ILL.baby,big:String(aw),hook:`Semana ${monday(today).slice(5).split("-").reverse().join("/")}: ${aw} bebés activos`,body:`${users.length} cuentas, ${nw} bebés nuevos esta semana${nw0?` (${nw>=nw0?"+":""}${nw-nw0} frente a la anterior)`:""}. Lo que he aprendido y lo que toca.`,why:"Crecimiento",ch:["x"],fmt:"Post",pilar:"Detrás de la app",score:60,draft:`Build in public, semana ${monday(today).slice(5).split("-").reverse().join("/")}:\n· ${users.length} cuentas\n· ${aw} bebés apuntando comidas\n· ${nw} nuevos esta semana\nLo que he cambiado en la app: `});
   [10,50,100].forEach(h=>{const n=started.filter(i=>i.foods.size>=h).length;if(n)I({id:`x-hito-${h}-${n}`,ico:ILL.heart,big:String(n),hook:`${n} ${n===1?"bebé ha":"bebés han"} llegado a ${h} alimentos`,body:`Un hito para celebrar (y para contar cómo lo usa la gente).`,why:"Crecimiento",ch:h===100?["x","ig"]:["x"],fmt:"Post",pilar:"Detrás de la app",score:h===100?72:45})});
   // Temporada
-  TEMP[m].forEach((k,i)=>{const f=byK[k];I({id:`temp-${m}-${k}`,ico:fi(k),big:f&&N>=MIN?pct(f.t,N)+" %":MESN[m],hook:`${k}: está de temporada`,body:f&&N>=MIN?`Solo el ${pct(f.t,N)} % de los bebés de la app la ha probado. Cómo dársela según la edad.`:`Cómo dárselo según la edad, y una receta fácil.`,why:"Temporada · "+MESN[m],fmt:i%2?"Carrusel":"Reel",ch:["ig","tt"],pilar:i%2?"Guía y tips":"Receta",score:(f&&f.t<N*.3?68:57)-i*2})});
+  TEMP[m].forEach((k,i)=>{const f=byK[k];I({id:`temp-${m}-${k}`,ico:fi(k),big:f&&N>=MIN?pct(f.t,N)+" %":MESN[m],hook:`${k}, de temporada`,body:f&&N>=MIN?`Solo el ${pct(f.t,N)} % de los bebés de la app la ha probado. ¿Se la has dado ya?`:`Ahora está en su mejor momento. Te cuento cómo dársela según la edad.`,why:"Temporada · "+MESN[m],fmt:i%2?"Carrusel":"Reel",ch:["ig","tt"],pilar:i%2?"Guía y tips":"Receta",score:(f&&f.t<N*.3?68:57)-i*2})});
   const MIC={adviento:"Mandarina",navidad:"Lombarda",reyes:"Naranja",cuesta:"Calabaza",sanvalentin:"Fresa",pascua:"Pan",pascua2:"Pan",verano:"Yogur natural",viajes:"Plátano",agua:"Sandía",guarde:"Manzana",halloween:"Calabaza",otono:"Boniato"};
   MOM.forEach(([mm,a,b,k,t,body,p])=>{const dd0=(new Date(now.getFullYear(),mm,a)-now)/DAY;if((mm===m&&d>=a-0&&d<=b)||(dd0>0&&dd0<=21))I({id:`mom-${k}-${now.getFullYear()}`,ico:(window.foodIcoHas&&window.foodIcoHas(MIC[k])?fi(MIC[k]):ILL.heart),big:dd0>0?`${a} ${MESN[mm].slice(0,3)}`:`hasta ${b} ${MESN[mm].slice(0,3)}`,hook:t,body,why:dd0>0?`Empieza en ${Math.ceil(dd0)} días: prepáralo ya`:"Es ahora",fmt:p==="Receta"?"Reel":"Carrusel",ch:["ig","tt"],pilar:p,score:80})});
   return out.sort((a,b)=>b.score-a.score)}
-function drawIdeas(){const el=$("t-redes");if(!el)return;const all=buildIdeas(),vs=seen(),now=Date.now();let ch=false;
+function drawIdeas(){const el=$("t-redes");if(!el)return;const all=buildIdeas().map(x=>{const e=(IDS[x.id]||{}).edit;return e?{...x,...e}:x}),vs=seen(),now=Date.now();let ch=false;
   all.forEach(x=>{if(!vs[x.id]){vs[x.id]=now;ch=true}x.nueva=now-vs[x.id]<7*DAY&&!IDS[x.id]});if(ch)try{localStorage.setItem(IKEY,JSON.stringify(vs))}catch(e){}
   const st=x=>(IDS[x.id]||{}).estado||"",F={nuevas:x=>!st(x),notion:x=>st(x)==="notion"||st(x)==="guardada",usada:x=>st(x)==="usada",descartada:x=>st(x)==="descartada"};
   const cnt=k=>all.filter(F[k]).length,L=all.filter(F[IDF]);
@@ -447,7 +448,7 @@ function drawIdeas(){const el=$("t-redes");if(!el)return;const all=buildIdeas(),
     <div class="idt"><div class="idtags">${x.nueva?'<span class="idn">Nueva</span>':""}<span>${x.ch.map(k=>CHN[k]).join(" · ")}</span><span>${esc(x.fmt)}</span><span>${esc(x.pilar)}</span></div>
       <h3>${esc(x.hook)}</h3><p>${esc(x.body)}</p><small class="mute"><span class="idw">${esc(x.why)}</span>${s==="usada"&&e.at&&e.at.toDate?` · usada el ${e.at.toDate().toLocaleDateString("es-ES")}`:""}${s==="notion"?(nu?` · <a href="${esc(nu)}" target="_blank" rel="noopener">Abrir en Notion</a>`:" · llega a Notion en menos de una hora"):""}</small></div>
     <div class="ida">${s==="notion"?`<button class="btn sm idbk on" data-ia="" data-id="${esc(x.id)}" title="Quitar de guardadas">${BKF} Guardada</button>`:s?"":`<button class="btn sm idbk" data-ia="notion" data-id="${esc(x.id)}" title="Guardar (se pasa a Notion)">${BKO} Guardar</button>`}
-      <button class="btn sm" data-img="${esc(x.id)}">Imagen</button>
+      <button class="btn sm" data-img="${esc(x.id)}">Editar</button>
       ${s==="usada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Desmarcar</button>`:s==="descartada"?"":`<button class="btn sm" data-ia="usada" data-id="${esc(x.id)}">✓ Usada</button>`}
       ${s==="descartada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Recuperar</button>`:`<button class="btn sm idx" data-ia="descartada" data-id="${esc(x.id)}" aria-label="Descartar">✕</button>`}</div></article>`};
   el.innerHTML=`${IDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar las ideas falta añadir la colección <b>ideas</b> a las reglas de Firestore.</div>`}
@@ -469,6 +470,15 @@ const svgImg=s=>new Promise((ok,ko)=>{if(!s)return ok(null);s=s.replace(/<svg(?!
 function wrap(ctx,t,maxW){const w=String(t).split(" "),L=[];let l="";w.forEach(x=>{const tt=l?l+" "+x:x;if(ctx.measureText(tt).width>maxW&&l){L.push(l);l=x}else l=tt});if(l)L.push(l);return L}
 function star(ctx,x,y,r,c){ctx.save();ctx.translate(x,y);ctx.beginPath();for(let i=0;i<10;i++){const a=Math.PI/5*i-Math.PI/2,rr=i%2?r*.45:r;ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}ctx.closePath();ctx.fillStyle=c;ctx.fill();ctx.restore()}
 function heart(ctx,x,y,s,c){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.beginPath();ctx.moveTo(0,-4);ctx.bezierCurveTo(-3,-10,-12,-8.5,-12,-1.7);ctx.bezierCurveTo(-12,4.3,0,10.3,0,10.3);ctx.bezierCurveTo(0,10.3,12,4.3,12,-1.7);ctx.bezierCurveTo(12,-8.5,3,-10,0,-4);ctx.fillStyle=c;ctx.fill();ctx.restore()}
+// El logo (el mismo SVG de la cabecera: texto en arco + estrella con carita), dibujado en el canvas
+function drawLogo(ctx,cx,top,w){const k=w/640,ox=cx-w/2,P=t=>[(1-t)*(1-t)*10+2*(1-t)*t*320+t*t*630,(1-t)*(1-t)*185+2*(1-t)*t*10+t*t*185];
+  const pts=[],N=400;let L=0;for(let i=0;i<=N;i++){const p=P(i/N);if(i)L+=Math.hypot(p[0]-pts[i-1][0],p[1]-pts[i-1][1]);pts.push([...p,L])}
+  const at=d=>{let i=pts.findIndex(p=>p[2]>=d);if(i<1)i=1;const a=pts[i-1],b=pts[i];return [a[0],a[1],Math.atan2(b[1]-a[1],b[0]-a[0])]};
+  ctx.save();ctx.translate(ox,top);ctx.scale(k,k);ctx.font='400 56px "Luckiest Guy"';ctx.fillStyle="#4a8760";ctx.textAlign="center";ctx.textBaseline="alphabetic";
+  const t="Primeros alimentos",tw=ctx.measureText(t).width;let d=(L-tw)/2;
+  for(const ch of t){const cw=ctx.measureText(ch).width,[x,y,an]=at(d+cw/2);ctx.save();ctx.translate(x,y);ctx.rotate(an);ctx.fillText(ch,0,0);ctx.restore();d+=cw}
+  ctx.translate(279,112);ctx.scale(3.4,3.4);ctx.fillStyle="#c96a47";ctx.beginPath();[[12,1.5],[14.9,8.4],[22.4,9.1],[16.7,14],[18.4,21.4],[12,17.5],[5.6,21.4],[7.3,14],[1.6,9.1],[9.1,8.4]].forEach(([a,b],i)=>i?ctx.lineTo(a,b):ctx.moveTo(a,b));ctx.closePath();ctx.fill();
+  ctx.strokeStyle="#fbf4ea";ctx.lineWidth=.9;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(9.3,11.2);ctx.lineTo(9.3,12.1);ctx.moveTo(14.7,11.2);ctx.lineTo(14.7,12.1);ctx.moveTo(9.8,13.4);ctx.quadraticCurveTo(12,15.3,14.2,13.4);ctx.stroke();ctx.restore()}
 async function ideaImg(x,q){const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const ctx=cv.getContext("2d"),c=PIL[x.pilar]||"#4a8760",ink="#3a2a22";
   try{await Promise.all(['400 120px "Luckiest Guy"','700 60px Montserrat','500 40px Montserrat'].map(f=>document.fonts.load(f)))}catch(e){}
   ctx.fillStyle="#fbf4ea";ctx.fillRect(0,0,W,H);
@@ -487,12 +497,24 @@ async function ideaImg(x,q){const W=1080,H=1350,cv=document.createElement("canva
   // gancho
   ctx.fillStyle=ink;ctx.font='700 64px Montserrat';let y=930;wrap(ctx,x.hook,900).slice(0,3).forEach(l=>{ctx.fillText(l,540,y);y+=78});
   ctx.fillStyle="#6b5d52";ctx.font='500 38px Montserrat';y+=10;wrap(ctx,x.body,880).slice(0,Math.max(0,Math.floor((1210-y)/52))).forEach(l=>{ctx.fillText(l,540,y);y+=52});
-  ctx.font='400 40px "Luckiest Guy"';ctx.fillStyle="#c96a47";ctx.fillText("PRIMEROS ALIMENTOS",540,1300);star(ctx,540-ctx.measureText("PRIMEROS ALIMENTOS").width/2-36,1286,16,"#c96a47");
+  drawLogo(ctx,540,1212,300);
   return cv.toDataURL("image/jpeg",q||.9)}
-async function showImg(x){const o=document.createElement("div");o.className="fdet";o.innerHTML=`<div class="fdi" style="max-width:560px;text-align:center"><button class="btn sm fx" aria-label="Cerrar">✕</button><h2 style="margin:0 0 12px">${esc(x.hook)}</h2><p class="mute">Creando imagen…</p></div>`;
-  document.body.appendChild(o);document.body.style.overflow="hidden";const close=()=>{o.remove();document.body.style.overflow=""};o.querySelector(".fx").onclick=close;
-  const u=await ideaImg(x,.92),slug=x.id.normalize("NFD").replace(/[^\w-]+/g,"-").toLowerCase();
-  o.querySelector("p").outerHTML=`<img src="${u}" alt="" style="width:100%;border-radius:18px;display:block;margin:0 0 14px"><a class="btn p" href="${u}" download="idea-${slug}.jpg">Descargar (1080×1350)</a>`}
+async function showImg(x){const o=document.createElement("div");o.className="fdet";
+  const f=(k,l,ta)=>`<label class="fl"><span>${l}</span>${ta?`<textarea data-e="${k}" rows="${ta}">${esc(x[k]||"")}</textarea>`:`<input data-e="${k}" value="${esc(x[k]||"")}">`}</label>`;
+  o.innerHTML=`<div class="fdi ied"><button class="btn sm fx" aria-label="Cerrar">✕</button><h2 style="margin:0 0 14px">Editar el post</h2>
+   <div class="iedg"><div><img class="iedp" alt=""><a class="btn p" data-dl download="idea.jpg" style="margin-top:12px">Descargar imagen (1080×1350)</a></div>
+   <div>${f("big","Número grande")}${f("hook","Título",2)}${f("body","Texto de la imagen",3)}${f("draft","Texto del post (el que va debajo)",6)}
+   <p class="mute sm">Los cambios se ven al momento en la imagen. Si la idea ya está en Notion, allí se queda como estaba.</p>
+   <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" data-x>Cancelar</button><button class="btn pri" data-sv>Guardar cambios</button></div></div></div></div>`;
+  document.body.appendChild(o);document.body.style.overflow="hidden";const close=()=>{o.remove();document.body.style.overflow=""};o.querySelector(".fx").onclick=close;o.querySelector("[data-x]").onclick=close;
+  const y={...x};if(!y.draft)y.draft=`${x.hook}\n\n${x.body}`;o.querySelector('[data-e="draft"]').value=y.draft;
+  const slug=x.id.normalize("NFD").replace(/[^\w-]+/g,"-").toLowerCase();let tm=0;
+  const draw=async()=>{const u=await ideaImg(y,.92);o.querySelector(".iedp").src=u;const a=o.querySelector("[data-dl]");a.href=u;a.download=`idea-${slug}.jpg`};
+  o.querySelectorAll("[data-e]").forEach(el=>el.oninput=()=>{y[el.dataset.e]=el.value;clearTimeout(tm);tm=setTimeout(draw,250)});
+  o.querySelector("[data-sv]").onclick=async ev=>{const b=ev.target;b.disabled=true;const edit={big:y.big,hook:y.hook.trim(),body:y.body.trim(),draft:y.draft.trim()};
+    IDS[x.id]={...(IDS[x.id]||{}),edit};try{await setDoc(doc(db,"ideas",x.id),{edit,por:(auth.currentUser||{}).email||"",estado:(IDS[x.id]||{}).estado||""},{merge:true})}catch(e){alert("No se ha podido guardar: "+(e.code||e.message));b.disabled=false;return}
+    close();drawIdeas()};
+  draw()}
 // Ficha completa de un alimento
 const RLAB={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción"};
 function openFood(name){const st=window.__ST;if(!st)return;const {started,N,LL}=st;
