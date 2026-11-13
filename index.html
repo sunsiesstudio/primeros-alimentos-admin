@@ -116,7 +116,7 @@ onAuthStateChanged(auth,async u=>{
   $("login").classList.toggle("hide",!!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
-  try{const snap=await getDocs(collection(db,"users"));render(snap.docs.map(d=>d.data()));
+  try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>d.data()))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
     $("upd").textContent=`Datos de ${snap.size} cuentas · ${new Date().toLocaleString("es-ES")} · Lectura de Firestore: ${snap.size} documentos`;}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
@@ -135,12 +135,12 @@ const cols=(title,rows,note)=>{const mx=Math.max(1,...rows.map(r=>r[1]));
 function render(users){
   const babies=[];
   users.forEach(u=>(u.babies||[]).forEach(b=>babies.push({...b,_ts:u.ts||0})));
-  const real=babies.filter(b=>(b.log||[]).some(l=>l&&!l.pre)||(b.nm||"").trim());
+  const real=babies.filter(b=>(Array.isArray(b.log)?b.log:[]).some(l=>l&&!l.pre)||(b.nm||"").trim());
   const now=Date.now();
   const act7=users.filter(u=>u.ts&&now-u.ts<7*DAY).length,act30=users.filter(u=>u.ts&&now-u.ts<30*DAY).length;
 
   // primer y último día con registro por bebé
-  const info=real.map(b=>{const L=(b.log||[]).filter(l=>l&&l.d&&!l.pre);const ds=L.map(l=>l.d).sort();
+  const info=real.map(b=>{const L=(Array.isArray(b.log)?b.log:[]).filter(l=>l&&l.f&&l.d&&!l.pre);const ds=L.map(l=>l.d).sort();
     const first=ds[0]||null,last=ds[ds.length-1]||null;
     const foods=new Set(L.map(l=>l.f));
     const firstWeek=first?new Set(L.filter(l=>dd(first,l.d)<7).map(l=>l.f)).size:0;
@@ -185,10 +185,10 @@ function render(users){
   const topT=Object.entries(tried).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,pct(v,N)+" %"]);
   const ratio=(o)=>Object.entries(o).filter(([k])=>(rated[k]||0)>=Math.max(3,MIN)).map(([k,v])=>[k,pct(v,rated[k]),pct(v,rated[k])+" %"]).sort((a,b)=>b[1]-a[1]).slice(0,12);
   const algT=Object.entries(AGD).map(([g,fs])=>{const n=started.filter(i=>fs.some(f=>i.foods.has(f))).length;return [AGN[g],n,pct(n,N)+" %"]}).sort((a,b)=>b[1]-a[1]);
-  const rxG={};real.forEach(b=>(b.rx||[]).forEach(r=>{const k=AGN[r.g]||r.f||r.g||"Otro";rxG[k]=(rxG[k]||0)+1}));
-  const alG={};real.forEach(b=>(b.al||[]).forEach(a=>{const k=AGN[a]||a;alG[k]=(alG[k]||0)+1}));
+  const rxG={};real.forEach(b=>(Array.isArray(b.rx)?b.rx:[]).forEach(r=>{if(!r)return;const k=AGN[r.g]||r.f||r.g||"Otro";rxG[k]=(rxG[k]||0)+1}));
+  const alG={},alS={};real.forEach(b=>{const al=b.al&&typeof b.al==="object"?b.al:{};Object.entries(Array.isArray(al)?Object.fromEntries(al.map(x=>[x,"alergia"])):al).forEach(([g,v])=>{const k=AGN[g]||g;if(v==="alergia")alG[k]=(alG[k]||0)+1;else if(v==="sospecha")alS[k]=(alS[k]||0)+1})});
   // cacas: días con dato
-  let ccDays=0,ccSum=0,cc0=0;real.forEach(b=>Object.values(b.dn||{}).forEach(v=>{if(!v||!Array.isArray(v.t))return;
+  let ccDays=0,ccSum=0,cc0=0;real.forEach(b=>Object.values(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(v=>{if(!v||!Array.isArray(v.t))return;
     const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccDays++;ccSum+=n;if(n===0)cc0++}));
   const avgFoods=N?Math.round(started.reduce((s,i)=>s+i.foods.size,0)/N):0;
   const med=a=>{a=[...a].sort((x,y)=>x-y);return a.length?a[Math.floor(a.length/2)]:null};
@@ -206,7 +206,8 @@ function render(users){
     ${bars("Los que más cuestan",ratio(bad),{alt:true,note:"% de valoraciones «poco» o «no»."})}
     ${bars("Alérgenos ya introducidos",algT,{note:"% de bebés que ya han probado cada grupo."})}
     ${bars("Reacciones por grupo",Object.entries(rxG).sort((a,b)=>b[1]-a[1]),{alt:true})}
-    ${bars("Alergias diagnosticadas",Object.entries(alG).sort((a,b)=>b[1]-a[1]),{alt:true})}
+    ${bars("Alergias confirmadas",Object.entries(alG).sort((a,b)=>b[1]-a[1]),{alt:true})}
+    ${bars("Sospechas de alergia",Object.entries(alS).sort((a,b)=>b[1]-a[1]),{alt:true})}
   </div>`;
 
   // ---------- ideas para redes ----------
