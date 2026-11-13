@@ -172,11 +172,11 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
 <div id="login"><svg class="lgo" viewBox="0 0 640 215" role="img" aria-label="Primeros alimentos"><defs><path id="ARC2" d="M10,185 Q320,10 630,185"/></defs><text class="disp" text-anchor="middle" style="font-size:56px;fill:var(--green)"><textPath href="#ARC2" startOffset="50%">Primeros alimentos</textPath></text><g transform="translate(279 112) scale(3.4)" style="fill:var(--terra)"><polygon points="12,1.5 14.9,8.4 22.4,9.1 16.7,14 18.4,21.4 12,17.5 5.6,21.4 7.3,14 1.6,9.1 9.1,8.4"/><path d="M9.3 11.2v.9M14.7 11.2v.9M9.8 13.4q2.2 1.9 4.4 0" style="stroke:var(--bg);fill:none;stroke-width:.9;stroke-linecap:round"/></g></svg><div class="art"><span class="sh"></span><svg class="f f1" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="18" r="11" fill="#e05a4c"/><path d="M16 7c0-3 2-5 4-5" stroke="#6a4a2a" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="21" cy="6" rx="4" ry="2" fill="#4a8760" transform="rotate(-25 21 6)"/></svg><svg class="f f2" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30c-6 0-9-5-7-13l7-15 7 15c2 8-1 13-7 13z" fill="#ef8a3c"/><path d="M16 2l-3-1M16 2l3-1" stroke="#4a8760" stroke-width="2" stroke-linecap="round"/></svg><svg class="f f3" viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="12" r="6" fill="#4a8760"/><circle cx="20" cy="10" r="6" fill="#5c9c71"/><circle cx="16" cy="16" r="6" fill="#4a8760"/><rect x="14" y="18" width="4" height="12" rx="2" fill="#7fae7c"/></svg><svg class="f f4" viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="17" rx="9" ry="12" fill="#f3d36b"/><path d="M12 6q4-5 8 0" stroke="#4a8760" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><svg class="st" viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--terra)" d="M12 1.5l2.9 6.9 7.5.7-5.7 4.9 1.7 7.4L12 17.5l-6.4 3.9 1.7-7.4-5.7-4.9 7.5-.7z"/><g stroke="var(--card)" stroke-width=".9" stroke-linecap="round" fill="none"><path d="M9.3 11.2v.9M14.7 11.2v.9"/><path d="M9.8 13.4q2.2 1.9 4.4 0"/></g></svg></div><h1>Panel de control</h1><p class="lead">Cómo va la app, qué comen los bebés y el blog, todo en un sitio.</p><button id="in" class="gbtn"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.2C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.8c4.3-4 6.9-9.9 6.9-17.2z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C1 16.5 0 20.1 0 24s1 7.5 2.7 10.8l7.8-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.8c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.2-13.4-9.9l-7.9 6.2C6.6 42.6 14.6 48 24 48z"/></svg>Entrar con Google</button><p id="err" class="mute"></p><div class="foot">Admin · Primeros Alimentos</div></div>
 
 <main id="app" class="hide">
-  <p id="upd" class="mute"></p>
   <section id="t-uso"></section>
   <section id="t-bebes" class="hide"></section>
   <section id="t-redes" class="hide"></section>
   <section id="t-blog" class="hide"></section>
+  <p id="upd" class="mute sm" style="text-align:center;margin:32px 0 8px;font-size:.8rem"></p>
 </main>
 
 <script src="icons.js"></script>
@@ -213,7 +213,7 @@ onAuthStateChanged(auth,async u=>{
   if(!u)return;
   $("upd").textContent="Cargando datos…";
   try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>{const x=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
-    $("upd").textContent=`Datos de ${snap.size} cuentas · ${new Date().toLocaleString("es-ES")} · Lectura de Firestore: ${snap.size} documentos`;}
+    $("upd").textContent=`Datos de ${snap.size} cuentas · actualizado ${new Date().toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"})}`;}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");document.body.classList.add("out");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
   renderBlog();
