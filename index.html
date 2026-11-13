@@ -100,7 +100,7 @@ select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-
 .dt.nw td{white-space:nowrap}.dt{width:100%;border-collapse:collapse;font-size:13.5px}.dt td,.dt th{padding:8px 6px}.dt .r{text-align:right}.dt small{color:var(--mute)}
 .dt th.srt{cursor:pointer;user-select:none}.dt th.on{color:var(--ink)}.dt tr:hover td{background:var(--soft)}
 .ib{display:inline-block;width:90px;height:8px;border-radius:99px;background:var(--soft);vertical-align:middle;overflow:hidden;margin-right:6px}.ib i{display:block;height:100%;border-radius:99px}
-.pill{display:inline-block;min-width:46px;text-align:center;padding:2px 8px;border-radius:99px;font-weight:700;font-size:12.5px;background:color-mix(in srgb,currentColor 15%,transparent)!important}
+.pill{display:inline-block;white-space:nowrap;min-width:46px;text-align:center;padding:2px 8px;border-radius:99px;font-weight:700;font-size:12.5px;background:color-mix(in srgb,currentColor 15%,transparent)!important}
 #tip{position:fixed;left:0;top:0;z-index:50;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:var(--bg);font:600 12.5px/1.4 Montserrat,sans-serif;padding:7px 10px;border-radius:10px;max-width:280px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 @media (max-width:640px){.dt .hm{display:none}.ib{width:50px}.fn{grid-template-columns:90px 1fr 34px 40px}}
 /* login */
@@ -122,6 +122,23 @@ body.out header{display:none}
 #login .gbtn:active{transform:translateY(3px);box-shadow:0 3px 0 color-mix(in srgb,var(--ink) 60%,transparent)}
 #login .gbtn svg{width:22px;height:22px;background:#fff;border-radius:50%;padding:3px;box-sizing:content-box}
 #login .foot{position:absolute;bottom:22px;left:0;right:0;font-size:12px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+@media (max-width:640px){
+.bt tr:first-child{display:none}.bt tr{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.bt td{border:0;padding:0;min-width:0}.bt td:nth-child(1){grid-column:1/-1}.bt td:nth-child(2){grid-column:1;grid-row:2;align-self:center;font-size:13px}
+.bt td:nth-child(3){grid-column:1/-1;grid-row:3}.bt td:nth-child(3) select{width:100%}.bt td:nth-child(4){grid-column:2;grid-row:2;text-align:right;align-self:center}
+#t-blog .grid{grid-template-columns:repeat(2,1fr)}#t-blog .kpi b{font-size:1.6rem}
+}
+svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[fill="none"]{stroke:rgba(0,0,0,.4);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}.fd .o.w{stroke:#fff!important}
+.fc{white-space:nowrap}.fic{display:inline-block;width:26px;height:26px;vertical-align:middle;margin-right:8px;background:var(--soft);border-radius:50%;padding:2px}
+.hill{position:absolute;right:12px;top:12px;width:46px;height:46px;animation:hb 3.2s ease-in-out infinite}.hill svg{width:100%;height:100%}
+@keyframes hb{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(4deg)}}
+@media (prefers-reduced-motion:reduce){.hill{animation:none}}
+.pods{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.pod{background:var(--soft);border-radius:18px;padding:12px 14px}.pt{font-weight:800;font-size:13px;margin-bottom:8px}
+.pi{display:grid;grid-template-columns:18px 44px 1fr auto;gap:8px;align-items:center;padding:6px 0}.pi+.pi{border-top:1px solid var(--line)}
+.pr{font:400 1.1rem "Luckiest Guy",system-ui;color:var(--mute)}.pic{width:44px;height:44px;border-radius:50%;background:var(--card);padding:3px}.pn{font-weight:700;font-size:14px}.pv{font:400 1.25rem "Luckiest Guy",system-ui;letter-spacing:.02em}
+.pi:first-child .pic{width:52px;height:52px;margin:-4px}.s1t{color:var(--s1)}.s2t{color:var(--s2)}
+.hero .hl{padding-right:52px}.card:has(.dt){overflow-x:auto}
+@media (max-width:640px){.heroes{grid-template-columns:1fr 1fr;gap:10px}.hero{min-height:0;padding:14px}.hero .hv b{font-size:1.8rem}.hero .hl{padding-right:38px;font-size:12px}.hill{width:34px;height:34px;right:10px;top:10px}.hero small{max-width:none;font-size:11px}.spark{position:static;display:block;width:100%;margin-top:8px}.dt{font-size:12.5px}.ib{width:40px}}
 </style>
 </head>
 <body class="out">
@@ -145,6 +162,7 @@ body.out header{display:none}
   <section id="t-blog" class="hide"></section>
 </main>
 
+<script src="icons.js"></script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -193,8 +211,8 @@ const tip=s=>` data-tip="${esc(s)}"`;
 // Cifra grande con variación y mini tendencia
 const spark=(vals,cls="s1")=>{if(!vals||vals.length<2)return"";const mx=Math.max(1,...vals),W=120,H=34,st=W/(vals.length-1);
   const pts=vals.map((v,i)=>[i*st,H-3-(v/mx)*(H-8)]);return `<svg class="spark ${cls}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="M${pts.map(p=>p.map(n=>n.toFixed(1)).join(" ")).join("L")}"/><circle cx="${pts.at(-1)[0]}" cy="${pts.at(-1)[1]}" r="3"/></svg>`};
-const hero=(v,l,{sub="",delta=null,sp=null,goal=null}={})=>{let d="";if(delta!=null&&isFinite(delta)){const up=delta>0,eq=delta===0;d=`<span class="dl ${eq?"":up?"up":"dn"}">${eq?"=":up?"▲":"▼"} ${Math.abs(delta)}${typeof delta==="number"&&String(sub).includes("%")?"":""}</span>`}
-  return `<div class="card hero"><div class="hl">${l}</div><div class="hv"><b>${v}</b>${d}</div>${goal?`<div class="goal"${tip(`${goal[0]} % · objetivo ${goal[1]} %`)}><i style="width:${Math.min(100,goal[0])}%"></i><u style="left:${goal[1]}%"></u></div>`:""}<small>${sub}</small>${sp?spark(sp):""}</div>`};
+const hero=(v,l,{sub="",delta=null,sp=null,goal=null,ill=""}={})=>{let d="";if(delta!=null&&isFinite(delta)){const up=delta>0,eq=delta===0;d=`<span class="dl ${eq?"":up?"up":"dn"}">${eq?"=":up?"▲":"▼"} ${Math.abs(delta)}${typeof delta==="number"&&String(sub).includes("%")?"":""}</span>`}
+  return `<div class="card hero">${ill?`<span class="hill">${ill}</span>`:""}<div class="hl">${l}</div><div class="hv"><b>${v}</b>${d}</div>${goal?`<div class="goal"${tip(`${goal[0]} % · objetivo ${goal[1]} %`)}><i style="width:${Math.min(100,goal[0])}%"></i><u style="left:${goal[1]}%"></u></div>`:""}<small>${sub}</small>${sp?spark(sp):""}</div>`};
 // Barras horizontales con tooltip
 const hbars=(rows,{c="s1",fmt=null}={})=>{if(!rows.length)return EMPTY;const mx=Math.max(1,...rows.map(r=>r[1]));
   return `<div class="bars">${rows.map(([k,v,lab,t])=>`<div class="row"${tip(t||`${k}: ${lab??v}`)}><span>${esc(k)}</span><span class="tr"><i class="${c}" style="width:${Math.max(1.5,v*100/mx)}%"></i></span><em>${lab??v}</em></div>`).join("")}</div>`};
@@ -216,6 +234,13 @@ const stack=(label,parts,tot)=>{const ps=parts.filter(p=>p[1]>0);if(!tot||!ps.le
   return `<div class="stk"><div class="sl">${esc(label)} <small>${tot} bebés</small></div><div class="sb">${ps.map(([k,v],i)=>`<i style="width:${v*100/tot}%;opacity:${op[Math.min(i,5)]}"${tip(`${label} · ${k}: ${v} (${pct(v,tot)} %)`)}></i>`).join("")}</div>
     <div class="sg">${ps.map(([k,v],i)=>`<span><i style="opacity:${op[Math.min(i,5)]}"></i>${esc(k)} <b>${pct(v,tot)} %</b></span>`).join("")}</div></div>`};
 
+const fi=n=>window.foodIco?window.foodIco(n):"";
+const gi=g=>{const l=AGD[g]||[];return fi(l.find(x=>window.foodIcoHas&&window.foodIcoHas(x))||l[0]||"")};
+const ILL={
+baby:`<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="25" r="17" fill="#f3c9a8"/><path d="M14 14q10-10 20 0" fill="#7a5230"/><circle cx="18" cy="25" r="2" fill="#3a2a22"/><circle cx="30" cy="25" r="2" fill="#3a2a22"/><path d="M19 32q5 4 10 0" stroke="#3a2a22" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="14" cy="30" r="2.5" fill="#f0a08a" opacity=".7"/><circle cx="34" cy="30" r="2.5" fill="#f0a08a" opacity=".7"/></svg>`,
+heart:`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42S6 31 6 18c0-6 5-10 10-10 4 0 6.5 2 8 5 1.5-3 4-5 8-5 5 0 10 4 10 10 0 13-18 24-18 24z" fill="#e05a6a"/><path d="M15 14q-4 2-4 6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/></svg>`,
+plate:`<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="26" r="18" fill="#fffdf6" stroke="#d8d3bc" stroke-width="2"/><circle cx="24" cy="26" r="11" fill="none" stroke="#e8e2cc" stroke-width="2"/><circle cx="20" cy="23" r="4" fill="#f08a2a"/><circle cx="28" cy="28" r="4" fill="#4a8a3c"/><circle cx="25" cy="21" r="3" fill="#e0402a"/></svg>`,
+retry:`<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="18" fill="#a7c7a0"/><path d="M16 26a8 8 0 1 0 3-7" stroke="#26402e" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14 14v7h7" stroke="#26402e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`};
 /* ---------- cálculos y pintado ---------- */
 const GOALN={iron:"Hierro",fiber:"Fibra",omega3:"Omega-3",calcium:"Calcio",protein:"Proteína",zinc:"Zinc",vitc:"Vitamina C",alg:"Alérgenos a tiempo",verd:"Más verduras",x100:"100 alimentos",xvar:"Rico y variado"};
 const DIETN={om:"De todo",veg:"Vegetariana",vegan:"Vegana",ovo:"Ovolacto",pesc:"Pescetariana"};
@@ -294,7 +319,7 @@ function render(users){
   const alg=Object.entries(AGD).map(([g,fs])=>{const intro=started.filter(i=>fs.some(f=>i.foods.has(f)));const ms=intro.filter(i=>i.b.bd).map(i=>months(i.b.bd,i.L.find(l=>fs.includes(l.f)).d)).filter(m=>m!=null&&m>=4&&m<=36);
     return {g,n:AGN[g],p:pct(intro.length,N),c:intro.length,age:ms.length>=3?med(ms):null,rx:rxG[g]||0,al:alG[g]||0,su:alS[g]||0}}).sort((a,b)=>b.p-a.p);
   const algNo=alg.filter(a=>!a.c).map(a=>a.n),algY=alg.filter(a=>a.c);
-  const algTable=N?`<table class="dt nw"><tr><th>Grupo</th><th>Ya lo han probado</th><th class="r">Edad típica</th><th class="r">Reacciones</th><th class="r">Alergias</th></tr>${algY.map(a=>`<tr${tip(`${a.n}: ${a.c} de ${N} bebés lo han probado${a.age!=null?`, la mitad antes de los ${a.age+1} meses`:""}`)}><td>${a.n}</td><td><span class="ib"><i class="s1" style="width:${a.p}%"></i></span>${a.p} % <small>(${a.c})</small></td><td class="r">${a.age!=null?a.age+" m":"—"}</td><td class="r">${a.rx||"—"}</td><td class="r">${a.al?a.al+" conf.":""}${a.al&&a.su?" · ":""}${a.su?a.su+" sosp.":""}${!a.al&&!a.su?"—":""}</td></tr>`).join("")}</table>${algNo.length?`<p class="mute note" style="margin-top:10px">Aún sin probar: ${algNo.join(", ")}.</p>`:""}`:EMPTY;
+  const algTable=N?`<table class="dt nw"><tr><th>Grupo</th><th>Ya lo han probado</th><th class="r">Edad típica</th><th class="r">Reacciones</th><th class="r">Alergias</th></tr>${algY.map(a=>`<tr${tip(`${a.n}: ${a.c} de ${N} bebés lo han probado${a.age!=null?`, la mitad antes de los ${a.age+1} meses`:""}`)}><td class="fc"><span class="fic">${gi(a.g)}</span>${a.n}</td><td><span class="ib"><i class="s1" style="width:${a.p}%"></i></span>${a.p} % <small>(${a.c})</small></td><td class="r">${a.age!=null?a.age+" m":"—"}</td><td class="r">${a.rx||"—"}</td><td class="r">${a.al?a.al+" conf.":""}${a.al&&a.su?" · ":""}${a.su?a.su+" sosp.":""}${!a.al&&!a.su?"—":""}</td></tr>`).join("")}</table>${algNo.length?`<p class="mute note" style="margin-top:10px">Aún sin probar: ${algNo.join(", ")}.</p>`:""}`:EMPTY;
   // ritmo
   const rit=[];for(let w=0;w<8;w++){const el=started.filter(i=>dd(i.first,today)>=(w+1)*7);if(!el.length){rit.push(["S"+(w+1),0]);continue}
     rit.push(["S"+(w+1),Math.round(el.reduce((s,i)=>{const seen=new Set();let n=0;i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);const x=dd(i.first,l.d);if(x>=w*7&&x<(w+1)*7)n++}});return s+n},0)/el.length*10)/10,`Semana ${w+1}: ${(el.reduce((s,i)=>{const seen=new Set();let n=0;i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);const x=dd(i.first,l.d);if(x>=w*7&&x<(w+1)*7)n++}});return s+n},0)/el.length).toFixed(1)} alimentos nuevos de media (${el.length} bebés)`])}
@@ -306,24 +331,24 @@ function render(users){
   const ccA={};let ccD=0,ccS=0,cc0=0;real.forEach(b=>Object.entries(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(([d,v])=>{if(!v||!Array.isArray(v.t))return;const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccD++;ccS+=n;if(!n)cc0++;const m=months(b.bd,d);if(m==null)return;const k=m<6?"<6":m>=12?"12+":String(m);(ccA[k]=ccA[k]||[]).push(n)}));
   const ccRows=["<6","6","7","8","9","10","11","12+"].filter(k=>ccA[k]&&ccA[k].length>=3).map(k=>{const a=ccA[k],v=Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10;return [k+" m",v,`${k} meses: ${v} cacas al día de media (${a.length} días apuntados)`]});
 
+  const fv3=foods.filter(f=>f.n>=3),col=(t,list,fmt,cls)=>`<div class="pod"><div class="pt">${t}</div>${list.length?list.map((f,k)=>`<div class="pi"${tip(`${f.k}: ${fmt(f,true)}`)}><span class="pr">${k+1}</span><span class="pic">${fi(f.k)}</span><span class="pn">${esc(f.k)}</span><span class="pv ${cls}">${fmt(f)}</span></div>`).join(""):EMPTY}</div>`;
+  const podium=`<div class="pods">${col("Los más probados",[...foods].sort((a,b)=>b.t-a.t).slice(0,3),(f,l)=>l?`${f.t} de ${N} bebés`:`${pct(f.t,N)} %`,"")}${col("Les encanta",[...fv3].sort((a,b)=>b.love-a.love||b.n-a.n).slice(0,3),(f,l)=>l?`le encanta el ${f.love} % de ${f.n} valoraciones`:`${f.love} %`,"s1t")}${col("Les cuesta",[...fv3].sort((a,b)=>b.bad-a.bad||b.n-a.n).slice(0,3),(f,l)=>l?`no o poco el ${f.bad} % de ${f.n} valoraciones · «no lo quiere» ${f.no} veces`:`${f.bad} %`,"s2t")}</div>`;
   $("t-bebes").innerHTML=`<div class="heroes">
-      ${hero(N,"Bebés que han empezado",{sub:`${LL.length} registros en total`})}
-      ${hero(avgF,"Alimentos distintos de media",{sub:`por bebé · ${started.filter(i=>nf(i)>=100).length} ya llegan a 100`})}
-      ${hero(rated.length?loveP+" %":"—","Valoraciones «le encanta»",{sub:`${rated.length} valoraciones`})}
-      ${hero(firstBad?pct(laterOk,firstBad)+" %":"—","Acaban gustando",{sub:firstBad?`de lo que la 1.ª vez no quiso (${laterOk} de ${firstBad})${tries.length?`, normalmente a la ${med(tries)}.ª vez`:""}`:"aún sin casos"})}
+      ${hero(N,"Bebés que han empezado",{sub:`${LL.length} registros en total`,ill:ILL.baby})}
+      ${hero(avgF,"Alimentos distintos de media",{sub:`por bebé · ${started.filter(i=>nf(i)>=100).length} ya llegan a 100`,ill:ILL.plate})}
+      ${hero(rated.length?loveP+" %":"—","Valoraciones «le encanta»",{sub:`${rated.length} valoraciones`,ill:ILL.heart})}
+      ${hero(firstBad?pct(laterOk,firstBad)+" %":"—","Acaban gustando",{sub:firstBad?`de lo que la 1.ª vez no quiso (${laterOk} de ${firstBad})${tries.length?`, normalmente a la ${med(tries)}.ª vez`:""}`:"aún sin casos",ill:ILL.retry})}
     </div>
+    ${card("Destacados","Con 3 valoraciones o más. Toca cada alimento para ver los números.",podium)}
     ${card("Alimento a alimento","Toca una columna para ordenar. «Le encanta» y «No o poco» salen con 3 valoraciones o más.",`<div id="ftab"></div>`)}
-    <div class="g2">
-      ${card("Alérgenos","% de bebés que ya han probado cada grupo, edad a la que la mitad ya lo ha probado, reacciones y alergias apuntadas.",algTable)}
-      ${card("Lo que más cuesta","Veces que han marcado «no lo quiere» y cuántos bebés.",hbars(foods.filter(f=>f.no).sort((a,b)=>b.no-a.no).slice(0,8).map(f=>[f.k,f.no,`${f.no} · ${f.rb} bebés`,`${f.k}: «no lo quiere» ${f.no} veces, ${f.rb} bebés lo han valorado`]),{c:"s2"}))}
-    </div>
+    ${card("Alérgenos","% de bebés que ya han probado cada grupo, edad a la que la mitad ya lo ha probado, reacciones y alergias apuntadas.",algTable)}
     <div class="g2">
       ${card("Ritmo","Alimentos nuevos por semana desde que empiezan (media por bebé).",vcols(rit,{fmt:v=>v}))}
-      ${card("Cacas al día",ccD?`${(ccS/ccD).toFixed(1)} de media · ${pct(cc0,ccD)} % de días sin caca · ${ccD} días apuntados. Por mes de vida:`:"",vcols(ccRows,{fmt:v=>v}))}
+      ${card("¿Comen peor esos días?","% de valoraciones buenas («le encanta» o «ha comido bien») según lo apuntado en el diario.",hbars(tagEat))}
     </div>
     <div class="g2">
+      ${card("Cacas al día",ccD?`${(ccS/ccD).toFixed(1)} de media · ${pct(cc0,ccD)} % de días sin caca · ${ccD} días apuntados. Por mes de vida:`:"",vcols(ccRows,{fmt:v=>v}))}
       ${card("Cómo y cuándo",`${LL.length} registros.`,stack("Cómo se lo dan",topHow,topHow.reduce((s,x)=>s+x[1],0)).replace(/ bebés</,' registros<')+stack("En qué comida",mlB,mlB.reduce((s,x)=>s+x[1],0)).replace(/ bebés</,' registros<'))}
-      ${card("¿Comen peor esos días?","% de valoraciones buenas («le encanta» o «ha comido bien») según lo apuntado en el diario.",hbars(tagEat))}
     </div>`;
   drawFoods("t");
 
@@ -353,7 +378,7 @@ function drawFoods(k){if(k)FSORT=k;const el=$("ftab");if(!el)return;const N=(win
   const th=(key,lab,cls="")=>`<th class="srt ${cls}${FSORT===key?" on":""}" data-s="${key}">${lab}${FSORT===key?" ↓":""}</th>`;
   el.innerHTML=`<table class="dt">
     <tr>${th("k","Alimento")}${th("t","Lo han probado")}${th("love","Le encanta","r")}${th("bad","No o poco","r")}${th("n","Valoraciones","r")}</tr>
-    ${show.map(f=>`<tr${tip(`${f.k}: probado por ${f.t} de ${N} bebés · ${f.n} valoraciones de ${f.rb} bebés${ok(f)?` · le encanta ${f.love} % · no o poco ${f.bad} %`:""}`)}><td><b>${esc(f.k)}</b></td>
+    ${show.map(f=>`<tr${tip(`${f.k}: probado por ${f.t} de ${N} bebés · ${f.n} valoraciones de ${f.rb} bebés${ok(f)?` · le encanta ${f.love} % · no o poco ${f.bad} %`:""}`)}><td class="fc"><span class="fic">${fi(f.k)}</span><b>${esc(f.k)}</b></td>
       <td><span class="ib"><i class="s1" style="width:${f.t*100/mt}%"></i></span> ${f.t} <small>(${pct(f.t,N)} %)</small></td>
       <td class="r">${ok(f)?`<span class="pill s1">${f.love} %</span>`:'<span class="mute">—</span>'}</td>
       <td class="r">${ok(f)?`<span class="pill s2">${f.bad} %</span>`:'<span class="mute">—</span>'}</td>
@@ -394,7 +419,7 @@ function drawBlog(){
   $("t-blog").innerHTML=`${EDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar estados y cambios falta añadir la colección <b>blog</b> a las reglas de Firestore.</div>`}
     <p class="mute">Se publica uno cada dos días, en este orden. Los que están <b>en pausa</b> o <b>descartados</b> se saltan. Toca un título para editarlo.</p>
     <div class="grid" style="margin-bottom:12px">${kpi(BL.cola.filter(a=>!a.fuera).length,"En cola")}${kpi(n("revisado"),"Revisados")}${kpi(n("cambios"),"Necesitan cambios")}${kpi(n("pausa")+n("descartado"),"Apartados")}</div>
-    <div class="card"><h2>Borradores · ${BL.cola.length}</h2><table><tr><th>Artículo</th><th>Fecha</th><th>Estado</th><th></th></tr>${BL.cola.map(row).join("")}</table></div>
+    <div class="card"><h2>Borradores · ${BL.cola.length}</h2><table class="bt"><tr><th>Artículo</th><th>Fecha</th><th>Estado</th><th></th></tr>${BL.cola.map(row).join("")}</table></div>
     <div class="card" style="margin-top:14px"><h2>Publicados · ${BL.pub.length}</h2><table>${BL.pub.map(a=>`<tr><td><a href="${a.url}" target="_blank" rel="noopener">${esc(a.t)}</a></td></tr>`).join("")}</table></div>`;
   $("t-blog").querySelectorAll("[data-st]").forEach(s=>s.onchange=async()=>{const k=s.dataset.st,e=BL.ed[k]||{};s.disabled=true;
     try{await saveEd(k,{...e,estado:s.value});drawBlog()}catch(err){alert("No se ha podido guardar: "+(err.code||err.message));s.disabled=false}});
