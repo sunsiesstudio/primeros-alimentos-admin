@@ -49,10 +49,11 @@ main{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
 .idv{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;background:color-mix(in srgb,var(--ic) 16%,var(--card));min-height:104px}
 .idi{width:68px;height:68px;flex:none;display:grid;place-items:center}.idi svg,.idi img{width:100%;height:100%}
 .idb{font:400 2.3rem/1 "Luckiest Guy",sans-serif;color:var(--ic);letter-spacing:.02em;text-align:right}
-.idn{position:absolute;top:10px;left:12px;font:800 .65rem Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.08em;background:var(--ic);color:#fff;padding:3px 8px;border-radius:99px;font-style:normal}
+.idtags .idn{font:800 .65rem Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.08em;background:var(--ic)!important;color:#fff!important;padding:3px 9px;border-radius:99px}
 .idt{padding:14px 18px 6px;flex:1}.idt h3{margin:8px 0 6px;font:800 1.05rem/1.3 Montserrat,sans-serif}.idt p{margin:0 0 8px;line-height:1.45;font-size:.92rem}
 .idtags{display:flex;flex-wrap:wrap;gap:4px}.idtags span{font:700 .7rem Montserrat,sans-serif;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}.idtags span:last-child{color:var(--ic);background:color-mix(in srgb,var(--ic) 14%,transparent)}
-.ida{display:flex;gap:6px;padding:10px 14px 14px;flex-wrap:wrap}.ida .btn{margin:0}.ida .idx{margin-left:auto}@media(max-width:600px){.ida .btn{padding-left:12px;padding-right:12px}}
+.ida{display:flex;gap:6px;padding:10px 14px 14px;flex-wrap:wrap}.ida .btn{margin:0}.ida .idx{margin-left:auto}.ida{flex-wrap:nowrap!important;gap:5px!important}.ida .btn{padding:6px 11px;white-space:nowrap}.idbk{display:inline-flex;align-items:center;gap:5px}.idbk.on{background:var(--ic);border-color:var(--ic);color:#fff}@media(max-width:600px){.ida .btn{padding-left:12px;padding-right:12px}}
+.idw{display:inline-block;font:700 .72rem Montserrat,sans-serif;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--ic) 16%,transparent);color:var(--ic);margin:2px 4px 2px 0}
 .idc.is-usada{opacity:.75}.idc.is-descartada{opacity:.5}
 .ideas{padding-left:0;list-style:none;margin:0}
 .ideas li{background:var(--soft);border-radius:16px;padding:12px 14px;margin-bottom:8px}
@@ -63,13 +64,16 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 td,th{padding:10px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
 th{color:var(--mute);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
 a{color:var(--acc);font-weight:600}
-.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--soft);color:var(--green)}
+.sr{display:grid;grid-template-columns:minmax(90px,34%) 1fr 48px 28px;align-items:center;gap:10px;padding:5px 0;font-size:.9rem}.sr span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.srb{height:12px;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent);overflow:hidden}.srb i{display:block;height:100%;border-radius:99px;background:var(--s1)}.sr b{text-align:right}.sr small{opacity:.6;text-align:right}.stk{margin-bottom:18px}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--soft);color:var(--green)}.chip.chr{color:#c96a47;background:color-mix(in srgb,#c96a47 14%,transparent)}
 .hide{display:none!important}
 #err{margin:14px 0 0;color:var(--terra);font-weight:600}
 @media (max-width:640px){header .logo{width:170px}main{padding:14px 12px 50px}nav button{font-size:13px}}
 .lnk{background:none;border:0;padding:0;color:var(--acc);font:700 14.5px Montserrat,sans-serif;text-align:left;cursor:pointer;text-decoration:underline}
 .sm{font-size:12.5px}.chip.ok{background:color-mix(in srgb,var(--green) 18%,var(--card))}
-select{font:600 13px Montserrat,sans-serif;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:7px 8px;min-height:38px}
+select,.fl select{background-image:var(--chev)!important;background-repeat:no-repeat!important;background-position:right 14px center!important;background-size:16px!important;padding-right:40px!important;-webkit-appearance:none;appearance:none}
+:root{--chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a8f86' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
+select{font:600 13px Montserrat,sans-serif;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:7px 40px 7px 12px;min-height:38px;-webkit-appearance:none;appearance:none}
 select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-color:var(--terra);color:var(--terra)}select.st-off{opacity:.6}
 .card.warn{border-color:var(--terra);color:var(--terra);font-weight:600}
 .edov{position:fixed;inset:0;z-index:20;background:rgba(10,10,30,.55);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:24px 12px}
@@ -80,6 +84,7 @@ select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-
 .fl textarea,.fq textarea{resize:vertical}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 10px}
 .tb{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 6px}.tb button{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:5px 10px;font:600 13px Montserrat,sans-serif;cursor:pointer}
+.tbs{position:sticky;top:-1px;z-index:3;background:var(--card);padding:8px 0;align-items:center}.rich.rs{min-height:0;max-height:none;padding:8px 14px}.rich.rs ul{margin:0;padding-left:20px}.rich.rs li{margin:2px 0}.fqa:empty::before{content:attr(data-ph);opacity:.5}
 .rich{min-height:260px;max-height:60vh;overflow:auto;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:6px 14px;line-height:1.6}.rich:focus{outline:2px solid var(--acc)}
 .rich h2{font:700 1.1rem Montserrat,sans-serif;letter-spacing:0;color:var(--ink);margin:14px 0 6px}.rich table{font-size:13px}
 .fq{display:grid;gap:6px;padding:10px;border:1px dashed var(--line);border-radius:12px;margin-bottom:8px}.fq .btn{justify-self:start}
@@ -258,9 +263,8 @@ const lineChart=(xs,series,{pct=false,h=200}={})=>{if(!xs.length)return EMPTY;co
   const leg=series.length>1?`<div class="leg">${series.map(s=>`<span><i class="${s.c}"></i>${esc(s.n)}</span>`).join("")}</div>`:"";
   return `${leg}<svg class="lc" viewBox="0 0 ${W} ${H}" role="img">${g}<line class="xh" x1="0" x2="0" y1="${T}" y2="${H-B}"/>${paths}${hits}</svg>`};
 // Barra 100 % segmentada (distribución), pasos de un mismo tono + leyenda con cifras
-const stack=(label,parts,tot)=>{const ps=parts.filter(p=>p[1]>0);if(!tot||!ps.length)return "";const op=[1,.72,.5,.34,.22,.14];
-  return `<div class="stk"><div class="sl">${esc(label)} <small>${tot} bebés</small></div><div class="sb">${ps.map(([k,v],i)=>`<i style="width:${v*100/tot}%;opacity:${op[Math.min(i,5)]}"${tip(`${label} · ${k}: ${v} (${pct(v,tot)} %)`)}></i>`).join("")}</div>
-    <div class="sg">${ps.map(([k,v],i)=>`<span><i style="opacity:${op[Math.min(i,5)]}"></i>${esc(k)} <b>${pct(v,tot)} %</b></span>`).join("")}</div></div>`};
+const stack=(label,parts,tot)=>{const ps=parts.filter(p=>p[1]>0);if(!tot||!ps.length||(ps.length===1&&/^sin indicar$/i.test(ps[0][0])))return "";const mx=Math.max(...ps.map(p=>p[1]));
+  return `<div class="stk"><div class="sl">${esc(label)} <small>${tot} bebés</small></div>${ps.map(([k,v])=>`<div class="sr"${tip(`${label} · ${k}: ${v} de ${tot} (${pct(v,tot)} %)`)}><span>${esc(k)}</span><span class="srb"><i style="width:${Math.max(2,v*100/mx)}%"></i></span><b>${pct(v,tot)} %</b><small>${v}</small></div>`).join("")}</div>`};
 
 const fi=n=>window.foodIco?window.foodIco(n):"";
 const gi=g=>{const l=AGD[g]||[];return fi(l.find(x=>window.foodIcoHas&&window.foodIcoHas(x))||l[0]||"")};
@@ -404,6 +408,7 @@ const MOM=[[11,1,24,"adviento","Adviento","Un calendario de Adviento de primeros
  [10,1,30,"otono","Otoño en el plato","Boniato, calabaza y granada: los colores del otoño para el bebé.","Receta"]];
 const PIL={"Receta":"#c96a47","Guía y tips":"#4a8760","Maternidad real":"#3e4cd0","Detrás de la app":"#6b5ca5","Adviento":"#b8433a"};
 const CHN={ig:"Instagram",tt:"TikTok",x:"X"};
+const BKF='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M6 3.5h12v17l-6-4.6-6 4.6z"/></svg>',BKO='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-6-4.6-6 4.6z"/></svg>';
 let IDS={},IDOK=true,IDF="nuevas";
 const IKEY="pa_ideas_vistas";
 function seen(){try{return JSON.parse(localStorage.getItem(IKEY)||"{}")}catch(e){return {}}}
@@ -431,32 +436,63 @@ function buildIdeas(){const S=window.__IDX;if(!S)return [];const {N,foods,alg,ta
   // Temporada
   TEMP[m].forEach((k,i)=>{const f=byK[k];I({id:`temp-${m}-${k}`,ico:fi(k),big:f&&N>=MIN?pct(f.t,N)+" %":MESN[m],hook:`${k}: está de temporada`,body:f&&N>=MIN?`Solo el ${pct(f.t,N)} % de los bebés de la app la ha probado. Cómo dársela según la edad.`:`Cómo dárselo según la edad, y una receta fácil.`,why:"Temporada · "+MESN[m],fmt:i%2?"Carrusel":"Reel",ch:["ig","tt"],pilar:i%2?"Guía y tips":"Receta",score:(f&&f.t<N*.3?68:57)-i*2})});
   const MIC={adviento:"Mandarina",navidad:"Lombarda",reyes:"Naranja",cuesta:"Calabaza",sanvalentin:"Fresa",pascua:"Pan",pascua2:"Pan",verano:"Yogur natural",viajes:"Plátano",agua:"Sandía",guarde:"Manzana",halloween:"Calabaza",otono:"Boniato"};
-  MOM.forEach(([mm,a,b,k,t,body,p])=>{const dd0=(new Date(now.getFullYear(),mm,a)-now)/DAY;if((mm===m&&d>=a-0&&d<=b)||(dd0>0&&dd0<=21))I({id:`mom-${k}-${now.getFullYear()}`,ico:(window.foodIcoHas&&window.foodIcoHas(MIC[k])?fi(MIC[k]):ILL.heart),big:dd0>0?`${Math.ceil(dd0)} días`:"¡Ya!",hook:t,body,why:dd0>0?`En ${Math.ceil(dd0)} días`:"Ahora",fmt:p==="Receta"?"Reel":"Carrusel",ch:["ig","tt"],pilar:p,score:80})});
+  MOM.forEach(([mm,a,b,k,t,body,p])=>{const dd0=(new Date(now.getFullYear(),mm,a)-now)/DAY;if((mm===m&&d>=a-0&&d<=b)||(dd0>0&&dd0<=21))I({id:`mom-${k}-${now.getFullYear()}`,ico:(window.foodIcoHas&&window.foodIcoHas(MIC[k])?fi(MIC[k]):ILL.heart),big:dd0>0?`${a} ${MESN[mm].slice(0,3)}`:`hasta ${b} ${MESN[mm].slice(0,3)}`,hook:t,body,why:dd0>0?`Empieza en ${Math.ceil(dd0)} días: prepáralo ya`:"Es ahora",fmt:p==="Receta"?"Reel":"Carrusel",ch:["ig","tt"],pilar:p,score:80})});
   return out.sort((a,b)=>b.score-a.score)}
 function drawIdeas(){const el=$("t-redes");if(!el)return;const all=buildIdeas(),vs=seen(),now=Date.now();let ch=false;
   all.forEach(x=>{if(!vs[x.id]){vs[x.id]=now;ch=true}x.nueva=now-vs[x.id]<7*DAY&&!IDS[x.id]});if(ch)try{localStorage.setItem(IKEY,JSON.stringify(vs))}catch(e){}
-  const st=x=>(IDS[x.id]||{}).estado||"",F={nuevas:x=>!st(x),guardada:x=>st(x)==="guardada",usada:x=>st(x)==="usada",descartada:x=>st(x)==="descartada"};
+  const st=x=>(IDS[x.id]||{}).estado||"",F={nuevas:x=>!st(x),notion:x=>st(x)==="notion"||st(x)==="guardada",usada:x=>st(x)==="usada",descartada:x=>st(x)==="descartada"};
   const cnt=k=>all.filter(F[k]).length,L=all.filter(F[IDF]);
-  const card=x=>{const c=PIL[x.pilar]||"#4a8760",e=IDS[x.id]||{};return `<article class="idc${st(x)?" is-"+st(x):""}" style="--ic:${c}">
-    <div class="idv"><span class="idi">${x.ico||""}</span><b class="idb">${esc(x.big)}</b>${x.nueva?'<em class="idn">Nueva</em>':""}</div>
-    <div class="idt"><div class="idtags"><span>${x.ch.map(k=>CHN[k]).join(" · ")}</span><span>${esc(x.fmt)}</span><span>${esc(x.pilar)}</span></div>
-      <h3>${esc(x.hook)}</h3><p>${esc(x.body)}</p><small class="mute">${esc(x.why)}${e.estado==="usada"&&e.at&&e.at.toDate?` · usada el ${e.at.toDate().toLocaleDateString("es-ES")}`:""}</small></div>
-    <div class="ida">${st(x)==="usada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Desmarcar</button>`:`<button class="btn sm p" data-ia="usada" data-id="${esc(x.id)}">✓ La he usado</button>`}
-      ${st(x)==="guardada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Quitar</button>`:st(x)?"":`<button class="btn sm" data-ia="guardada" data-id="${esc(x.id)}">☆ Guardar</button>`}
-      <button class="btn sm" data-icp="${esc(x.id)}" title="Copiar texto">Copiar</button>
-      ${st(x)==="descartada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Recuperar</button>`:`<button class="btn sm idx" data-ia="descartada" data-id="${esc(x.id)}" aria-label="Descartar">✕</button>`}</div></article>`};
-  el.innerHTML=`${IDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar qué ideas has usado falta añadir la colección <b>ideas</b> a las reglas de Firestore. Mientras, se guarda solo en este navegador.</div>`}
-   <div class="idh"><div><h2 style="margin:0">Ideas para redes</h2><p class="mute" style="margin:4px 0 0">Salen de los datos de la app y de la temporada (${MESN[new Date().getMonth()]}). Se renuevan solas cada vez que entras.</p></div></div>
-   <div class="idf">${[["nuevas","Por usar"],["guardada","Guardadas"],["usada","Usadas"],["descartada","Descartadas"]].map(([k,l])=>`<button class="${IDF===k?"on":""}" data-if="${k}">${l} <b>${cnt(k)}</b></button>`).join("")}</div>
+  const card=x=>{const c=PIL[x.pilar]||"#4a8760",e=IDS[x.id]||{},s=st(x),nu=e.notion&&e.notion.url;return `<article class="idc${s?" is-"+s:""}" style="--ic:${c}">
+    <div class="idv"><span class="idi">${x.ico||""}</span><b class="idb">${esc(x.big)}</b></div>
+    <div class="idt"><div class="idtags">${x.nueva?'<span class="idn">Nueva</span>':""}<span>${x.ch.map(k=>CHN[k]).join(" · ")}</span><span>${esc(x.fmt)}</span><span>${esc(x.pilar)}</span></div>
+      <h3>${esc(x.hook)}</h3><p>${esc(x.body)}</p><small class="mute"><span class="idw">${esc(x.why)}</span>${s==="usada"&&e.at&&e.at.toDate?` · usada el ${e.at.toDate().toLocaleDateString("es-ES")}`:""}${s==="notion"?(nu?` · <a href="${esc(nu)}" target="_blank" rel="noopener">Abrir en Notion</a>`:" · llega a Notion en menos de una hora"):""}</small></div>
+    <div class="ida">${s==="notion"?`<button class="btn sm idbk on" data-ia="" data-id="${esc(x.id)}" title="Quitar de guardadas">${BKF} Guardada</button>`:s?"":`<button class="btn sm idbk" data-ia="notion" data-id="${esc(x.id)}" title="Guardar (se pasa a Notion)">${BKO} Guardar</button>`}
+      <button class="btn sm" data-img="${esc(x.id)}">Imagen</button>
+      ${s==="usada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Desmarcar</button>`:s==="descartada"?"":`<button class="btn sm" data-ia="usada" data-id="${esc(x.id)}">✓ Usada</button>`}
+      ${s==="descartada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Recuperar</button>`:`<button class="btn sm idx" data-ia="descartada" data-id="${esc(x.id)}" aria-label="Descartar">✕</button>`}</div></article>`};
+  el.innerHTML=`${IDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar las ideas falta añadir la colección <b>ideas</b> a las reglas de Firestore.</div>`}
+   <div class="idh"><div><h2 style="margin:0">Ideas para redes</h2><p class="mute" style="margin:4px 0 0">Salen de los datos de la app y de la temporada (${MESN[new Date().getMonth()]}) y se renuevan solas. Las que guardes aparecen en Notion (Tareas) con su texto y su imagen.</p></div></div>
+   <div class="idf">${[["nuevas","Por usar"],["notion","Guardadas"],["usada","Usadas"],["descartada","Descartadas"]].map(([k,l])=>`<button class="${IDF===k?"on":""}" data-if="${k}">${l} <b>${cnt(k)}</b></button>`).join("")}</div>
    ${L.length?`<div class="idg">${L.map(card).join("")}</div>`:`<div class="card"><p class="mute" style="margin:0">${IDF==="nuevas"?"Las has repasado todas. Saldrán más cuando cambien los datos o la temporada.":"Nada por aquí todavía."}</p></div>`}`;
   el.querySelectorAll("[data-if]").forEach(b=>b.onclick=()=>{IDF=b.dataset.if;drawIdeas()});
-  el.querySelectorAll("[data-ia]").forEach(b=>b.onclick=()=>setIdea(b.dataset.id,b.dataset.ia));
-  el.querySelectorAll("[data-icp]").forEach(b=>b.onclick=async()=>{const x=all.find(i=>i.id===b.dataset.icp);const t=x.draft||`${x.hook}\n\n${x.body}`;try{await navigator.clipboard.writeText(t);b.textContent="¡Copiado!";setTimeout(()=>b.textContent="Copiar",1500)}catch(e){prompt("Copia el texto:",t)}});
+  el.querySelectorAll("[data-ia]").forEach(b=>b.onclick=()=>{b.disabled=true;setIdea(all.find(i=>i.id===b.dataset.id),b.dataset.ia)});
+  el.querySelectorAll("[data-img]").forEach(b=>b.onclick=()=>showImg(all.find(i=>i.id===b.dataset.img)));
 }
-async function loadIdeas(){try{const s=await getDocs(collection(db,"ideas"));IDS={};s.forEach(d=>IDS[d.id]=d.data());IDOK=true}catch(e){IDOK=false;try{IDS=JSON.parse(localStorage.getItem("pa_ideas_estado")||"{}")}catch(_){IDS={}}}drawIdeas()}
-async function setIdea(id,estado){const u=auth.currentUser;if(estado)IDS[id]={estado,por:u&&u.email||"",at:{toDate:()=>new Date()}};else delete IDS[id];drawIdeas();
-  if(IDOK){try{await setDoc(doc(db,"ideas",id),estado?{estado,por:u.email||"",at:serverTimestamp()}:{estado:"",por:u.email||"",at:serverTimestamp()})}catch(e){IDOK=false;drawIdeas()}}
-  if(!IDOK)try{localStorage.setItem("pa_ideas_estado",JSON.stringify(Object.fromEntries(Object.entries(IDS).map(([k,v])=>[k,{estado:v.estado}]))))}catch(e){}}
+async function loadIdeas(){try{const s=await getDocs(collection(db,"ideas"));IDS={};s.forEach(d=>{const x=d.data();delete x.img;IDS[d.id]=x});IDOK=true}catch(e){IDOK=false}drawIdeas()}
+async function setIdea(x,estado){const u=auth.currentUser,id=x.id,prev=IDS[id]||{};
+  const d={estado,por:u&&u.email||"",at:serverTimestamp()};
+  if(estado==="notion"){const {score,nueva,ico,...idea}=x;d.idea=idea;try{d.img=await ideaImg(x,.86)}catch(e){console.error(e)}}
+  IDS[id]={...prev,estado,at:{toDate:()=>new Date()}};drawIdeas();
+  try{await setDoc(doc(db,"ideas",id),d,{merge:true})}catch(e){IDOK=false;IDS[id]=prev;drawIdeas();alert("No se ha podido guardar: "+(e.code||e.message))}}
+// ---------- Imagen para redes (1080×1350, estilo de las ilustraciones de la app) ----------
+const svgImg=s=>new Promise((ok,ko)=>{if(!s)return ok(null);s=s.replace(/<svg(?![^>]*xmlns=)/,'<svg xmlns="http://www.w3.org/2000/svg"');const i=new Image();i.onload=()=>ok(i);i.onerror=()=>ok(null);i.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)});
+function wrap(ctx,t,maxW){const w=String(t).split(" "),L=[];let l="";w.forEach(x=>{const tt=l?l+" "+x:x;if(ctx.measureText(tt).width>maxW&&l){L.push(l);l=x}else l=tt});if(l)L.push(l);return L}
+function star(ctx,x,y,r,c){ctx.save();ctx.translate(x,y);ctx.beginPath();for(let i=0;i<10;i++){const a=Math.PI/5*i-Math.PI/2,rr=i%2?r*.45:r;ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}ctx.closePath();ctx.fillStyle=c;ctx.fill();ctx.restore()}
+function heart(ctx,x,y,s,c){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.beginPath();ctx.moveTo(0,-4);ctx.bezierCurveTo(-3,-10,-12,-8.5,-12,-1.7);ctx.bezierCurveTo(-12,4.3,0,10.3,0,10.3);ctx.bezierCurveTo(0,10.3,12,4.3,12,-1.7);ctx.bezierCurveTo(12,-8.5,3,-10,0,-4);ctx.fillStyle=c;ctx.fill();ctx.restore()}
+async function ideaImg(x,q){const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const ctx=cv.getContext("2d"),c=PIL[x.pilar]||"#4a8760",ink="#3a2a22";
+  try{await Promise.all(['400 120px "Luckiest Guy"','700 60px Montserrat','500 40px Montserrat'].map(f=>document.fonts.load(f)))}catch(e){}
+  ctx.fillStyle="#fbf4ea";ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.globalAlpha=.16;ctx.fillStyle=c;ctx.beginPath();ctx.arc(540,400,330,0,7);ctx.fill();ctx.globalAlpha=.08;ctx.beginPath();ctx.arc(920,120,170,0,7);ctx.fill();ctx.beginPath();ctx.arc(120,700,120,0,7);ctx.fill();ctx.restore();
+  // sombra
+  ctx.save();ctx.globalAlpha=.08;ctx.fillStyle=ink;ctx.beginPath();ctx.ellipse(540,650,190,22,0,0,7);ctx.fill();ctx.restore();
+  const im=await svgImg(x.ico);if(im)ctx.drawImage(im,330,170,420,420);
+  if(im&&!Object.values(ILL).includes(x.ico)){// carita feliz
+    ctx.fillStyle=ink;[[-38,0],[38,0]].forEach(([dx])=>{ctx.beginPath();ctx.arc(540+dx,410,13,0,7);ctx.fill()});
+    ctx.strokeStyle=ink;ctx.lineWidth=11;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(518,440);ctx.quadraticCurveTo(540,462,562,440);ctx.stroke();
+    ctx.save();ctx.globalAlpha=.55;ctx.fillStyle="#f19b9b";[-72,72].forEach(dx=>{ctx.beginPath();ctx.arc(540+dx,436,20,0,7);ctx.fill()});ctx.restore()}
+  star(ctx,190,170,34,"#f2c66d");star(ctx,880,300,24,"#f2c66d");star(ctx,250,560,18,"#f2c66d");heart(ctx,860,520,3.2,"#e05a6a");heart(ctx,170,360,2.2,"#f08a8a");
+  // número
+  let fs=170;ctx.font=`400 ${fs}px "Luckiest Guy"`;while(ctx.measureText(String(x.big).toUpperCase()).width>900&&fs>60){fs-=10;ctx.font=`400 ${fs}px "Luckiest Guy"`}
+  ctx.fillStyle=c;ctx.textAlign="center";ctx.textBaseline="alphabetic";ctx.fillText(String(x.big).toUpperCase(),540,830);
+  // gancho
+  ctx.fillStyle=ink;ctx.font='700 64px Montserrat';let y=930;wrap(ctx,x.hook,900).slice(0,3).forEach(l=>{ctx.fillText(l,540,y);y+=78});
+  ctx.fillStyle="#6b5d52";ctx.font='500 38px Montserrat';y+=10;wrap(ctx,x.body,880).slice(0,Math.max(0,Math.floor((1210-y)/52))).forEach(l=>{ctx.fillText(l,540,y);y+=52});
+  ctx.font='400 40px "Luckiest Guy"';ctx.fillStyle="#c96a47";ctx.fillText("PRIMEROS ALIMENTOS",540,1300);star(ctx,540-ctx.measureText("PRIMEROS ALIMENTOS").width/2-36,1286,16,"#c96a47");
+  return cv.toDataURL("image/jpeg",q||.9)}
+async function showImg(x){const o=document.createElement("div");o.className="fdet";o.innerHTML=`<div class="fdi" style="max-width:560px;text-align:center"><button class="btn sm fx" aria-label="Cerrar">✕</button><h2 style="margin:0 0 12px">${esc(x.hook)}</h2><p class="mute">Creando imagen…</p></div>`;
+  document.body.appendChild(o);document.body.style.overflow="hidden";const close=()=>{o.remove();document.body.style.overflow=""};o.querySelector(".fx").onclick=close;
+  const u=await ideaImg(x,.92),slug=x.id.normalize("NFD").replace(/[^\w-]+/g,"-").toLowerCase();
+  o.querySelector("p").outerHTML=`<img src="${u}" alt="" style="width:100%;border-radius:18px;display:block;margin:0 0 14px"><a class="btn p" href="${u}" download="idea-${slug}.jpg">Descargar (1080×1350)</a>`}
 // Ficha completa de un alimento
 const RLAB={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción"};
 function openFood(name){const st=window.__ST;if(!st)return;const {started,N,LL}=st;
@@ -555,7 +591,7 @@ async function renderBlog(){
   drawBlog()}
 function drawBlog(){
   const row=a=>{const e=BL.ed[a.slug]||{},st=e.estado||a.fuera||"pendiente",ch=Object.keys(e.cambios||{}).length;
-    return `<tr><td><button class="lnk" data-ed="${esc(a.slug)}">${esc((e.cambios||{}).title||a.t)}</button>${ch?` <span class="chip">Editado</span>`:""}<div class="mute sm">${a.cat==="receta"?"Receta":"Guía"}${e.por?` · ${esc(e.por.split("@")[0])}, ${e.at&&e.at.toDate?e.at.toDate().toLocaleDateString("es-ES",{day:"numeric",month:"short"}):""}`:""}${e.nota?` · <i>${esc(e.nota)}</i>`:""}</div></td>
+    return `<tr><td><button class="lnk" data-ed="${esc(a.slug)}">${esc((e.cambios||{}).title||a.t)}</button>${ch?` <span class="chip">Editado</span>`:""}<div class="mute sm"><span class="chip ${a.cat==="receta"?"chr":""}">${a.cat==="receta"?"Receta":"Guía"}</span>${e.por?` · ${esc(e.por.split("@")[0])}, ${e.at&&e.at.toDate?e.at.toDate().toLocaleDateString("es-ES",{day:"numeric",month:"short"}):""}`:""}${e.nota?` · <i>${esc(e.nota)}</i>`:""}</div></td>
       <td class="mute">${esc(a.d||"No se publica")}</td>
       <td><select class="st st-${EST[st]?EST[st][1]:""}" data-st="${esc(a.slug)}" ${EDOK?"":"disabled"}>${Object.entries(EST).map(([k,[l]])=>`<option value="${k}"${k===st?" selected":""}>${l}</option>`).join("")}</select></td>
       <td><button class="lnk sm" data-pv="${esc(a.slug)}">Ver</button></td></tr>`};
@@ -576,14 +612,15 @@ async function saveEd(slug,e){const u=auth.currentUser;const d={estado:e.estado|
   await setDoc(doc(db,"blog",slug),d);BL.ed[slug]={...d,at:{toDate:()=>new Date()}}}
 function openEd(slug){
   const a=BL.cola.find(x=>x.slug===slug);if(!a)return;const src=a.a||{},e=BL.ed[slug]||{},c={...(e.cambios||{})},v=k=>k in c?c[k]:src[k];const rec=a.cat==="receta";
-  const F=(k,lab,type="text",help="")=>k in src||k==="short"?`<label class="fl"><span>${lab}${help?` <small class="mute">${help}</small>`:""}</span>${type==="area"||type==="list"?`<textarea data-k="${k}" data-t="${type}" rows="${type==="list"?Math.max(3,(src[k]||[]).length+1):3}">${esc(type==="list"?L2(v(k)):v(k))}</textarea>`:`<input data-k="${k}" data-t="${type}" type="${type==="num"?"number":"text"}" value="${esc(v(k))}">`}</label>`:"";
+  const F=(k,lab,type="text",help="")=>k in src||k==="short"?`<label class="fl"><span>${lab}${help?` <small class="mute">${help}</small>`:""}</span>${type==="list"?`<div class="rich rs" contenteditable="true" data-k="${k}" data-t="rlist"><ul>${(v(k)||[]).map(x=>`<li>${x}</li>`).join("")||"<li><br></li>"}</ul></div>`:type==="area"&&k!=="desc"&&/<[a-z]/i.test(String(src[k]||""))?`<div class="rich rs" contenteditable="true" data-k="${k}" data-t="rarea">${v(k)||""}</div>`:type==="area"||type==="list"?`<textarea data-k="${k}" data-t="${type}" rows="3">${esc(v(k))}</textarea>`:`<input data-k="${k}" data-t="${type}" type="${type==="num"?"number":"text"}" value="${esc(v(k))}">`}</label>`:"";
   const faq=(v("faq")||[]);
   const o=document.createElement("div");o.className="edov";o.innerHTML=`<div class="edc">
     <div class="edh"><div><h2 style="margin:0">${rec?"Receta":"Guía"} · ${esc(a.d||"no se publica")}</h2><button class="lnk sm" data-pv="${esc(slug)}">Ver la página</button></div><button class="btn sm" data-x>Cerrar</button></div>
+    <div class="tb tbs"><span class="mute sm">Selecciona texto y:</span><button type="button" data-cmd="bold"><b>Negrita</b></button><button type="button" data-cmd="link">Enlace</button>${"body" in src?`<button type="button" data-cmd="h2">Subtítulo</button><button type="button" data-cmd="p">Párrafo</button><button type="button" data-cmd="ul">• Lista</button>`:""}</div>
     <label class="fl"><span>Estado</span><select data-k="estado">${Object.entries(EST).map(([k,[l]])=>`<option value="${k}"${k===(e.estado||"pendiente")?" selected":""}>${l}</option>`).join("")}</select></label>
     ${F("title","Título")}${F("short","Título corto","text","para las tarjetas")}${F("desc","Descripción","area","la que sale en Google · <b data-cnt></b>")}${F("lead","Entradilla","area")}
-    ${rec?`<div class="g3">${F("age","Edad")}${F("prep","Preparación (min)","num")}${F("cook","Cocción (min)","num")}${F("yld","Raciones")}</div>${F("alg","Alérgenos","list","uno por línea")}${F("ing","Ingredientes","list","uno por línea")}${F("steps","Pasos","list","uno por línea")}${F("serve","Cómo servirlo","list","uno por línea")}${F("keep","Conservación","area")}`:""}
-    ${"body" in src?`<label class="fl"><span>Texto</span></label><div class="tb"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="h2">Subtítulo</button><button type="button" data-cmd="p">Párrafo</button><button type="button" data-cmd="ul">• Lista</button><button type="button" data-cmd="link">Enlace</button></div><div class="rich" contenteditable="true" data-k="body">${v("body")}</div>`:""}
+    ${rec?`<div class="g3">${F("age","Edad")}${F("prep","Preparación (min)","num")}${F("cook","Cocción (min)","num")}${F("yld","Raciones")}</div>${F("alg","Alérgenos","list","cada punto, una línea")}${F("ing","Ingredientes","list","cada punto, una línea")}${F("steps","Pasos","list","cada punto, una línea")}${F("serve","Cómo servirlo","list","cada punto, una línea")}${F("keep","Conservación","area")}`:""}
+    ${"body" in src?`<label class="fl"><span>Texto</span></label><div class="rich" contenteditable="true" data-k="body">${v("body")}</div>`:""}
     ${"faq" in src?`<label class="fl"><span>Preguntas frecuentes</span></label><div id="faqs">${faq.map(([q,r])=>fq(q,r)).join("")}</div><button type="button" class="btn sm" data-addq>Añadir pregunta</button>`:""}
     <label class="fl"><span>Nota interna <small class="mute">solo la veis vosotras</small></span><input data-k="nota" value="${esc(e.nota||"")}"></label>
     <p class="mute sm">Los cambios se guardan para las dos y se aplican a la página al publicarse. Si escribes en <b>negrita</b> o enlaces en las listas, se mantienen.</p>
@@ -592,23 +629,29 @@ function openEd(slug){
   const close=()=>{o.remove();document.body.style.overflow=""};
   o.querySelectorAll("[data-x]").forEach(b=>b.onclick=close);
   const cnt=()=>{const d=o.querySelector('[data-k="desc"]'),b=o.querySelector("[data-cnt]");if(d&&b){b.textContent=d.value.length+" caracteres"+(d.value.length>160?" (mejor menos de 160)":"")}};cnt();o.querySelector('[data-k="desc"]')?.addEventListener("input",cnt);
-  o.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>{const k=b.dataset.cmd;o.querySelector(".rich").focus();
+  let last=o.querySelector(".rich");o.addEventListener("focusin",ev=>{const r=ev.target.closest&&ev.target.closest(".rich");if(r)last=r});
+  o.addEventListener("paste",ev=>{if(!ev.target.closest||!ev.target.closest(".rich"))return;ev.preventDefault();document.execCommand("insertText",false,(ev.clipboardData||window.clipboardData).getData("text/plain"))});
+  o.querySelectorAll("[data-cmd]").forEach(b=>{b.onmousedown=ev=>ev.preventDefault();b.onclick=()=>{const k=b.dataset.cmd;if(!last)return;last.focus();
     if(k==="bold")document.execCommand("bold");else if(k==="h2")document.execCommand("formatBlock",false,"h2");else if(k==="p")document.execCommand("formatBlock",false,"p");else if(k==="ul")document.execCommand("insertUnorderedList");
-    else if(k==="link"){const u=prompt("Enlace (https://…)");if(u)document.execCommand("createLink",false,u)}});
+    else if(k==="link"){const u=prompt("Enlace (https://…)");if(u)document.execCommand("createLink",false,u)}}});
   o.querySelector("[data-addq]")?.addEventListener("click",()=>{o.querySelector("#faqs").insertAdjacentHTML("beforeend",fq("",""))});
   o.addEventListener("click",ev=>{const r=ev.target.closest("[data-rmq]");if(r)r.closest(".fq").remove()});
   o.querySelector("[data-reset]").onclick=async()=>{if(!confirm("¿Quitar todos los cambios de este artículo y volver al texto original?"))return;await saveEd(slug,{...e,cambios:{}});close();drawBlog()};
   o.querySelector("[data-save]").onclick=async ev=>{const b=ev.target;b.disabled=true;b.textContent="Guardando…";
     const nc={},same=(x,y)=>JSON.stringify(x??"")===JSON.stringify(y??"");
     o.querySelectorAll("[data-k]").forEach(el=>{const k=el.dataset.k;if(k==="estado"||k==="nota")return;let val;
-      if(k==="body")val=el.innerHTML;else if(el.dataset.t==="list")val=toL(el.value);else if(el.dataset.t==="num")val=el.value===""?null:+el.value;else val=el.value.trim();
+      if(el.dataset.t==="rlist"){val=[...el.querySelectorAll("li")].map(li=>cleanH(li.innerHTML)).filter(Boolean);if(same(val.map(normH),(src[k]||[]).map(normH)))return}
+      else if(el.dataset.t==="rarea"){val=cleanH(el.innerHTML);if(normH(val)===normH(src[k]))return}
+      else if(k==="body")val=el.innerHTML;else if(el.dataset.t==="list")val=toL(el.value);else if(el.dataset.t==="num")val=el.value===""?null:+el.value;else val=el.value.trim();
       if(k==="body"&&same(val.replace(/\s+/g," "),String(src.body||"").replace(/\s+/g," ")))return;
       if(!same(val,src[k])&&!(k==="short"&&!src.short&&!val))nc[k]=val});
-    if("faq" in src){const fs=[...o.querySelectorAll(".fq")].map(x=>[x.querySelector("input").value.trim(),x.querySelector("textarea").value.trim()]).filter(x=>x[0]&&x[1]);if(!same(fs,src.faq))nc.faq=fs}
+    if("faq" in src){const fs=[...o.querySelectorAll(".fq")].map(x=>[x.querySelector("input").value.trim(),cleanH(x.querySelector(".fqa").innerHTML)]).filter(x=>x[0]&&x[1]);if(!same(fs.map(([q,r])=>[q,normH(r)]),(src.faq||[]).map(([q,r])=>[q,normH(r)])))nc.faq=fs}
     try{await saveEd(slug,{estado:o.querySelector('[data-k="estado"]').value,cambios:nc,nota:o.querySelector('[data-k="nota"]').value.trim()});close();drawBlog()}
     catch(err){b.disabled=false;b.textContent="Guardar";alert("No se ha podido guardar: "+(err.code||err.message))}};
 }
-const fq=(q,r)=>`<div class="fq"><input placeholder="Pregunta" value="${esc(q)}"><textarea rows="2" placeholder="Respuesta">${esc(r)}</textarea><button type="button" class="btn sm" data-rmq>Quitar</button></div>`;
+const fq=(q,r)=>`<div class="fq"><input placeholder="Pregunta" value="${esc(q)}"><div class="rich rs fqa" contenteditable="true" data-ph="Respuesta">${r||""}</div><button type="button" class="btn sm" data-rmq>Quitar</button></div>`;
+const cleanH=h=>String(h||"").replace(/&nbsp;/g," ").replace(/<b>/g,"<strong>").replace(/<\/b>/g,"</strong>").replace(/<i>/g,"<em>").replace(/<\/i>/g,"</em>").replace(/<(div|p)>/g,"").replace(/<\/(div|p)>/g," ").replace(/(<br\s*\/?>\s*)+$/,"").replace(/\s+/g," ").trim();
+const normH=h=>{const d=document.createElement("div");d.innerHTML=cleanH(h);return d.innerHTML};
 </script>
 </body>
 </html>
