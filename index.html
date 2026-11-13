@@ -75,9 +75,56 @@ select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-
 .edf{display:flex;gap:8px;align-items:center;margin-top:18px;flex-wrap:wrap;position:sticky;bottom:-20px;background:var(--card);padding:10px 0}
 .sech{font:400 1.2rem "Luckiest Guy",system-ui;letter-spacing:.03em;color:var(--terra);margin:26px 0 10px}
 .row em{white-space:nowrap}
+
+:root{--s1:#3e4cd0;--s2:#c96a47}
+@media (prefers-color-scheme:dark){:root{--s1:#6f69e0;--s2:#d2703f}}
+.s1{background:var(--s1);color:var(--s1);stroke:var(--s1);fill:var(--s1)}.s2{background:var(--s2);color:var(--s2);stroke:var(--s2);fill:var(--s2)}
+.note{margin:-6px 0 12px;font-size:13px}
+.heroes{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-bottom:12px}
+.hero{position:relative;overflow:hidden;min-height:132px}.hero .hl{font-weight:700;font-size:13px;color:var(--mute)}
+.hero .hv{display:flex;align-items:baseline;gap:10px;margin:6px 0 4px}.hero .hv b{font:400 2.4rem/1 "Luckiest Guy",system-ui;color:var(--ink);letter-spacing:.02em}
+.dl{font-weight:700;font-size:12.5px;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--mute)}.dl.up{color:var(--green)}.dl.dn{color:var(--terra)}
+.hero small{display:block;color:var(--mute);font-size:12px;max-width:70%}
+.goal{position:relative;height:6px;border-radius:99px;background:var(--soft);margin:8px 0 6px}.goal u{position:absolute;top:-3px;width:2px;height:12px;background:var(--ink);border-radius:1px}.goal i{display:block;height:100%;background:var(--s1);border-radius:99px;overflow:hidden}
+.spark{position:absolute;right:14px;bottom:14px;width:110px;height:34px;fill:none;background:none}.spark path{stroke-width:2;stroke-linejoin:round;stroke-linecap:round;fill:none}.spark circle{stroke:none}
+.lc{width:100%;height:auto;display:block;overflow:visible}.lc .grid{stroke:var(--line);stroke-width:1}.lc .ax{fill:var(--mute);font:600 11px Montserrat,sans-serif}
+.lc .ln{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;background:none}.lc .dot,.lc .end{stroke:var(--card);stroke-width:2}.lc .lbl{fill:var(--ink);font:700 12px Montserrat,sans-serif}
+.lc .hit{fill:transparent;stroke:none}.lc .xh{stroke:var(--mute);stroke-width:1;stroke-dasharray:3 3;opacity:0}.lc .xh.on{opacity:.6}
+.leg{display:flex;gap:14px;font-size:12.5px;font-weight:600;margin:-4px 0 6px}.leg i{display:inline-block;width:12px;height:4px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.row .tr i{border-radius:0 99px 99px 0}.cols i{border-radius:6px 6px 2px 2px}.cols i.s1,.row .tr i.s1{background:var(--s1)}.row .tr i.s2{background:var(--s2)}
+.funnel{display:flex;flex-direction:column;gap:7px}.fn{display:grid;grid-template-columns:minmax(96px,30%) 1fr 42px 48px;gap:8px;align-items:center;font-size:13px;font-weight:600}
+.fb{height:22px;background:var(--soft);border-radius:6px;overflow:hidden}.fb i{display:block;height:100%;border-radius:0 6px 6px 0}.fn b{text-align:right}.fn em{font-style:normal;color:var(--mute);font-size:12px;text-align:right}
+.stk{margin-bottom:14px}.sl{font-weight:700;font-size:13px;margin-bottom:5px}.sl small{color:var(--mute);font-weight:500}
+.sb{display:flex;gap:2px;height:16px;border-radius:6px;overflow:hidden}.sb i{display:block;background:var(--s1);min-width:3px}
+.sg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font-size:12px;color:var(--mute)}.sg i{display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--s1);margin-right:4px}.sg b{color:var(--ink)}
+.dt.nw td{white-space:nowrap}.dt{width:100%;border-collapse:collapse;font-size:13.5px}.dt td,.dt th{padding:8px 6px}.dt .r{text-align:right}.dt small{color:var(--mute)}
+.dt th.srt{cursor:pointer;user-select:none}.dt th.on{color:var(--ink)}.dt tr:hover td{background:var(--soft)}
+.ib{display:inline-block;width:90px;height:8px;border-radius:99px;background:var(--soft);vertical-align:middle;overflow:hidden;margin-right:6px}.ib i{display:block;height:100%;border-radius:99px}
+.pill{display:inline-block;min-width:46px;text-align:center;padding:2px 8px;border-radius:99px;font-weight:700;font-size:12.5px;background:color-mix(in srgb,currentColor 15%,transparent)!important}
+#tip{position:fixed;left:0;top:0;z-index:50;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:var(--bg);font:600 12.5px/1.4 Montserrat,sans-serif;padding:7px 10px;border-radius:10px;max-width:280px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+@media (max-width:640px){.dt .hm{display:none}.ib{width:50px}.fn{grid-template-columns:90px 1fr 34px 40px}}
+/* login */
+body.out header{display:none}
+#login{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 22px;position:relative;overflow:hidden}
+#login .lgo{width:min(340px,82vw);height:auto}
+#login .art{position:relative;width:200px;height:150px;margin:6px auto 14px}
+#login .art .st{position:absolute;left:50%;top:22px;width:92px;margin-left:-46px;animation:lgB 2.6s ease-in-out infinite}
+#login .art .sh{position:absolute;left:50%;bottom:8px;width:70px;height:10px;margin-left:-35px;border-radius:50%;background:var(--ink);opacity:.12;animation:lgS 2.6s ease-in-out infinite}
+#login .art .f{position:absolute;width:30px;animation:lgF 4s ease-in-out infinite}
+#login .art .f1{left:0;top:30px}#login .art .f2{right:2px;top:10px;animation-delay:-1.3s}#login .art .f3{right:18px;bottom:16px;width:26px;animation-delay:-2.6s}#login .art .f4{left:20px;bottom:6px;width:24px;animation-delay:-.7s}
+@keyframes lgB{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-16px) rotate(6deg)}}
+@keyframes lgS{0%,100%{transform:scaleX(1);opacity:.14}50%{transform:scaleX(.7);opacity:.07}}
+@keyframes lgF{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(12deg)}}
+@media (prefers-reduced-motion:reduce){#login .art *{animation:none!important}}
+#login h1{font:400 clamp(1.7rem,7vw,2.2rem)/1.1 "Luckiest Guy",system-ui;letter-spacing:.03em;color:var(--ink);margin:0 0 8px}
+#login p.lead{margin:0 0 26px;color:var(--mute);font-size:16px;max-width:300px}
+#login .gbtn{display:inline-flex;align-items:center;justify-content:center;gap:12px;width:min(330px,100%);min-height:56px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);font:700 16px Montserrat,sans-serif;cursor:pointer;box-shadow:0 6px 0 color-mix(in srgb,var(--ink) 60%,transparent)}
+#login .gbtn:active{transform:translateY(3px);box-shadow:0 3px 0 color-mix(in srgb,var(--ink) 60%,transparent)}
+#login .gbtn svg{width:22px;height:22px;background:#fff;border-radius:50%;padding:3px;box-sizing:content-box}
+#login .foot{position:absolute;bottom:22px;left:0;right:0;font-size:12px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
 </style>
 </head>
-<body>
+<body class="out">
 <header>
   <div class="top"><span class="who">Admin</span><svg class="logo" viewBox="0 0 640 215" role="img" aria-label="Primeros alimentos"><defs><path id="ARC1" d="M10,185 Q320,10 630,185"/></defs><text class="disp" text-anchor="middle" style="font-size:56px;fill:var(--green)"><textPath href="#ARC1" startOffset="50%">Primeros alimentos</textPath></text><g transform="translate(279 112) scale(3.4)" style="fill:var(--terra)"><polygon points="12,1.5 14.9,8.4 22.4,9.1 16.7,14 18.4,21.4 12,17.5 5.6,21.4 7.3,14 1.6,9.1 9.1,8.4"/><path d="M9.3 11.2v.9M14.7 11.2v.9M9.8 13.4q2.2 1.9 4.4 0" style="stroke:var(--bg);fill:none;stroke-width:.9;stroke-linecap:round"/></g></svg><button id="out" class="btn sm hide">Salir</button><span id="sp" class="who" style="visibility:hidden">Admin</span></div>
   <nav id="nav" class="hide">
@@ -88,12 +135,7 @@ select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-
   </nav>
 </header>
 
-<div id="login" class="center"><div class="card">
-  <h2>Panel de control</h2>
-  <p class="mute">Inicia sesión para ver cómo va la app.</p>
-  <button id="in" class="btn pri">Iniciar sesión con Google</button>
-  <p id="err" class="mute"></p>
-</div></div>
+<div id="login"><svg class="lgo" viewBox="0 0 640 215" role="img" aria-label="Primeros alimentos"><defs><path id="ARC2" d="M10,185 Q320,10 630,185"/></defs><text class="disp" text-anchor="middle" style="font-size:56px;fill:var(--green)"><textPath href="#ARC2" startOffset="50%">Primeros alimentos</textPath></text><g transform="translate(279 112) scale(3.4)" style="fill:var(--terra)"><polygon points="12,1.5 14.9,8.4 22.4,9.1 16.7,14 18.4,21.4 12,17.5 5.6,21.4 7.3,14 1.6,9.1 9.1,8.4"/><path d="M9.3 11.2v.9M14.7 11.2v.9M9.8 13.4q2.2 1.9 4.4 0" style="stroke:var(--bg);fill:none;stroke-width:.9;stroke-linecap:round"/></g></svg><div class="art"><span class="sh"></span><svg class="f f1" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="18" r="11" fill="#e05a4c"/><path d="M16 7c0-3 2-5 4-5" stroke="#6a4a2a" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="21" cy="6" rx="4" ry="2" fill="#4a8760" transform="rotate(-25 21 6)"/></svg><svg class="f f2" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 30c-6 0-9-5-7-13l7-15 7 15c2 8-1 13-7 13z" fill="#ef8a3c"/><path d="M16 2l-3-1M16 2l3-1" stroke="#4a8760" stroke-width="2" stroke-linecap="round"/></svg><svg class="f f3" viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="12" r="6" fill="#4a8760"/><circle cx="20" cy="10" r="6" fill="#5c9c71"/><circle cx="16" cy="16" r="6" fill="#4a8760"/><rect x="14" y="18" width="4" height="12" rx="2" fill="#7fae7c"/></svg><svg class="f f4" viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="17" rx="9" ry="12" fill="#f3d36b"/><path d="M12 6q4-5 8 0" stroke="#4a8760" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><svg class="st" viewBox="0 0 24 24" aria-hidden="true"><path fill="var(--terra)" d="M12 1.5l2.9 6.9 7.5.7-5.7 4.9 1.7 7.4L12 17.5l-6.4 3.9 1.7-7.4-5.7-4.9 7.5-.7z"/><g stroke="var(--card)" stroke-width=".9" stroke-linecap="round" fill="none"><path d="M9.3 11.2v.9M14.7 11.2v.9"/><path d="M9.8 13.4q2.2 1.9 4.4 0"/></g></svg></div><h1>Panel de control</h1><p class="lead">Cómo va la app, qué comen los bebés y el blog, todo en un sitio.</p><button id="in" class="gbtn"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.2C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.8c4.3-4 6.9-9.9 6.9-17.2z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C1 16.5 0 20.1 0 24s1 7.5 2.7 10.8l7.8-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.8c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.2-13.4-9.9l-7.9 6.2C6.6 42.6 14.6 48 24 48z"/></svg>Entrar con Google</button><p id="err" class="mute"></p><div class="foot">Admin · Primeros Alimentos</div></div>
 
 <main id="app" class="hide">
   <p id="upd" class="mute"></p>
@@ -132,12 +174,12 @@ $("nav").onclick=e=>{const t=e.target.dataset.t;if(!t)return;
 $("in").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>$("err").textContent="No se ha podido entrar: "+e.code);
 $("out").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,async u=>{
-  $("login").classList.toggle("hide",!!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
+  $("login").classList.toggle("hide",!!u);document.body.classList.toggle("out",!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
   try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>{const x=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
     $("upd").textContent=`Datos de ${snap.size} cuentas · ${new Date().toLocaleString("es-ES")} · Lectura de Firestore: ${snap.size} documentos`;}
-  catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");
+  catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");document.body.classList.add("out");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
   renderBlog();
   try{const t=(location.hash||"").slice(1)||localStorage.getItem("adm_tab");if(t)document.querySelector(`#nav [data-t="${t}"]`)?.click()}catch(e){}
@@ -145,204 +187,188 @@ onAuthStateChanged(auth,async u=>{
 
 /* ---------- piezas de UI ---------- */
 const kpi=(v,l,s)=>`<div class="card kpi"><b>${v}</b><span>${l}</span>${s?`<small>${s}</small>`:""}</div>`;
-const bars=(title,rows,{alt=false,suf="",note=""}={})=>{const mx=Math.max(1,...rows.map(r=>r[1]));
-  return `<div class="card"><h2>${title}</h2>${note?`<p class="mute">${note}</p>`:""}<div class="bars">${rows.length?rows.map(([k,v,lab])=>`<div class="row${alt?" alt":""}"><span>${esc(k)}</span><span class="tr"><i style="width:${v*100/mx}%"></i></span><em>${lab??v+suf}</em></div>`).join(""):'<p class="mute">Aún no hay datos suficientes.</p>'}</div></div>`};
-const cols=(title,rows,note)=>{const mx=Math.max(1,...rows.map(r=>r[1]));
-  return `<div class="card"><h2>${title}</h2>${note?`<p class="mute">${note}</p>`:""}<div class="cols">${rows.map(([k,v])=>`<div><span>${v}</span><i style="height:${v*110/mx}px"></i><span>${esc(k)}</span></div>`).join("")}</div></div>`};
+const EMPTY='<p class="mute">Aún no hay datos suficientes.</p>';
+const card=(title,note,body,cls="")=>`<div class="card ${cls}"><h2>${title}</h2>${note?`<p class="mute note">${note}</p>`:""}${body}</div>`;
+const tip=s=>` data-tip="${esc(s)}"`;
+// Cifra grande con variación y mini tendencia
+const spark=(vals,cls="s1")=>{if(!vals||vals.length<2)return"";const mx=Math.max(1,...vals),W=120,H=34,st=W/(vals.length-1);
+  const pts=vals.map((v,i)=>[i*st,H-3-(v/mx)*(H-8)]);return `<svg class="spark ${cls}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="M${pts.map(p=>p.map(n=>n.toFixed(1)).join(" ")).join("L")}"/><circle cx="${pts.at(-1)[0]}" cy="${pts.at(-1)[1]}" r="3"/></svg>`};
+const hero=(v,l,{sub="",delta=null,sp=null,goal=null}={})=>{let d="";if(delta!=null&&isFinite(delta)){const up=delta>0,eq=delta===0;d=`<span class="dl ${eq?"":up?"up":"dn"}">${eq?"=":up?"▲":"▼"} ${Math.abs(delta)}${typeof delta==="number"&&String(sub).includes("%")?"":""}</span>`}
+  return `<div class="card hero"><div class="hl">${l}</div><div class="hv"><b>${v}</b>${d}</div>${goal?`<div class="goal"${tip(`${goal[0]} % · objetivo ${goal[1]} %`)}><i style="width:${Math.min(100,goal[0])}%"></i><u style="left:${goal[1]}%"></u></div>`:""}<small>${sub}</small>${sp?spark(sp):""}</div>`};
+// Barras horizontales con tooltip
+const hbars=(rows,{c="s1",fmt=null}={})=>{if(!rows.length)return EMPTY;const mx=Math.max(1,...rows.map(r=>r[1]));
+  return `<div class="bars">${rows.map(([k,v,lab,t])=>`<div class="row"${tip(t||`${k}: ${lab??v}`)}><span>${esc(k)}</span><span class="tr"><i class="${c}" style="width:${Math.max(1.5,v*100/mx)}%"></i></span><em>${lab??v}</em></div>`).join("")}</div>`};
+// Columnas con tooltip
+const vcols=(rows,{c="s1",fmt=v=>v,unit=""}={})=>{if(!rows.length||rows.every(r=>!r[1]))return EMPTY;const mx=Math.max(1e-9,...rows.map(r=>r[1]));
+  return `<div class="cols">${rows.map(([k,v,t])=>`<div${tip(t||`${k}: ${fmt(v)}${unit}`)}><span>${fmt(v)}</span><i class="${c}" style="height:${Math.max(2,v*120/mx)}px"></i><span>${esc(k)}</span></div>`).join("")}</div>`};
+// Línea (una o dos series, mismo eje) con cruceta y tooltip
+const lineChart=(xs,series,{pct=false,h=200}={})=>{if(!xs.length)return EMPTY;const W=640,H=h,L=34,R=54,T=12,B=26,mx0=Math.max(1,...series.flatMap(s=>s.v.filter(v=>v!=null)));
+  const mx=pct?100:Math.ceil(mx0/(mx0>10?5:1))*(mx0>10?5:1),X=i=>L+(xs.length<2?0:i*(W-L-R)/(xs.length-1)),Y=v=>T+(1-v/mx)*(H-T-B);
+  let g="";for(let k=0;k<=2;k++){const v=mx*k/2,y=Y(v);g+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" class="grid"/><text x="${L-6}" y="${y+4}" class="ax" text-anchor="end">${Math.round(v)}${pct?"%":""}</text>`}
+  xs.forEach((x,i)=>{if(xs.length<=8||i%Math.ceil(xs.length/6)===0||i===xs.length-1)g+=`<text x="${X(i)}" y="${H-6}" class="ax" text-anchor="middle">${esc(x)}</text>`});
+  const paths=series.map(s=>{const pts=s.v.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);const last=pts.at(-1),lv=s.v.filter(v=>v!=null).at(-1);
+    return `<path class="ln ${s.c}" d="M${pts.map(p=>p.map(n=>n.toFixed(1)).join(" ")).join("L")}"/>${pts.map(p=>`<circle class="dot ${s.c}" cx="${p[0]}" cy="${p[1]}" r="${xs.length>14?0:3}"/>`).join("")}${last?`<circle class="end ${s.c}" cx="${last[0]}" cy="${last[1]}" r="4.5"/><text x="${last[0]+8}" y="${last[1]+4}" class="lbl">${lv}${pct?"%":""}</text>`:""}`}).join("");
+  const hits=xs.map((x,i)=>{const w=(W-L-R)/Math.max(1,xs.length-1);return `<rect class="hit" x="${X(i)-w/2}" y="${T}" width="${w}" height="${H-T-B}" data-x="${X(i)}"${tip(x+" · "+series.map(s=>`${s.n}: ${s.v[i]??"—"}${pct?"%":""}`).join(" · "))}/>`}).join("");
+  const leg=series.length>1?`<div class="leg">${series.map(s=>`<span><i class="${s.c}"></i>${esc(s.n)}</span>`).join("")}</div>`:"";
+  return `${leg}<svg class="lc" viewBox="0 0 ${W} ${H}" role="img">${g}<line class="xh" x1="0" x2="0" y1="${T}" y2="${H-B}"/>${paths}${hits}</svg>`};
+// Barra 100 % segmentada (distribución), pasos de un mismo tono + leyenda con cifras
+const stack=(label,parts,tot)=>{const ps=parts.filter(p=>p[1]>0);if(!tot||!ps.length)return "";const op=[1,.72,.5,.34,.22,.14];
+  return `<div class="stk"><div class="sl">${esc(label)} <small>${tot} bebés</small></div><div class="sb">${ps.map(([k,v],i)=>`<i style="width:${v*100/tot}%;opacity:${op[Math.min(i,5)]}"${tip(`${label} · ${k}: ${v} (${pct(v,tot)} %)`)}></i>`).join("")}</div>
+    <div class="sg">${ps.map(([k,v],i)=>`<span><i style="opacity:${op[Math.min(i,5)]}"></i>${esc(k)} <b>${pct(v,tot)} %</b></span>`).join("")}</div></div>`};
 
-/* ---------- cálculos ---------- */
+/* ---------- cálculos y pintado ---------- */
+const GOALN={iron:"Hierro",fiber:"Fibra",omega3:"Omega-3",calcium:"Calcio",protein:"Proteína",zinc:"Zinc",vitc:"Vitamina C",alg:"Alérgenos a tiempo",verd:"Más verduras",x100:"100 alimentos",xvar:"Rico y variado"};
+const DIETN={om:"De todo",veg:"Vegetariana",vegan:"Vegana",ovo:"Ovolacto",pesc:"Pescetariana"};
+const MILKN={pecho:"Pecho",formula:"Fórmula",mixta:"Mixta",vaca:"Leche de vaca",no:"Ya no toma"};
+const TAGN={dientes:"Dientes",malito:"Malito",vacuna:"Vacuna",fuera:"Fuera de casa",cansado:"Muy cansado"};
+const MLN={desayuno:"Desayuno",comida:"Comida",merienda:"Merienda",cena:"Cena",media:"Media mañana"};
+const tally=(arr,key)=>{const o={};arr.forEach(x=>{const k=key(x);if(k!=null&&k!=="")o[k]=(o[k]||0)+1});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
+const med=a=>{a=[...a].sort((x,y)=>x-y);return a.length?a[Math.floor(a.length/2)]:null};
+const monday=d=>{const x=new Date(d+"T12:00");x.setDate(x.getDate()-((x.getDay()+6)%7));return x.toISOString().slice(0,10)};
+const LIKE=r=>r==="love"||r==="ok",BAD=r=>r==="meh"||r==="no",RATED=r=>["love","ok","meh","no"].includes(r);
+
 function render(users){
-  const babies=[];
-  users.forEach(u=>(u.babies||[]).forEach(b=>babies.push({...b,_ts:u.ts||0})));
+  const babies=[];users.forEach(u=>(u.babies||[]).forEach(b=>babies.push(b)));
   const real=babies.filter(b=>(Array.isArray(b.log)?b.log:[]).some(l=>l&&!l.pre)||(b.nm||"").trim());
-  const now=Date.now();
-  const act7=users.filter(u=>u.ts&&now-u.ts<7*DAY).length,act30=users.filter(u=>u.ts&&now-u.ts<30*DAY).length;
+  const info=real.map(b=>{const L=(Array.isArray(b.log)?b.log:[]).filter(l=>l&&l.f&&l.d&&!l.pre).sort((a,c)=>a.d<c.d?-1:1);const ds=[...new Set(L.map(l=>l.d))];
+    return {b,L,ds,first:ds[0]||null,last:ds.at(-1)||null,foods:new Set(L.map(l=>l.f)),dn:b.dn&&typeof b.dn==="object"?b.dn:{}}});
+  const started=info.filter(i=>i.first),N=started.length,LL=started.flatMap(i=>i.L.map(l=>({...l,_i:i})));
+  window.__ST={users,real,started,N,LL};
 
-  // primer y último día con registro por bebé
-  const info=real.map(b=>{const L=(Array.isArray(b.log)?b.log:[]).filter(l=>l&&l.f&&l.d&&!l.pre);const ds=L.map(l=>l.d).sort();
-    const first=ds[0]||null,last=ds[ds.length-1]||null;
-    const foods=new Set(L.map(l=>l.f));
-    const firstWeek=first?new Set(L.filter(l=>dd(first,l.d)<7).map(l=>l.f)).size:0;
-    const w4=first&&dd(first,today)>=28?L.some(l=>{const x=dd(first,l.d);return x>=21&&x<35}):null;
-    return {b,L,first,last,foods,firstWeek,w4,mo:months(b.bd,today)}});
-  const started=info.filter(i=>i.first);
-  const actv=started.filter(i=>i.firstWeek>=5).length;
-  const elig=started.filter(i=>i.w4!==null),ret=elig.filter(i=>i.w4).length;
+  // ===== USO =====
+  const thisW=monday(today),W12=[];for(let k=11;k>=0;k--){const d=new Date(thisW+"T12:00");d.setDate(d.getDate()-7*k);W12.push(d.toISOString().slice(0,10))}
+  const actW=W12.map(w=>started.filter(i=>i.ds.some(d=>monday(d)===w)).length),newW=W12.map(w=>started.filter(i=>monday(i.first)===w).length);
+  const wl=w=>{const d=new Date(w+"T12:00");return d.getDate()+"/"+(d.getMonth()+1)};
+  const act1=actW.at(-1),act0=actW.at(-2),new1=newW.at(-1),new0=newW.at(-2);
+  const firstWeekFoods=i=>new Set(i.L.filter(l=>dd(i.first,l.d)<7).map(l=>l.f)).size;
+  const elAct=started.filter(i=>dd(i.first,today)>=7),activ=elAct.filter(i=>firstWeekFoods(i)>=5).length;
+  // ¿siguen apuntando? % de bebés con algo apuntado en la semana k desde que empezaron
+  const ret=[];for(let k=1;k<=8;k++){const el=started.filter(i=>dd(i.first,today)>=(k+1)*7);ret.push(el.length>=3?pct(el.filter(i=>i.ds.some(d=>{const x=dd(i.first,d);return x>=k*7&&x<(k+1)*7})).length,el.length):null)}
+  const r4=started.filter(i=>dd(i.first,today)>=35),r4ok=r4.filter(i=>i.ds.some(d=>{const x=dd(i.first,d);return x>=28&&x<35})).length;
+  const nf=i=>i.foods.size;
+  const fun=[["Cuentas",users.length],["Con bebé",real.length],["Han empezado",N],["5+ alimentos",started.filter(i=>nf(i)>=5).length],["20+ alimentos",started.filter(i=>nf(i)>=20).length],["50+ alimentos",started.filter(i=>nf(i)>=50).length],["100 alimentos",started.filter(i=>nf(i)>=100).length]];
+  const funnel=fun.map(([k,v],j)=>`<div class="fn"${tip(`${k}: ${v} (${pct(v,fun[0][1])} % de las cuentas)`)}><span>${k}</span><span class="fb"><i class="s1" style="width:${Math.max(1.5,v*100/Math.max(1,fun[0][1]))}%"></i></span><b>${v}</b><em>${j?pct(v,fun[j-1][1])+" %":""}</em></div>`).join("");
+  const fromMenu=LL.filter(l=>l.m).length;
+  const feat=[["Apunta desde el menú del día",pct(fromMenu,LL.length),`${pct(fromMenu,LL.length)} % de registros`],
+    ["Diario (cacas, dientes…)",pct(started.filter(i=>Object.keys(i.dn).length).length,N)],["Favoritos",pct(real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,real.length)],
+    ["Nevera y congelador",pct(real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length,real.length)],["Fotos",pct(started.filter(i=>i.L.some(l=>l.ph)).length,N)],
+    ["Escuela infantil",pct(real.filter(b=>b.gd&&(typeof b.gd!=="object"||Object.keys(b.gd).length)).length,real.length)],
+    ["Comparte con cuidadores",pct(users.filter(u=>u.members&&Object.keys(u.members).length).length,users.length),null,"% de cuentas"]]
+    .map(([k,v,lab,t])=>[k,v,lab||v+" %",t?`${k}: ${v} ${t}`:`${k}: ${v} % de los bebés`]).sort((a,b)=>b[1]-a[1]);
+  const ageB=tally(real.filter(b=>b.bd),b=>{const m=months(b.bd,today);return m<6?"<6 m":m<9?"6-8 m":m<12?"9-11 m":m<18?"12-17 m":"18+ m"}).sort((a,b)=>["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(a[0])-["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(b[0]));
+  const startB=tally(started.filter(i=>i.b.bd),i=>{const m=months(i.b.bd,i.first);return m<5?"Antes de 5 m":m<6?"5 m":m<7?"6 m":"7 m o más"}).sort((a,b)=>["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(a[0])-["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(b[0]));
+  const styB=tally(real,b=>STY[(b.prefs||{}).sty||""]||"Otro"),milkB=tally(real,b=>MILKN[(b.prefs||{}).milk]||"Sin indicar"),dietB=tally(real,b=>DIETN[(b.prefs||{}).diet||"om"]||"Otra"),paisB=tally(real,b=>b.pais||"ES");
+  const goals=tally(real.flatMap(b=>((b.prefs||{}).goals)||[]),g=>GOALN[g]||g).map(([k,v])=>[k,pct(v,real.length),pct(v,real.length)+" %",`${k}: ${v} de ${real.length} bebés`]);
+  const pre=real.filter(b=>b.ga&&b.ga<37).length,multi=users.filter(u=>(u.babies||[]).length>1).length;
 
-  // nuevas por semana (primer registro), últimas 10 semanas
-  const wk=d=>{const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);return x.toISOString().slice(5,10)};
-  const weeks=[];for(let i=9;i>=0;i--){const x=new Date(now-i*7*DAY);weeks.push(wk(x.toISOString().slice(0,10)))}
-  const newW=weeks.map(w=>[w.split("-").reverse().join("/"),started.filter(i=>wk(i.first)===w).length]);
+  $("t-uso").innerHTML=`<div class="heroes">
+      ${hero(act1,"Bebés activos esta semana",{delta:act1-act0,sub:`${act0} la semana pasada`,sp:actW})}
+      ${hero(new1,"Familias nuevas esta semana",{delta:new1-new0,sub:`${new0} la semana pasada · ${N} en total`,sp:newW})}
+      ${hero(elAct.length?pct(activ,elAct.length)+" %":"—","Activación",{sub:`5+ alimentos la 1.ª semana · ${activ} de ${elAct.length} · objetivo 50 %`,goal:elAct.length?[pct(activ,elAct.length),50]:null})}
+      ${hero(r4.length?pct(r4ok,r4.length)+" %":"—","Siguen en la semana 4",{sub:`${r4ok} de ${r4.length} bebés · objetivo 30 %`,goal:r4.length?[pct(r4ok,r4.length),30]:null})}
+    </div>
+    <div class="g2">
+      ${card("Cada semana","Bebés con algo apuntado y familias que empiezan, últimas 12 semanas.",lineChart(W12.map(wl),[{n:"Activos",v:actW,c:"s1"},{n:"Nuevas",v:newW,c:"s2"}]))}
+      ${card("¿Siguen apuntando?","% de bebés que apuntan algo en cada semana desde que empezaron (con 3 bebés o más en esa semana).",ret.some(v=>v!=null)?lineChart(["S1","S2","S3","S4","S5","S6","S7","S8"],[{n:"Siguen",v:ret,c:"s1"}],{pct:true}):EMPTY)}
+    </div>
+    <div class="g2">
+      ${card("Embudo","De todas las cuentas, cuántas llegan a cada punto. A la derecha, el % que pasa desde el paso anterior.",`<div class="funnel">${funnel}</div>`)}
+      ${card("Qué usan","% de bebés que usan cada parte de la app.",hbars(feat))}
+    </div>
+    <h3 class="sech">Quiénes son</h3>
+    <div class="g2">
+      ${card("Las familias",`${pre} prematuros · ${multi} familias con 2 o más bebés.`,stack("Edad ahora",ageB,ageB.reduce((s,x)=>s+x[1],0))+stack("Empezaron a comer a los",startB,startB.reduce((s,x)=>s+x[1],0))+stack("Cómo comen",styB,real.length)+stack("Leche",milkB,real.length)+stack("Dieta",dietB,real.length)+stack("País",paisB,real.length))}
+      ${card("Qué objetivos eligen","% de bebés que lo tienen marcado en el plan.",hbars(goals))}
+    </div>`;
 
-  // edad
-  const ageB={"<6":0,"6 m":0,"7 m":0,"8 m":0,"9 m":0,"10 m":0,"11 m":0,"12-17 m":0,"18+ m":0};
-  real.forEach(b=>{const m=months(b.bd,today);if(m==null)return;const k=m<6?"<6":m<12?m+" m":m<18?"12-17 m":"18+ m";ageB[k]++});
-  const sty={};real.forEach(b=>{const k=STY[(b.prefs||{}).sty||""]||"Otro";sty[k]=(sty[k]||0)+1});
-  const pais={};real.forEach(b=>{const k=b.pais||"ES";pais[k]=(pais[k]||0)+1});
+  // ===== QUÉ COMEN =====
+  const F={};LL.forEach(l=>{const f=F[l.f]=F[l.f]||{tried:new Set(),n:0,like:0,love:0,bad:0,no:0,rb:new Set()};f.tried.add(l._i);if(RATED(l.r)){f.n++;f.rb.add(l._i);if(LIKE(l.r))f.like++;if(l.r==="love")f.love++;if(BAD(l.r))f.bad++;if(l.r==="no")f.no++}});
+  const foods=Object.entries(F).map(([k,f])=>({k,t:f.tried.size,n:f.n,love:f.n?pct(f.love,f.n):null,bad:f.n?pct(f.bad,f.n):null,no:f.no,rb:f.rb.size}));
+  window.__FOODS=foods;
+  let firstBad=0,laterOk=0;const tries=[];
+  started.forEach(i=>{const by={};i.L.forEach(l=>(by[l.f]=by[l.f]||[]).push(l.r));Object.values(by).forEach(rs=>{if(BAD(rs[0])){firstBad++;const k=rs.findIndex(LIKE);if(k>0){laterOk++;tries.push(k+1)}}})});
+  const rated=LL.filter(l=>RATED(l.r)),loveP=pct(rated.filter(l=>l.r==="love").length,rated.length);
+  const avgF=N?Math.round(started.reduce((s,i)=>s+nf(i),0)/N):0;
+  // alérgenos
+  const rxG={},alG={},alS={};real.forEach(b=>{(Array.isArray(b.rx)?b.rx:[]).forEach(r=>{if(r){const k=r.g||"";rxG[k]=(rxG[k]||0)+1}});const al=b.al&&typeof b.al==="object"?(Array.isArray(b.al)?Object.fromEntries(b.al.map(x=>[x,"alergia"])):b.al):{};Object.entries(al).forEach(([g,v])=>{if(v==="alergia")alG[g]=(alG[g]||0)+1;else if(v==="sospecha")alS[g]=(alS[g]||0)+1})});
+  const alg=Object.entries(AGD).map(([g,fs])=>{const intro=started.filter(i=>fs.some(f=>i.foods.has(f)));const ms=intro.filter(i=>i.b.bd).map(i=>months(i.b.bd,i.L.find(l=>fs.includes(l.f)).d)).filter(m=>m!=null&&m>=4&&m<=36);
+    return {g,n:AGN[g],p:pct(intro.length,N),c:intro.length,age:ms.length>=3?med(ms):null,rx:rxG[g]||0,al:alG[g]||0,su:alS[g]||0}}).sort((a,b)=>b.p-a.p);
+  const algNo=alg.filter(a=>!a.c).map(a=>a.n),algY=alg.filter(a=>a.c);
+  const algTable=N?`<table class="dt nw"><tr><th>Grupo</th><th>Ya lo han probado</th><th class="r">Edad típica</th><th class="r">Reacciones</th><th class="r">Alergias</th></tr>${algY.map(a=>`<tr${tip(`${a.n}: ${a.c} de ${N} bebés lo han probado${a.age!=null?`, la mitad antes de los ${a.age+1} meses`:""}`)}><td>${a.n}</td><td><span class="ib"><i class="s1" style="width:${a.p}%"></i></span>${a.p} % <small>(${a.c})</small></td><td class="r">${a.age!=null?a.age+" m":"—"}</td><td class="r">${a.rx||"—"}</td><td class="r">${a.al?a.al+" conf.":""}${a.al&&a.su?" · ":""}${a.su?a.su+" sosp.":""}${!a.al&&!a.su?"—":""}</td></tr>`).join("")}</table>${algNo.length?`<p class="mute note" style="margin-top:10px">Aún sin probar: ${algNo.join(", ")}.</p>`:""}`:EMPTY;
+  // ritmo
+  const rit=[];for(let w=0;w<8;w++){const el=started.filter(i=>dd(i.first,today)>=(w+1)*7);if(!el.length){rit.push(["S"+(w+1),0]);continue}
+    rit.push(["S"+(w+1),Math.round(el.reduce((s,i)=>{const seen=new Set();let n=0;i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);const x=dd(i.first,l.d);if(x>=w*7&&x<(w+1)*7)n++}});return s+n},0)/el.length*10)/10,`Semana ${w+1}: ${(el.reduce((s,i)=>{const seen=new Set();let n=0;i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);const x=dd(i.first,l.d);if(x>=w*7&&x<(w+1)*7)n++}});return s+n},0)/el.length).toFixed(1)} alimentos nuevos de media (${el.length} bebés)`])}
+  const howB=tally(LL.filter(l=>l.how&&l.how!=="Del menú"&&l.how!=="Antes de empezar"),l=>l.how),mlB=tally(LL.filter(l=>l.ml),l=>MLN[String(l.ml).toLowerCase()]||l.ml);
+  const topHow=howB.slice(0,4),restHow=howB.slice(4).reduce((s,x)=>s+x[1],0);if(restHow)topHow.push(["Otras",restHow]);
+  // diario
+  const tagN={},tagL={};let bN=0,bL=0;started.forEach(i=>i.L.forEach(l=>{if(!RATED(l.r))return;const t=(((i.dn[l.d]||{}).t)||[]).filter(x=>TAGN[x]);if(!t.length){bN++;if(LIKE(l.r))bL++}t.forEach(x=>{tagN[x]=(tagN[x]||0)+1;if(LIKE(l.r))tagL[x]=(tagL[x]||0)+1})}));
+  const tagEat=[["Días normales",pct(bL,bN),pct(bL,bN)+" %",`Días normales: ${bL} de ${bN} valoraciones buenas`],...Object.entries(tagN).filter(([k,v])=>v>=3).map(([k,v])=>[TAGN[k],pct(tagL[k]||0,v),pct(tagL[k]||0,v)+" %",`${TAGN[k]}: ${tagL[k]||0} de ${v} valoraciones buenas`])];
+  const ccA={};let ccD=0,ccS=0,cc0=0;real.forEach(b=>Object.entries(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(([d,v])=>{if(!v||!Array.isArray(v.t))return;const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccD++;ccS+=n;if(!n)cc0++;const m=months(b.bd,d);if(m==null)return;const k=m<6?"<6":m>=12?"12+":String(m);(ccA[k]=ccA[k]||[]).push(n)}));
+  const ccRows=["<6","6","7","8","9","10","11","12+"].filter(k=>ccA[k]&&ccA[k].length>=3).map(k=>{const a=ccA[k],v=Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10;return [k+" m",v,`${k} meses: ${v} cacas al día de media (${a.length} días apuntados)`]});
 
-  $("t-uso").innerHTML=`<div class="grid">
-    ${kpi(users.length,"Cuentas")}
-    ${kpi(real.length,"Bebés con datos")}
-    ${kpi(act7,"Activas en 7 días",pct(act7,users.length)+" % de las cuentas")}
-    ${kpi(act30,"Activas en 30 días")}
-    ${kpi(started.length?pct(actv,started.length)+" %":"—","Activación","5 alimentos o más la primera semana · objetivo 50 %")}
-    ${kpi(elig.length?pct(ret,elig.length)+" %":"—","Retención semana 4",elig.length+" bebés con 4 semanas o más · objetivo 30 %")}
-  </div>
-  <div class="g2">
-    ${cols("Familias nuevas por semana",newW,"Por la semana de su primer alimento apuntado.")}
-    ${bars("Edad de los bebés (meses)",Object.entries(ageB))}
-    ${bars("Cómo comen",Object.entries(sty).sort((a,b)=>b[1]-a[1]))}
-    ${bars("País",Object.entries(pais).sort((a,b)=>b[1]-a[1]),{alt:true})}
-  </div>`;
+  $("t-bebes").innerHTML=`<div class="heroes">
+      ${hero(N,"Bebés que han empezado",{sub:`${LL.length} registros en total`})}
+      ${hero(avgF,"Alimentos distintos de media",{sub:`por bebé · ${started.filter(i=>nf(i)>=100).length} ya llegan a 100`})}
+      ${hero(rated.length?loveP+" %":"—","Valoraciones «le encanta»",{sub:`${rated.length} valoraciones`})}
+      ${hero(firstBad?pct(laterOk,firstBad)+" %":"—","Acaban gustando",{sub:firstBad?`de lo que la 1.ª vez no quiso (${laterOk} de ${firstBad})${tries.length?`, normalmente a la ${med(tries)}.ª vez`:""}`:"aún sin casos"})}
+    </div>
+    ${card("Alimento a alimento","Toca una columna para ordenar. «Le encanta» y «No o poco» salen con 3 valoraciones o más.",`<div id="ftab"></div>`)}
+    <div class="g2">
+      ${card("Alérgenos","% de bebés que ya han probado cada grupo, edad a la que la mitad ya lo ha probado, reacciones y alergias apuntadas.",algTable)}
+      ${card("Lo que más cuesta","Veces que han marcado «no lo quiere» y cuántos bebés.",hbars(foods.filter(f=>f.no).sort((a,b)=>b.no-a.no).slice(0,8).map(f=>[f.k,f.no,`${f.no} · ${f.rb} bebés`,`${f.k}: «no lo quiere» ${f.no} veces, ${f.rb} bebés lo han valorado`]),{c:"s2"}))}
+    </div>
+    <div class="g2">
+      ${card("Ritmo","Alimentos nuevos por semana desde que empiezan (media por bebé).",vcols(rit,{fmt:v=>v}))}
+      ${card("Cacas al día",ccD?`${(ccS/ccD).toFixed(1)} de media · ${pct(cc0,ccD)} % de días sin caca · ${ccD} días apuntados. Por mes de vida:`:"",vcols(ccRows,{fmt:v=>v}))}
+    </div>
+    <div class="g2">
+      ${card("Cómo y cuándo",`${LL.length} registros.`,stack("Cómo se lo dan",topHow,topHow.reduce((s,x)=>s+x[1],0)).replace(/ bebés</,' registros<')+stack("En qué comida",mlB,mlB.reduce((s,x)=>s+x[1],0)).replace(/ bebés</,' registros<'))}
+      ${card("¿Comen peor esos días?","% de valoraciones buenas («le encanta» o «ha comido bien») según lo apuntado en el diario.",hbars(tagEat))}
+    </div>`;
+  drawFoods("t");
 
-  // ---------- qué comen ----------
-  const tried={},love={},bad={},rated={},firstAge={},ratedB={};
-  started.forEach(i=>{const seen=new Set();i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);tried[l.f]=(tried[l.f]||0)+1;
-      if(i.b.bd){const m=months(i.b.bd,l.d);if(m!=null&&m>=4&&m<=24)(firstAge[l.f]=firstAge[l.f]||[]).push(m)}}
-    if(["love","ok","meh","no"].includes(l.r)){rated[l.f]=(rated[l.f]||0)+1;(ratedB[l.f]=ratedB[l.f]||new Set()).add(i);if(l.r==="love")love[l.f]=(love[l.f]||0)+1;if(l.r==="meh"||l.r==="no")bad[l.f]=(bad[l.f]||0)+1}})});
-  const N=started.length;
-  const topT=Object.entries(tried).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,`${pct(v,N)} % · ${v} de ${N} bebés`]);
-  const ratio=(o)=>Object.entries(o).filter(([k])=>(rated[k]||0)>=3).map(([k,v])=>[k,pct(v,rated[k]),`${pct(v,rated[k])} % · ${v} de ${rated[k]} · ${ratedB[k].size} bebés`,rated[k]]).sort((a,b)=>b[1]-a[1]||b[3]-a[3]).slice(0,15);
-  const algT=Object.entries(AGD).map(([g,fs])=>{const n=started.filter(i=>fs.some(f=>i.foods.has(f))).length;return [AGN[g],n,`${pct(n,N)} % · ${n} de ${N} bebés`]}).sort((a,b)=>b[1]-a[1]);
-  const rxG={};real.forEach(b=>(Array.isArray(b.rx)?b.rx:[]).forEach(r=>{if(!r)return;const k=AGN[r.g]||r.f||r.g||"Otro";rxG[k]=(rxG[k]||0)+1}));
-  const alG={},alS={};real.forEach(b=>{const al=b.al&&typeof b.al==="object"?b.al:{};Object.entries(Array.isArray(al)?Object.fromEntries(al.map(x=>[x,"alergia"])):al).forEach(([g,v])=>{const k=AGN[g]||g;if(v==="alergia")alG[k]=(alG[k]||0)+1;else if(v==="sospecha")alS[k]=(alS[k]||0)+1})});
-  // cacas: días con dato
-  let ccDays=0,ccSum=0,cc0=0;real.forEach(b=>Object.values(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(v=>{if(!v||!Array.isArray(v.t))return;
-    const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccDays++;ccSum+=n;if(n===0)cc0++}));
-  const avgFoods=N?Math.round(started.reduce((s,i)=>s+i.foods.size,0)/N):0;
-  const med=a=>{a=[...a].sort((x,y)=>x-y);return a.length?a[Math.floor(a.length/2)]:null};
-
-  $("t-bebes").innerHTML=`<p class="mute">Todo en agregado y anónimo. En cada gráfica: el porcentaje, cuántos casos hay detrás y de cuántos bebés.</p>
-  <div class="grid">
-    ${kpi(N,"Bebés que ya han empezado")}
-    ${kpi(avgFoods,"Alimentos distintos de media")}
-    ${kpi(ccDays?(ccSum/ccDays).toFixed(1):"—","Cacas al día de media",ccDays?`${ccDays} días apuntados · ${pct(cc0,ccDays)} % sin caca`:"")}
-    ${kpi(Object.values(rxG).reduce((a,b)=>a+b,0),"Reacciones apuntadas")}
-  </div>
-  <div class="g2">
-    ${bars("Los más probados",topT,{note:"% de bebés que ya lo han probado."})}
-    ${bars("Los que más encantan",ratio(love),{note:"% de valoraciones «le encanta» · cuántas sobre el total · cuántos bebés. Salen con 3 valoraciones o más."})}
-    ${bars("Los que más cuestan",ratio(bad),{alt:true,note:"% de valoraciones «poco» o «no» · cuántas sobre el total · cuántos bebés. Salen con 3 valoraciones o más."})}
-    ${bars("Alérgenos ya introducidos",algT,{note:"% de bebés que ya han probado cada grupo."})}
-    ${bars("Reacciones por grupo",Object.entries(rxG).sort((a,b)=>b[1]-a[1]),{alt:true})}
-    ${bars("Alergias confirmadas",Object.entries(alG).sort((a,b)=>b[1]-a[1]),{alt:true})}
-    ${bars("Sospechas de alergia",Object.entries(alS).sort((a,b)=>b[1]-a[1]),{alt:true})}
-  </div>`;
-
-  // ---------- ideas para redes ----------
-  const ideas=[];
+  // ===== IDEAS =====
+  const ideas=[],fv=foods.filter(f=>f.n>=Math.max(3,MIN));
   if(N>=MIN){
-    if(topT[0])ideas.push(`El alimento que más bebés han probado es <b>${esc(topT[0][0].toLowerCase())}</b>: ya lo ha probado el ${topT[0][2]} de los bebés.`);
-    const l=ratio(love)[0];if(l)ideas.push(`<b>${esc(l[0])}</b> es lo que más gusta: el ${l[2]} de las veces «le encanta».`);
-    const b=ratio(bad)[0];if(b)ideas.push(`<b>${esc(b[0])}</b> es lo que más cuesta (${b[2]} de las veces «poco» o «no»). Buen tema para un reel de trucos.`);
-    ideas.push(`De media, cada bebé ha probado <b>${avgFoods} alimentos distintos</b>.`);
-    const eg=med(firstAge["Huevo"]||[]);if(eg!=null&&(firstAge["Huevo"]||[]).length>=MIN)ideas.push(`La mitad de los bebés prueba el <b>huevo</b> antes de los ${eg+1} meses.`);
-    const al=algT.find(x=>x[0]==="Cacahuete");if(al)ideas.push(`El ${al[2]} de los bebés ya ha probado el <b>cacahuete</b> (en crema). Recordar que se introduce pronto y en poca cantidad.`);
-    if(ccDays>=MIN*3)ideas.push(`Los bebés hacen de media <b>${(ccSum/ccDays).toFixed(1)} cacas al día</b> (${pct(cc0,ccDays)} % de días sin caca).`);
+    const top=[...foods].sort((a,b)=>b.t-a.t)[0];if(top)ideas.push(`El alimento que más bebés han probado es <b>${esc(top.k.toLowerCase())}</b>: ya lo ha probado el ${pct(top.t,N)} % (${top.t} de ${N}).`);
+    const lv=[...fv].sort((a,b)=>b.love-a.love)[0];if(lv)ideas.push(`<b>${esc(lv.k)}</b> es lo que más gusta: «le encanta» el ${lv.love} % de las veces (${lv.n} valoraciones).`);
+    const bd=[...fv].sort((a,b)=>b.bad-a.bad)[0];if(bd)ideas.push(`<b>${esc(bd.k)}</b> es lo que más cuesta: «poco» o «no» el ${bd.bad} % de las veces. Buen tema para un reel de trucos.`);
+    if(firstBad>=MIN)ideas.push(`El <b>${pct(laterOk,firstBad)} %</b> de lo que un bebé rechaza la primera vez acaba gustándole${tries.length?`, normalmente a la ${med(tries)}.ª vez`:""}. Insistir funciona.`);
+    ideas.push(`De media, cada bebé ha probado <b>${avgF} alimentos distintos</b>.`);
+    const eg=alg.find(a=>a.g==="huevo");if(eg&&eg.age!=null)ideas.push(`La mitad de los bebés prueba el <b>huevo</b> antes de los ${eg.age+1} meses.`);
+    const cc=alg.find(a=>a.g==="cacahuete");if(cc&&cc.c)ideas.push(`El ${cc.p} % de los bebés ya ha probado el <b>cacahuete</b> (en crema). Se introduce pronto y en poca cantidad.`);
+    if(ccD>=MIN*3)ideas.push(`Los bebés hacen de media <b>${(ccS/ccD).toFixed(1)} cacas al día</b> (${pct(cc0,ccD)} % de días sin caca).`);
+    const dn=tagEat.find(x=>x[0]==="Dientes");if(dn&&tagEat[0][1]-dn[1]>=10)ideas.push(`Los días de <b>dientes</b> comen peor: ${dn[1]} % de valoraciones buenas frente a ${tagEat[0][1]} % un día normal.`);
   }
   $("t-redes").innerHTML=`<div class="card"><h2>Ideas para redes</h2>
     <p class="mute">Frases sacadas de los datos de hoy. Antes de publicarlas, revisa que haya bastantes familias detrás (ahora ${N}) y cítalo como «familias que usan Primeros Alimentos».</p>
     ${ideas.length?`<ul class="ideas">${ideas.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p>Aún no hay suficientes familias (mínimo ${MIN}) para sacar conclusiones.</p>`}</div>`;
-  renderMore(users,real,started);
 }
-/* ---------- más datos ---------- */
-const GOALN={iron:"Hierro",fiber:"Fibra",omega3:"Omega-3",calcium:"Calcio",protein:"Proteína",zinc:"Zinc",vitc:"Vitamina C",alg:"Alérgenos a tiempo",verd:"Más verduras",x100:"100 alimentos",xvar:"Rico y variado"};
-const DIETN={om:"Come de todo",veg:"Vegetariana",vegan:"Vegana",ovo:"Ovolacto",pesc:"Pescetariana"};
-const RN={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción",mix:"Mezclado"};
-const TAGN={dientes:"Dientes",malito:"Malito",vacuna:"Vacuna",fuera:"Fuera de casa",cansado:"Muy cansado",nocaca:"Sin caca",nocuenta:"No cuenta"};
-const WD=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
-const cnt=(arr,key)=>{const o={};arr.forEach(x=>{const k=key(x);if(k!=null&&k!=="")o[k]=(o[k]||0)+1});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
-const pr=(rows,tot)=>rows.map(([k,v])=>[k,v,v+" · "+pct(v,tot)+" %"]);
-function renderMore(users,real,started){
-  const N=started.length,LL=[];started.forEach(i=>i.L.forEach(l=>LL.push({...l,_i:i})));
-  const now=Date.now();
-  // embudo
-  const nf=i=>i.foods.size;
-  const fun=[["Cuentas",users.length],["Con bebé",real.length],["1+ alimento",N],["5+ alimentos",started.filter(i=>nf(i)>=5).length],["20+",started.filter(i=>nf(i)>=20).length],["50+",started.filter(i=>nf(i)>=50).length],["100+",started.filter(i=>nf(i)>=100).length]].map(([k,v])=>[k,v,v+(users.length?" · "+pct(v,users.length)+" %":"")]);
-  // actividad
-  const last30=[];for(let i=29;i>=0;i--){const d=new Date(now-i*DAY).toISOString().slice(0,10);last30.push([d.slice(8,10),LL.filter(l=>l.d===d).length])}
-  const wdc=WD.map((w,i)=>[w,LL.filter(l=>((new Date(l.d+"T12:00").getDay()+6)%7)===i).length]);
-  const daysAct=started.map(i=>new Set(i.L.map(l=>l.d)).size);
-  const dact=[["1 día",daysAct.filter(x=>x===1).length],["2-7",daysAct.filter(x=>x>=2&&x<=7).length],["8-30",daysAct.filter(x=>x>=8&&x<=30).length],["31-90",daysAct.filter(x=>x>30&&x<=90).length],["90+",daysAct.filter(x=>x>90).length]];
-  const sinceLast=started.map(i=>dd(i.last,today));
-  const churn=[["Hoy o ayer",sinceLast.filter(x=>x<=1).length],["2-7 días",sinceLast.filter(x=>x>=2&&x<=7).length],["8-30 días",sinceLast.filter(x=>x>7&&x<=30).length],["Más de 30",sinceLast.filter(x=>x>30).length]];
-  // funciones de la app
-  const fromMenu=LL.filter(l=>l.m).length,rec=LL.filter(l=>l.sv==="rec").length;
-  const withPh=started.filter(i=>i.L.some(l=>l.ph)).length;
-  const fav=real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,frz=real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length;
-  const gd=real.filter(b=>b.gd&&(typeof b.gd!=="object"||Object.keys(b.gd).length)).length,diary=real.filter(b=>b.dn&&Object.keys(b.dn).length).length;
-  const fams=users.filter(u=>u.members&&Object.keys(u.members).length).length,cg=users.filter(u=>u.fam).length,multi=users.filter(u=>(u.babies||[]).length>1).length;
-  const pre=real.filter(b=>b.ga&&b.ga<37).length;
-  const feat=[["Menú del día (lo anotado desde el menú)",fromMenu,pct(fromMenu,LL.length)+" % de registros"],["Recetas (platos de varios alimentos)",rec,pct(rec,LL.length)+" % de registros"],["Diario (cacas, dientes…)",diary,pct(diary,real.length)+" % de bebés"],["Favoritos",fav,pct(fav,real.length)+" % de bebés"],["Nevera y congelador",frz,pct(frz,real.length)+" % de bebés"],["Fotos",withPh,pct(withPh,real.length)+" % de bebés"],["Escuela infantil",gd,pct(gd,real.length)+" % de bebés"],["Comparten con cuidadores",fams,pct(fams,users.length)+" % de cuentas"]].sort((a,b)=>parseInt(b[2])-parseInt(a[2]));
-  const goals=cnt(real.flatMap(b=>((b.prefs||{}).goals)||[]),g=>GOALN[g]||g);
-  const diet=cnt(real,b=>DIETN[(b.prefs||{}).diet||"om"]||(b.prefs||{}).diet);
-  const milk=cnt(real,b=>({pecho:"Pecho",formula:"Fórmula",mixta:"Mixta",vaca:"Leche de vaca",no:"Ya no toma"})[(b.prefs||{}).milk]||(b.prefs||{}).milk||"Sin indicar");
-  const startAge=cnt(started.filter(i=>i.b.bd),i=>{const m=months(i.b.bd,i.first);return m==null?null:m<4?"<4 m":m>=9?"9+ m":m+" m"}).sort((a,b)=>parseInt(a[0].replace("<",""))-parseInt(b[0].replace("<","")));
-  $("t-uso").insertAdjacentHTML("beforeend",`<h3 class="sech">Cómo se usa</h3><div class="grid">
-      ${kpi(multi,"Familias con 2+ bebés")}${kpi(fams,"Cuentas que comparten",cg+" cuentas de cuidador")}${kpi(pre,"Prematuros",pct(pre,real.length)+" % de los bebés")}${kpi(N?Math.round(LL.length/N):"—","Registros por bebé","de media")}
-    </div><div class="g2">
-    ${bars("Embudo",fun,{note:"Cuántas cuentas llegan a cada punto (sobre el total de cuentas)."})}
-    ${cols("Registros cada día (últimos 30)",last30,"Alimentos apuntados por día, todas las familias.")}
-    ${cols("Qué día de la semana se apunta más",wdc,"Total de registros por día de la semana.")}
-    ${bars("Días con algo apuntado",dact,{note:"Por bebé, desde que empezó."})}
-    ${bars("Última vez que apuntaron",churn,{alt:true,note:"Por bebé. Los de más de 30 días probablemente lo han dejado."})}
-    ${bars("Funciones que usan",feat.map(([k,v,l])=>[k,parseInt(l),l]))}
-    ${bars("Objetivos que eligen",pr(goals,real.length),{note:"% de bebés que lo tienen marcado."})}
-    ${bars("Dieta de la familia",pr(diet,real.length))}
-    ${bars("Leche",pr(milk,real.length),{alt:true})}
-    ${bars("Edad al empezar",pr(startAge,startAge.reduce((s,x)=>s+x[1],0)),{note:"Mes de vida del primer alimento apuntado."})}
-  </div>`);
-
-  // ---------- qué comen: más ----------
-  // ritmo: alimentos nuevos por semana desde el inicio
-  const rit=[];for(let w=0;w<8;w++){const el=started.filter(i=>dd(i.first,today)>=(w+1)*7);if(el.length<1){rit.push(["S"+(w+1),0]);continue}
-    const avg=el.reduce((s,i)=>{const seen=new Set();let n=0;i.L.slice().sort((a,b)=>a.d<b.d?-1:1).forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);const x=dd(i.first,l.d);if(x>=w*7&&x<(w+1)*7)n++}});return s+n},0)/el.length;rit.push(["S"+(w+1),Math.round(avg*10)/10])}
-  const meals=cnt(LL.filter(l=>l.ml),l=>({desayuno:"Desayuno",comida:"Comida",merienda:"Merienda",cena:"Cena",media:"Media mañana"})[String(l.ml).toLowerCase()]||l.ml);
-  const how=cnt(LL.filter(l=>l.how&&!l.pre&&l.how!=="Del menú"),l=>l.how).slice(0,10);
-  const rates=cnt(LL.filter(l=>RN[l.r]),l=>RN[l.r]);
-  // insistir: alimentos que al principio no gustaron y después sí
-  let firstBad=0,laterOk=0;const tries=[];
-  started.forEach(i=>{const by={};i.L.slice().sort((a,b)=>a.d<b.d?-1:1).forEach(l=>(by[l.f]=by[l.f]||[]).push(l.r));
-    Object.values(by).forEach(rs=>{if(rs[0]==="meh"||rs[0]==="no"){firstBad++;const k=rs.findIndex(r=>r==="love"||r==="ok");if(k>0){laterOk++;tries.push(k+1)}}})});
-  const medT=tries.length?[...tries].sort((a,b)=>a-b)[Math.floor(tries.length/2)]:null;
-  // diario: cómo comen esos días
-  const tagDays={},tagLove={},tagN={};let baseL=0,baseN=0;
-  started.forEach(i=>{const dn=i.b.dn&&typeof i.b.dn==="object"?i.b.dn:{};i.L.forEach(l=>{if(!["love","ok","meh","no"].includes(l.r))return;const t=((dn[l.d]||{}).t)||[];const tags=t.filter(x=>TAGN[x]&&x!=="nocaca"&&x!=="nocuenta");
-      if(!tags.length){baseN++;if(l.r==="love"||l.r==="ok")baseL++}tags.forEach(x=>{tagN[x]=(tagN[x]||0)+1;if(l.r==="love"||l.r==="ok")tagLove[x]=(tagLove[x]||0)+1})})});
-  real.forEach(b=>Object.values(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(v=>((v&&v.t)||[]).forEach(x=>{if(TAGN[x])tagDays[TAGN[x]]=(tagDays[TAGN[x]]||0)+1})));
-  const tagEat=[["Días normales",pct(baseL,baseN),pct(baseL,baseN)+" % · "+baseN+" valoraciones"],...Object.entries(tagN).filter(([k,v])=>v>=3).map(([k,v])=>[TAGN[k],pct(tagLove[k]||0,v),pct(tagLove[k]||0,v)+" % · "+v+" valoraciones"])];
-  // rechazos: cuántas veces han marcado «no lo quiere» y «poco», por alimento
-  const noF={},noB={},mehF={};LL.forEach(l=>{if(l.r==="no"){noF[l.f]=(noF[l.f]||0)+1;(noB[l.f]=noB[l.f]||new Set()).add(l._i)}if(l.r==="meh")mehF[l.f]=(mehF[l.f]||0)+1});
-  const noRows=Object.entries(noF).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,`${v} veces · ${noB[k].size} bebés`]);
-  const mehRows=Object.entries(mehF).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,v+" veces"]);
-  // edad de introducción de alérgenos (mediana)
-  const algAge=Object.entries(AGD).map(([g,fs])=>{const ms=started.filter(i=>i.b.bd).map(i=>{const d=i.L.filter(l=>fs.includes(l.f)).map(l=>l.d).sort()[0];return d?months(i.b.bd,d):null}).filter(m=>m!=null&&m>=4&&m<=36).sort((a,b)=>a-b);
-    return ms.length>=Math.min(3,MIN)?[AGN[g],ms[Math.floor(ms.length/2)],ms[Math.floor(ms.length/2)]+" m · "+ms.length+" bebés"]:null}).filter(Boolean).sort((a,b)=>a[1]-b[1]);
-  // cacas por edad
-  const ccAge={};real.forEach(b=>Object.entries(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(([d,v])=>{if(!v||!Array.isArray(v.t))return;const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;const m=months(b.bd,d);if(m==null)return;const k=m<6?"<6":m>=12?"12+":String(m);(ccAge[k]=ccAge[k]||[]).push(n)}));
-  const ccA=["<6","6","7","8","9","10","11","12+"].filter(k=>ccAge[k]&&ccAge[k].length>=3).map(k=>[k+" m",Math.round(ccAge[k].reduce((a,b)=>a+b,0)/ccAge[k].length*10)/10]);
-  // variedad: distribución de alimentos distintos
-  const vb=[["1-9",0],["10-24",0],["25-49",0],["50-99",0],["100+",0]];started.forEach(i=>{const n=i.foods.size;vb[n<10?0:n<25?1:n<50?2:n<100?3:4][1]++});
-  $("t-bebes").insertAdjacentHTML("beforeend",`<h3 class="sech">Más a fondo</h3><div class="grid">
-      ${kpi(firstBad?pct(laterOk,firstBad)+" %":"—","Acaban gustando","de los alimentos que la 1.ª vez no quiso, luego le gustaron")}
-      ${kpi(medT?medT+".ª":"—","Vez en que le gusta","mediana, cuando al principio no lo quiso")}
-      ${kpi(rates.length?pct((rates.find(r=>r[0]==="Le encanta")||[0,0])[1],LL.filter(l=>RN[l.r]).length)+" %":"—","Valoraciones «le encanta»")}
-      ${kpi(Object.values(tagDays).reduce((a,b)=>a+b,0),"Días con notas del diario")}
-    </div><div class="g2">
-    ${cols("Alimentos nuevos por semana",rit,"Media por bebé en sus primeras 8 semanas.")}
-    ${bars("Cuántos alimentos llevan",vb,{note:"Bebés según los alimentos distintos que han probado."})}
-    ${bars("Cómo lo valoran",pr(rates,rates.reduce((s,x)=>s+x[1],0)),{note:"Número de valoraciones y % del total."})}
-    ${bars("Los que más «no lo quiere»",noRows,{alt:true,note:"Veces que lo han marcado y cuántos bebés."})}
-    ${bars("Los que más «poco»",mehRows,{alt:true,note:"Veces que lo han marcado."})}
-    ${bars("En qué comida",pr(meals,meals.reduce((s,x)=>s+x[1],0)))}
-    ${bars("Cómo se lo dan",pr(how,how.reduce((s,x)=>s+x[1],0)),{note:"Las 10 formas más usadas."})}
-    ${bars("Edad a la que prueban cada alérgeno",algAge,{alt:true,note:"Mediana del mes de vida en que lo prueban por primera vez."})}
-    ${bars("Comen bien según el día",tagEat,{note:"% de valoraciones «le encanta» o «ha comido bien»."})}
-    ${bars("Qué apuntan en el diario",Object.entries(tagDays).sort((a,b)=>b[1]-a[1]),{alt:true,note:"Días con cada nota."})}
-    ${cols("Cacas al día según la edad",ccA,"Media por mes de vida (con 3 días apuntados o más).")}
-  </div>`);
-}
-
+// Tabla de alimentos ordenable
+let FSORT="t",FALL=false;
+function drawFoods(k){if(k)FSORT=k;const el=$("ftab");if(!el)return;const N=(window.__ST||{}).N||0,fs=[...(window.__FOODS||[])];
+  if(!fs.length){el.innerHTML=EMPTY;return}
+  const val=f=>FSORT==="k"?f.k:f[FSORT]??-1;fs.sort((a,b)=>FSORT==="k"?a.k.localeCompare(b.k):val(b)-val(a)||b.t-a.t);
+  const show=FALL?fs:fs.slice(0,15),mt=Math.max(1,...fs.map(f=>f.t)),ok=f=>f.n>=3;
+  const th=(key,lab,cls="")=>`<th class="srt ${cls}${FSORT===key?" on":""}" data-s="${key}">${lab}${FSORT===key?" ↓":""}</th>`;
+  el.innerHTML=`<table class="dt">
+    <tr>${th("k","Alimento")}${th("t","Lo han probado")}${th("love","Le encanta","r")}${th("bad","No o poco","r")}${th("n","Valoraciones","r")}</tr>
+    ${show.map(f=>`<tr${tip(`${f.k}: probado por ${f.t} de ${N} bebés · ${f.n} valoraciones de ${f.rb} bebés${ok(f)?` · le encanta ${f.love} % · no o poco ${f.bad} %`:""}`)}><td><b>${esc(f.k)}</b></td>
+      <td><span class="ib"><i class="s1" style="width:${f.t*100/mt}%"></i></span> ${f.t} <small>(${pct(f.t,N)} %)</small></td>
+      <td class="r">${ok(f)?`<span class="pill s1">${f.love} %</span>`:'<span class="mute">—</span>'}</td>
+      <td class="r">${ok(f)?`<span class="pill s2">${f.bad} %</span>`:'<span class="mute">—</span>'}</td>
+      <td class="r">${f.n} <small>· ${f.rb} bebés</small></td></tr>`).join("")}</table>
+    ${fs.length>15?`<button class="btn sm" id="fmore" style="margin-top:10px">${FALL?"Ver menos":`Ver los ${fs.length}`}</button>`:""}`;
+  el.querySelectorAll("[data-s]").forEach(t=>t.onclick=()=>drawFoods(t.dataset.s));
+  const m=$("fmore");if(m)m.onclick=()=>{FALL=!FALL;drawFoods()}}
+// Tooltip compartido y cruceta de las líneas
+(function(){const t=document.createElement("div");t.id="tip";document.body.appendChild(t);
+  document.addEventListener("pointermove",e=>{const el=e.target.closest&&e.target.closest("[data-tip]");
+    document.querySelectorAll(".lc .xh.on").forEach(x=>{if(!el||!el.closest("svg")||el.closest("svg")!==x.ownerSVGElement)x.classList.remove("on")});
+    if(!el){t.style.opacity=0;return}t.textContent=el.dataset.tip;t.style.opacity=1;
+    const r=t.getBoundingClientRect();let x=e.clientX+14,y=e.clientY+14;if(x+r.width>innerWidth-8)x=e.clientX-r.width-14;if(y+r.height>innerHeight-8)y=e.clientY-r.height-14;t.style.transform=`translate(${x}px,${y}px)`;
+    if(el.classList.contains("hit")){const xh=el.ownerSVGElement.querySelector(".xh");xh.setAttribute("x1",el.dataset.x);xh.setAttribute("x2",el.dataset.x);xh.classList.add("on")}});
+  document.addEventListener("pointerleave",()=>t.style.opacity=0)})();
 
 /* ---------- blog ---------- */
 // Estados y cambios compartidos entre las dos (Firestore: blog/{slug}). La web los aplica al generar las páginas.
