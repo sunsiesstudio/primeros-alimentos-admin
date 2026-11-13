@@ -121,7 +121,7 @@ onAuthStateChanged(auth,async u=>{
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
   renderBlog();
-  try{const t=localStorage.getItem("adm_tab");if(t)document.querySelector(`#nav [data-t="${t}"]`)?.click()}catch(e){}
+  try{const t=(location.hash||"").slice(1)||localStorage.getItem("adm_tab");if(t)document.querySelector(`#nav [data-t="${t}"]`)?.click()}catch(e){}
 });
 
 /* ---------- piezas de UI ---------- */
@@ -230,8 +230,8 @@ function render(users){
 async function renderBlog(){
   // Lista en directo desde la web (así nunca se queda vieja); si falla, la copia de blog.json
   const W="https://www.primerosalimentos.com",get=async u=>new DOMParser().parseFromString(await (await fetch(u,{cache:"no-store"})).text(),"text/html");
-  let B=null;try{const [bd,bp]=await Promise.all([get(W+"/borradores/"),get(W+"/blog/")]);
-    const borradores=[...bd.querySelectorAll("ol li")].map(li=>{const a=li.querySelector("a");return a&&{slug:a.getAttribute("href").replace(/\//g,""),t:a.textContent.trim(),url:W+"/borradores/"+a.getAttribute("href"),d:(li.querySelector("span")||{}).textContent||"",o:li.parentNode?[...li.parentNode.children].indexOf(li):0}}).filter(Boolean);
+  let B=null;try{const get2=async u=>(await fetch(u,{cache:"no-store"})).json();const [cola,bp]=await Promise.all([get2(W+"/borradores/cola.json"),get(W+"/blog/")]);
+    const borradores=cola.map((a,o)=>({slug:a.slug,t:a.t,url:W+"/borradores/"+a.slug+"/",d:a.d,o,cat:a.cat}));
     const publicados=[...bp.querySelectorAll("a.card[href*='/blog/']")].map(a=>({slug:a.getAttribute("href").split("/").filter(Boolean).pop(),t:(a.querySelector("h2")||a).textContent.trim(),url:a.getAttribute("href"),d:""}));
     if(borradores.length||publicados.length)B={borradores,publicados}}catch(e){}
   if(!B){try{B=await (await fetch("blog.json",{cache:"no-store"})).json()}catch(e){$("t-blog").innerHTML='<p class="mute">No se ha podido cargar la lista del blog.</p>';return}}
