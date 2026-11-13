@@ -43,6 +43,17 @@ main{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
 .cols div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mute);font-weight:600}
 .cols i{display:block;width:100%;max-width:34px;background:var(--bar);border-radius:10px 10px 4px 4px;min-height:3px}
 .mute{color:var(--mute)}
+.idh{margin-bottom:12px}.idf{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}.idf button{font:700 .85rem Montserrat,sans-serif;padding:8px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}.idf button b{opacity:.6;margin-left:4px}.idf button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.idg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.idc{display:flex;flex-direction:column;border-radius:22px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.idv{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;background:color-mix(in srgb,var(--ic) 16%,var(--card));min-height:104px}
+.idi{width:68px;height:68px;flex:none;display:grid;place-items:center}.idi svg,.idi img{width:100%;height:100%}
+.idb{font:400 2.3rem/1 "Luckiest Guy",sans-serif;color:var(--ic);letter-spacing:.02em;text-align:right}
+.idn{position:absolute;top:10px;left:12px;font:800 .65rem Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.08em;background:var(--ic);color:#fff;padding:3px 8px;border-radius:99px;font-style:normal}
+.idt{padding:14px 18px 6px;flex:1}.idt h3{margin:8px 0 6px;font:800 1.05rem/1.3 Montserrat,sans-serif}.idt p{margin:0 0 8px;line-height:1.45;font-size:.92rem}
+.idtags{display:flex;flex-wrap:wrap;gap:4px}.idtags span{font:700 .7rem Montserrat,sans-serif;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}.idtags span:last-child{color:var(--ic);background:color-mix(in srgb,var(--ic) 14%,transparent)}
+.ida{display:flex;gap:6px;padding:10px 14px 14px;flex-wrap:wrap}.ida .btn{margin:0}.ida .idx{margin-left:auto}@media(max-width:600px){.ida .btn{padding-left:12px;padding-right:12px}}
+.idc.is-usada{opacity:.75}.idc.is-descartada{opacity:.5}
 .ideas{padding-left:0;list-style:none;margin:0}
 .ideas li{background:var(--soft);border-radius:16px;padding:12px 14px;margin-bottom:8px}
 .center{min-height:72vh;display:grid;place-items:center;text-align:center;padding:20px}
@@ -212,7 +223,7 @@ onAuthStateChanged(auth,async u=>{
   $("login").classList.toggle("hide",!!u);document.body.classList.toggle("out",!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
-  try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>{const x=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
+  try{const snap=await getDocs(collection(db,"users"));loadIdeas();try{render(snap.docs.map(d=>{const x=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
     $("upd").textContent=`Datos de ${snap.size} cuentas · actualizado ${new Date().toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"})}`;}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");document.body.classList.add("out");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
@@ -370,22 +381,82 @@ function render(users){
   drawFoods("t");
 
   // ===== IDEAS =====
-  const ideas=[],fv=foods.filter(f=>f.n>=Math.max(3,MIN));
-  if(N>=MIN){
-    const top=[...foods].sort((a,b)=>b.t-a.t)[0];if(top)ideas.push(`El alimento que más bebés han probado es <b>${esc(top.k.toLowerCase())}</b>: ya lo ha probado el ${pct(top.t,N)} % (${top.t} de ${N}).`);
-    const lv=[...fv].sort((a,b)=>b.love-a.love)[0];if(lv)ideas.push(`<b>${esc(lv.k)}</b> es lo que más gusta: «le encanta» el ${lv.love} % de las veces (${lv.n} valoraciones).`);
-    const bd=[...fv].sort((a,b)=>b.bad-a.bad)[0];if(bd)ideas.push(`<b>${esc(bd.k)}</b> es lo que más cuesta: «poco» o «no» el ${bd.bad} % de las veces. Buen tema para un reel de trucos.`);
-    if(firstBad>=MIN)ideas.push(`El <b>${pct(laterOk,firstBad)} %</b> de lo que un bebé rechaza la primera vez acaba gustándole${tries.length?`, normalmente a la ${med(tries)}.ª vez`:""}. Insistir funciona.`);
-    ideas.push(`De media, cada bebé ha probado <b>${avgF} alimentos distintos</b>.`);
-    const eg=alg.find(a=>a.g==="huevo");if(eg&&eg.age!=null)ideas.push(`La mitad de los bebés prueba el <b>huevo</b> antes de los ${eg.age+1} meses.`);
-    const cc=alg.find(a=>a.g==="cacahuete");if(cc&&cc.c)ideas.push(`El ${cc.p} % de los bebés ya ha probado el <b>cacahuete</b> (en crema). Se introduce pronto y en poca cantidad.`);
-    if(ccD>=MIN*3)ideas.push(`Los bebés hacen de media <b>${(ccS/ccD).toFixed(1)} cacas al día</b> (${pct(cc0,ccD)} % de días sin caca).`);
-    const dn=tagEat.find(x=>x[0]==="Dientes");if(dn&&tagEat[0][1]-dn[1]>=10)ideas.push(`Los días de <b>dientes</b> comen peor: ${dn[1]} % de valoraciones buenas frente a ${tagEat[0][1]} % un día normal.`);
-  }
-  $("t-redes").innerHTML=`<div class="card"><h2>Ideas para redes</h2>
-    <p class="mute">Frases sacadas de los datos de hoy. Antes de publicarlas, revisa que haya bastantes familias detrás (ahora ${N}) y cítalo como «familias que usan Primeros Alimentos».</p>
-    ${ideas.length?`<ul class="ideas">${ideas.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p>Aún no hay suficientes familias (mínimo ${MIN}) para sacar conclusiones.</p>`}</div>`;
+  window.__IDX={N,foods,alg,tagEat,firstBad,laterOk,tries,avgF,ccS,ccD,cc0,howB,mlB,actW,newW,users,started};
+  drawIdeas();
 }
+// ---------- Ideas para redes: se generan cada vez con los datos + la temporada ----------
+const MESN=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+// Fruta y verdura de temporada en España (para bebés: nada de frutos secos enteros ni castañas)
+const TEMP=[["Naranja","Mandarina","Kiwi","Coliflor","Puerro","Brócoli"],["Naranja","Mandarina","Alcachofa","Brócoli","Coliflor","Kiwi"],["Fresa","Alcachofa","Espárrago","Naranja","Guisantes"],["Fresa","Espárrago","Guisantes","Alcachofa","Níspero"],["Fresa","Cereza","Guisantes","Habas","Albaricoque"],["Cereza","Albaricoque","Melocotón","Calabacín","Sandía"],["Sandía","Melón","Melocotón","Tomate","Calabacín","Nectarina"],["Sandía","Melón","Higo","Tomate","Ciruela","Pimiento"],["Uva","Higo","Ciruela","Calabaza","Pera","Manzana"],["Calabaza","Boniato","Granada","Manzana","Pera","Uva"],["Mandarina","Granada","Caqui","Boniato","Calabaza","Manzana"],["Mandarina","Naranja","Coliflor","Lombarda","Brócoli","Kiwi"]];
+// Momentos del año: [mes (0-11), desde día, hasta día, clave, título, idea]
+const MOM=[[11,1,24,"adviento","Adviento","Un calendario de Adviento de primeros alimentos: una receta o un alimento nuevo cada día hasta Navidad.","Adviento"],
+ [11,10,31,"navidad","Navidad con bebé","Qué puede comer un bebé de lo que hay en la mesa de Navidad (y qué mejor no: turrón, marisco, embutido, frutos secos enteros).","Guía y tips"],
+ [0,1,8,"reyes","Roscón para bebés","Roscón de Reyes sin azúcar para que también lo pruebe (sin haba, que es un peligro).","Receta"],
+ [0,8,31,"cuesta","Batch cooking de enero","Una tarde de cocina, toda la semana resuelta: cómo congelar raciones para el bebé.","Guía y tips"],
+ [1,1,14,"sanvalentin","Tortitas de corazón","Tortitas de plátano y avena en forma de corazón para San Valentín.","Receta"],
+ [2,15,31,"pascua","Semana Santa sin azúcar","Torrijas para bebés: al horno, sin azúcar y con fruta.","Receta"],
+ [3,1,20,"pascua2","Semana Santa sin azúcar","Torrijas para bebés: al horno, sin azúcar y con fruta.","Receta"],
+ [5,1,30,"verano","Polos caseros","Polos de yogur y fruta para los días de calor (y para las encías).","Receta"],
+ [6,1,31,"viajes","Comer fuera y de viaje","Qué llevar en la bolsa para comer fuera de casa con un bebé.","Guía y tips"],
+ [7,1,31,"agua","Agua y calor","Cuánta agua necesita un bebé que ya come y cómo ofrecérsela en verano.","Guía y tips"],
+ [8,1,30,"guarde","Vuelta a la guarde","Cómo coordinar lo que come en la escuela infantil con lo de casa.","Guía y tips"],
+ [9,15,31,"halloween","Halloween de calabaza","Recetas de calabaza con cara para Halloween: crema, tortitas y bastones.","Receta"],
+ [10,1,30,"otono","Otoño en el plato","Boniato, calabaza y granada: los colores del otoño para el bebé.","Receta"]];
+const PIL={"Receta":"#c96a47","Guía y tips":"#4a8760","Maternidad real":"#3e4cd0","Detrás de la app":"#6b5ca5","Adviento":"#b8433a"};
+const CHN={ig:"Instagram",tt:"TikTok",x:"X"};
+let IDS={},IDOK=true,IDF="nuevas";
+const IKEY="pa_ideas_vistas";
+function seen(){try{return JSON.parse(localStorage.getItem(IKEY)||"{}")}catch(e){return {}}}
+function buildIdeas(){const S=window.__IDX;if(!S)return [];const {N,foods,alg,tagEat,firstBad,laterOk,tries,avgF,ccS,ccD,cc0,howB,mlB,actW,newW,users,started}=S;
+  const now=new Date(),m=now.getMonth(),d=now.getDate(),out=[],low=x=>String(x).toLowerCase();
+  const I=(o)=>out.push({score:50,ch:["ig"],fmt:"Carrusel",pilar:"Guía y tips",...o});
+  const fv=foods.filter(f=>f.n>=Math.max(3,MIN)),byK=Object.fromEntries(foods.map(f=>[f.k,f]));
+  if(N>=MIN){
+    const top=[...foods].sort((a,b)=>b.t-a.t)[0];
+    if(top)I({id:"top-"+top.k,ico:fi(top.k),big:pct(top.t,N)+" %",hook:`El primer clásico: ${low(top.k)}`,body:`Es lo que más bebés han probado: el ${pct(top.t,N)} % de las familias que usan la app ya se lo han dado.`,why:"Dato de la app",draft:`¿Sabías que el ${low(top.k)} es lo que más bebés han probado en Primeros alimentos? Te cuento cómo dárselo según la edad 👇`});
+    [...fv].sort((a,b)=>b.love-a.love).slice(0,3).forEach((f,i)=>I({id:"love-"+f.k,ico:fi(f.k),big:f.love+" %",hook:`${f.k}: el favorito`,body:`«Le encanta» el ${f.love} % de las veces (${f.n} valoraciones). Receta fácil para darlo.`,why:"Dato de la app",fmt:"Reel",ch:["ig","tt"],pilar:"Receta",score:62-i*4,draft:`Si buscas algo que casi seguro le guste: ${low(f.k)}. En la app «le encanta» el ${f.love} % de las veces. Así lo preparamos:`}));
+    [...fv].sort((a,b)=>b.bad-a.bad).slice(0,2).forEach((f,i)=>I({id:"bad-"+f.k,ico:fi(f.k),big:f.bad+" %",hook:`¿No quiere ${low(f.k)}? No eres la única`,body:`«Poco» o «no» el ${f.bad} % de las veces. Reel de 3 trucos para ofrecerlo de otra forma.`,why:"Dato de la app",fmt:"Reel",ch:["ig","tt"],pilar:"Maternidad real",score:70-i*5,draft:`El ${low(f.k)} es de lo que más cuesta: en la app, «poco» o «no» el ${f.bad} % de las veces. 3 trucos que funcionan:`}));
+    if(firstBad>=MIN)I({id:"insistir",ico:ILL.retry,big:pct(laterOk,firstBad)+" %",hook:"Insistir funciona",body:`De lo que rechazan la primera vez, el ${pct(laterOk,firstBad)} % acaba gustándoles${tries.length?`, normalmente a la ${med(tries)}.ª vez`:""}.`,why:"Dato de la app",pilar:"Maternidad real",score:75,draft:`Que no lo quiera hoy no significa que no le vaya a gustar. En la app, el ${pct(laterOk,firstBad)} % de lo que rechazan la primera vez acaba gustándoles.`});
+    const eg=alg.find(a=>a.g==="huevo");if(eg&&eg.age!=null)I({id:"huevo-edad",ico:fi("Huevo"),big:`${eg.age+1} m`,hook:"¿Cuándo el huevo?",body:`La mitad de los bebés lo prueba antes de los ${eg.age+1} meses. Cómo empezar y en qué cantidad.`,why:"Dato de la app",score:58});
+    const cc=alg.find(a=>a.g==="cacahuete");if(cc&&cc.c)I({id:"cacahuete",ico:fi("Cacahuete"),big:cc.p+" %",hook:"Cacahuete, sí (y pronto)",body:`El ${cc.p} % de los bebés ya lo ha probado, en crema y en poca cantidad. Nunca entero.`,why:"Dato de la app",score:55});
+    if(ccD>=MIN*3)I({id:"cacas",ico:ILL.baby,big:(ccS/ccD).toFixed(1),hook:"Hablemos de cacas",body:`De media, ${(ccS/ccD).toFixed(1)} al día y un ${pct(cc0,ccD)} % de días sin ninguna. Qué es normal al empezar a comer.`,why:"Dato de la app",fmt:"Reel",ch:["ig","tt"],pilar:"Maternidad real",score:66});
+    const dn=tagEat.find(x=>x[0]==="Dientes");if(dn&&tagEat[0][1]-dn[1]>=10)I({id:"dientes",ico:ILL.baby,big:`−${tagEat[0][1]-dn[1]}`,hook:"Días de dientes, días de comer menos",body:`Los días de dientes ${dn[1]} % de comidas buenas, frente a ${tagEat[0][1]} % un día normal. Qué darle esos días.`,why:"Dato de la app",pilar:"Maternidad real",score:64});
+    const how=howB.slice(0,3);if(how.length>=2){const t=how.reduce((s,x)=>s+x[1],0);I({id:"como",ico:ILL.plate,big:pct(how[0][1],t)+" %",hook:"¿Puré, trozos o los dos?",body:how.map(([k,v])=>`${k} ${pct(v,t)} %`).join(" · ")+". Sin dogmas: así lo hacen las familias de la app.",why:"Dato de la app",score:56})}
+    I({id:"media",ico:ILL.plate,big:String(avgF),hook:`${avgF} alimentos de media`,body:`Es lo que lleva probado cada bebé de la app. ¿Cuántos lleva el tuyo?`,why:"Dato de la app",score:44});
+  }
+  // Crecimiento (X, build in public)
+  const nw=newW.at(-1)||0,nw0=newW.at(-2)||0,aw=actW.at(-1)||0;
+  I({id:"x-semana-"+monday(today),ico:ILL.baby,big:String(aw),hook:`Semana ${monday(today).slice(5).split("-").reverse().join("/")}: ${aw} bebés activos`,body:`${users.length} cuentas, ${nw} bebés nuevos esta semana${nw0?` (${nw>=nw0?"+":""}${nw-nw0} frente a la anterior)`:""}. Lo que he aprendido y lo que toca.`,why:"Crecimiento",ch:["x"],fmt:"Post",pilar:"Detrás de la app",score:60,draft:`Build in public, semana ${monday(today).slice(5).split("-").reverse().join("/")}:\n· ${users.length} cuentas\n· ${aw} bebés apuntando comidas\n· ${nw} nuevos esta semana\nLo que he cambiado en la app: `});
+  [10,50,100].forEach(h=>{const n=started.filter(i=>i.foods.size>=h).length;if(n)I({id:`x-hito-${h}-${n}`,ico:ILL.heart,big:String(n),hook:`${n} ${n===1?"bebé ha":"bebés han"} llegado a ${h} alimentos`,body:`Un hito para celebrar (y para contar cómo lo usa la gente).`,why:"Crecimiento",ch:h===100?["x","ig"]:["x"],fmt:"Post",pilar:"Detrás de la app",score:h===100?72:45})});
+  // Temporada
+  TEMP[m].forEach((k,i)=>{const f=byK[k];I({id:`temp-${m}-${k}`,ico:fi(k),big:f&&N>=MIN?pct(f.t,N)+" %":MESN[m],hook:`${k}: está de temporada`,body:f&&N>=MIN?`Solo el ${pct(f.t,N)} % de los bebés de la app la ha probado. Cómo dársela según la edad.`:`Cómo dárselo según la edad, y una receta fácil.`,why:"Temporada · "+MESN[m],fmt:i%2?"Carrusel":"Reel",ch:["ig","tt"],pilar:i%2?"Guía y tips":"Receta",score:(f&&f.t<N*.3?68:57)-i*2})});
+  const MIC={adviento:"Mandarina",navidad:"Lombarda",reyes:"Naranja",cuesta:"Calabaza",sanvalentin:"Fresa",pascua:"Pan",pascua2:"Pan",verano:"Yogur natural",viajes:"Plátano",agua:"Sandía",guarde:"Manzana",halloween:"Calabaza",otono:"Boniato"};
+  MOM.forEach(([mm,a,b,k,t,body,p])=>{const dd0=(new Date(now.getFullYear(),mm,a)-now)/DAY;if((mm===m&&d>=a-0&&d<=b)||(dd0>0&&dd0<=21))I({id:`mom-${k}-${now.getFullYear()}`,ico:(window.foodIcoHas&&window.foodIcoHas(MIC[k])?fi(MIC[k]):ILL.heart),big:dd0>0?`${Math.ceil(dd0)} días`:"¡Ya!",hook:t,body,why:dd0>0?`En ${Math.ceil(dd0)} días`:"Ahora",fmt:p==="Receta"?"Reel":"Carrusel",ch:["ig","tt"],pilar:p,score:80})});
+  return out.sort((a,b)=>b.score-a.score)}
+function drawIdeas(){const el=$("t-redes");if(!el)return;const all=buildIdeas(),vs=seen(),now=Date.now();let ch=false;
+  all.forEach(x=>{if(!vs[x.id]){vs[x.id]=now;ch=true}x.nueva=now-vs[x.id]<7*DAY&&!IDS[x.id]});if(ch)try{localStorage.setItem(IKEY,JSON.stringify(vs))}catch(e){}
+  const st=x=>(IDS[x.id]||{}).estado||"",F={nuevas:x=>!st(x),guardada:x=>st(x)==="guardada",usada:x=>st(x)==="usada",descartada:x=>st(x)==="descartada"};
+  const cnt=k=>all.filter(F[k]).length,L=all.filter(F[IDF]);
+  const card=x=>{const c=PIL[x.pilar]||"#4a8760",e=IDS[x.id]||{};return `<article class="idc${st(x)?" is-"+st(x):""}" style="--ic:${c}">
+    <div class="idv"><span class="idi">${x.ico||""}</span><b class="idb">${esc(x.big)}</b>${x.nueva?'<em class="idn">Nueva</em>':""}</div>
+    <div class="idt"><div class="idtags"><span>${x.ch.map(k=>CHN[k]).join(" · ")}</span><span>${esc(x.fmt)}</span><span>${esc(x.pilar)}</span></div>
+      <h3>${esc(x.hook)}</h3><p>${esc(x.body)}</p><small class="mute">${esc(x.why)}${e.estado==="usada"&&e.at&&e.at.toDate?` · usada el ${e.at.toDate().toLocaleDateString("es-ES")}`:""}</small></div>
+    <div class="ida">${st(x)==="usada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Desmarcar</button>`:`<button class="btn sm p" data-ia="usada" data-id="${esc(x.id)}">✓ La he usado</button>`}
+      ${st(x)==="guardada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Quitar</button>`:st(x)?"":`<button class="btn sm" data-ia="guardada" data-id="${esc(x.id)}">☆ Guardar</button>`}
+      <button class="btn sm" data-icp="${esc(x.id)}" title="Copiar texto">Copiar</button>
+      ${st(x)==="descartada"?`<button class="btn sm" data-ia="" data-id="${esc(x.id)}">Recuperar</button>`:`<button class="btn sm idx" data-ia="descartada" data-id="${esc(x.id)}" aria-label="Descartar">✕</button>`}</div></article>`};
+  el.innerHTML=`${IDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar qué ideas has usado falta añadir la colección <b>ideas</b> a las reglas de Firestore. Mientras, se guarda solo en este navegador.</div>`}
+   <div class="idh"><div><h2 style="margin:0">Ideas para redes</h2><p class="mute" style="margin:4px 0 0">Salen de los datos de la app y de la temporada (${MESN[new Date().getMonth()]}). Se renuevan solas cada vez que entras.</p></div></div>
+   <div class="idf">${[["nuevas","Por usar"],["guardada","Guardadas"],["usada","Usadas"],["descartada","Descartadas"]].map(([k,l])=>`<button class="${IDF===k?"on":""}" data-if="${k}">${l} <b>${cnt(k)}</b></button>`).join("")}</div>
+   ${L.length?`<div class="idg">${L.map(card).join("")}</div>`:`<div class="card"><p class="mute" style="margin:0">${IDF==="nuevas"?"Las has repasado todas. Saldrán más cuando cambien los datos o la temporada.":"Nada por aquí todavía."}</p></div>`}`;
+  el.querySelectorAll("[data-if]").forEach(b=>b.onclick=()=>{IDF=b.dataset.if;drawIdeas()});
+  el.querySelectorAll("[data-ia]").forEach(b=>b.onclick=()=>setIdea(b.dataset.id,b.dataset.ia));
+  el.querySelectorAll("[data-icp]").forEach(b=>b.onclick=async()=>{const x=all.find(i=>i.id===b.dataset.icp);const t=x.draft||`${x.hook}\n\n${x.body}`;try{await navigator.clipboard.writeText(t);b.textContent="¡Copiado!";setTimeout(()=>b.textContent="Copiar",1500)}catch(e){prompt("Copia el texto:",t)}});
+}
+async function loadIdeas(){try{const s=await getDocs(collection(db,"ideas"));IDS={};s.forEach(d=>IDS[d.id]=d.data());IDOK=true}catch(e){IDOK=false;try{IDS=JSON.parse(localStorage.getItem("pa_ideas_estado")||"{}")}catch(_){IDS={}}}drawIdeas()}
+async function setIdea(id,estado){const u=auth.currentUser;if(estado)IDS[id]={estado,por:u&&u.email||"",at:{toDate:()=>new Date()}};else delete IDS[id];drawIdeas();
+  if(IDOK){try{await setDoc(doc(db,"ideas",id),estado?{estado,por:u.email||"",at:serverTimestamp()}:{estado:"",por:u.email||"",at:serverTimestamp()})}catch(e){IDOK=false;drawIdeas()}}
+  if(!IDOK)try{localStorage.setItem("pa_ideas_estado",JSON.stringify(Object.fromEntries(Object.entries(IDS).map(([k,v])=>[k,{estado:v.estado}]))))}catch(e){}}
 // Ficha completa de un alimento
 const RLAB={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción"};
 function openFood(name){const st=window.__ST;if(!st)return;const {started,N,LL}=st;
