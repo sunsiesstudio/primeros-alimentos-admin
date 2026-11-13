@@ -139,6 +139,23 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
 .pi:first-child .pic{width:52px;height:52px;margin:-4px}.s1t{color:var(--s1)}.s2t{color:var(--s2)}
 .hero .hl{padding-right:52px}.card:has(.dt){overflow-x:auto}
 @media (max-width:640px){.heroes{grid-template-columns:1fr 1fr;gap:10px}.hero{min-height:0;padding:14px}.hero .hv b{font-size:1.8rem}.hero .hl{padding-right:38px;font-size:12px}.hill{width:34px;height:34px;right:10px;top:10px}.hero small{max-width:none;font-size:11px}.spark{position:static;display:block;width:100%;margin-top:8px}.dt{font-size:12.5px}.ib{width:40px}}
+#tipsh{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);border-radius:18px;padding:14px 48px 14px 16px;font:600 14px/1.45 Montserrat,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);transform:translateY(140%);transition:transform .22s ease}
+#tipsh.on{transform:none}#tipsh p{margin:0}#tipsh button{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;border:0;background:color-mix(in srgb,var(--bg) 18%,transparent);color:var(--bg);font-size:14px}
+.frow,.pi{cursor:pointer}.dt .go{color:var(--mute);font-size:18px;width:14px}
+.fsort{display:flex;flex-wrap:wrap;gap:6px;margin:-2px 0 10px;font-size:12.5px;font-weight:700;color:var(--mute);align-items:center}.fsort button{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:99px;padding:5px 11px;font:700 12.5px Montserrat,sans-serif;cursor:pointer}.fsort button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fdet{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch;animation:fdIn .22s ease-out}@keyframes fdIn{from{opacity:0;transform:translateY(12px)}}
+.fdi{max-width:1100px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top,0px)) 20px 60px;position:relative}
+.fx{position:sticky;top:10px;float:right;z-index:2;width:44px;height:44px;padding:0;border-radius:50%;background:var(--card)}
+.fhd{display:flex;align-items:center;gap:16px;margin:4px 0 18px}.fbig{width:92px;height:92px;flex:none;border-radius:50%;background:var(--card);padding:8px;animation:hb 3.2s ease-in-out infinite}
+.fhd h1{font:400 2rem/1.1 "Luckiest Guy",system-ui;letter-spacing:.03em;margin:0 0 4px;color:var(--ink)}.fhd p{margin:0;font-size:13px}
+.cog{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}.coi{display:flex;align-items:center;gap:8px;border:0;background:var(--soft);border-radius:14px;padding:6px 10px 6px 6px;cursor:pointer;text-align:left;color:var(--ink);font:600 13px Montserrat,sans-serif}
+.coi span{width:36px;height:36px;flex:none;background:var(--card);border-radius:50%;padding:2px}.coi b{display:block;font-size:13px}.coi small{display:block;color:var(--mute);font-size:11px;margin-left:auto}
+@media (max-width:640px){
+.ft tr:first-child{display:none}.ft tr{display:grid;grid-template-columns:1fr auto auto 14px;gap:4px 8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.ft td{border:0;padding:0}
+.ft td:nth-child(1){grid-column:1;grid-row:1}.ft td:nth-child(3){grid-column:2;grid-row:1}.ft td:nth-child(4){grid-column:3;grid-row:1}.ft td:nth-child(6){grid-column:4;grid-row:1/3}
+.ft td:nth-child(2){grid-column:1/4;grid-row:2;font-size:12px;padding-left:34px}.ft td:nth-child(5){display:none}.ft .pill{min-width:0;font-size:12px}
+.card:has(.ft){overflow:visible}.fhd h1{font-size:1.6rem}.fbig{width:72px;height:72px}
+}
 </style>
 </head>
 <body class="out">
@@ -331,7 +348,7 @@ function render(users){
   const ccA={};let ccD=0,ccS=0,cc0=0;real.forEach(b=>Object.entries(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(([d,v])=>{if(!v||!Array.isArray(v.t))return;const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccD++;ccS+=n;if(!n)cc0++;const m=months(b.bd,d);if(m==null)return;const k=m<6?"<6":m>=12?"12+":String(m);(ccA[k]=ccA[k]||[]).push(n)}));
   const ccRows=["<6","6","7","8","9","10","11","12+"].filter(k=>ccA[k]&&ccA[k].length>=3).map(k=>{const a=ccA[k],v=Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10;return [k+" m",v,`${k} meses: ${v} cacas al día de media (${a.length} días apuntados)`]});
 
-  const fv3=foods.filter(f=>f.n>=3),col=(t,list,fmt,cls)=>`<div class="pod"><div class="pt">${t}</div>${list.length?list.map((f,k)=>`<div class="pi"${tip(`${f.k}: ${fmt(f,true)}`)}><span class="pr">${k+1}</span><span class="pic">${fi(f.k)}</span><span class="pn">${esc(f.k)}</span><span class="pv ${cls}">${fmt(f)}</span></div>`).join(""):EMPTY}</div>`;
+  const fv3=foods.filter(f=>f.n>=3),col=(t,list,fmt,cls)=>`<div class="pod"><div class="pt">${t}</div>${list.length?list.map((f,k)=>`<div class="pi" data-food="${esc(f.k)}"${tip(`${f.k}: ${fmt(f,true)}`)}><span class="pr">${k+1}</span><span class="pic">${fi(f.k)}</span><span class="pn">${esc(f.k)}</span><span class="pv ${cls}">${fmt(f)}</span></div>`).join(""):EMPTY}</div>`;
   const podium=`<div class="pods">${col("Los más probados",[...foods].sort((a,b)=>b.t-a.t).slice(0,3),(f,l)=>l?`${f.t} de ${N} bebés`:`${pct(f.t,N)} %`,"")}${col("Les encanta",[...fv3].sort((a,b)=>b.love-a.love||b.n-a.n).slice(0,3),(f,l)=>l?`le encanta el ${f.love} % de ${f.n} valoraciones`:`${f.love} %`,"s1t")}${col("Les cuesta",[...fv3].sort((a,b)=>b.bad-a.bad||b.n-a.n).slice(0,3),(f,l)=>l?`no o poco el ${f.bad} % de ${f.n} valoraciones · «no lo quiere» ${f.no} veces`:`${f.bad} %`,"s2t")}</div>`;
   $("t-bebes").innerHTML=`<div class="heroes">
       ${hero(N,"Bebés que han empezado",{sub:`${LL.length} registros en total`,ill:ILL.baby})}
@@ -369,6 +386,58 @@ function render(users){
     <p class="mute">Frases sacadas de los datos de hoy. Antes de publicarlas, revisa que haya bastantes familias detrás (ahora ${N}) y cítalo como «familias que usan Primeros Alimentos».</p>
     ${ideas.length?`<ul class="ideas">${ideas.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p>Aún no hay suficientes familias (mínimo ${MIN}) para sacar conclusiones.</p>`}</div>`;
 }
+// Ficha completa de un alimento
+const RLAB={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción"};
+function openFood(name){const st=window.__ST;if(!st)return;const {started,N,LL}=st;
+  const L=LL.filter(l=>l.f===name);if(!L.length)return;
+  const babies=started.filter(i=>i.foods.has(name)),nB=babies.length;
+  const rated=L.filter(l=>RATED(l.r)),rc=k=>L.filter(l=>l.r===k).length;
+  const rateRows=["love","ok","meh","no","play","react"].map(k=>[RLAB[k],rc(k)]).filter(r=>r[1]);
+  const tot=rateRows.reduce((s,x)=>s+x[1],0);
+  // por intento: % bueno la 1.ª, 2.ª, 3.ª, 4.ª+ vez
+  const byTry=[[],[],[],[]];babies.forEach(i=>i.L.filter(l=>l.f===name&&RATED(l.r)).forEach((l,k)=>byTry[Math.min(k,3)].push(LIKE(l.r))));
+  const tryRows=byTry.map((a,k)=>[["1.ª vez","2.ª vez","3.ª vez","4.ª o más"][k],a.length?pct(a.filter(Boolean).length,a.length):0,a.length?`${pct(a.filter(Boolean).length,a.length)} % · ${a.length}`:"—",`${["1.ª vez","2.ª vez","3.ª vez","4.ª o más"][k]}: ${a.filter(Boolean).length} de ${a.length} valoraciones buenas`]).filter((r,k)=>byTry[k].length);
+  // edad a la que lo prueban
+  const ages=babies.filter(i=>i.b.bd).map(i=>months(i.b.bd,i.L.find(l=>l.f===name).d)).filter(m=>m!=null&&m>=4&&m<=36);
+  const ageRows=[];if(ages.length){const lo=Math.min(...ages),hi=Math.min(Math.max(...ages),24);for(let m=lo;m<=hi;m++)ageRows.push([m+" m",ages.filter(a=>a===m).length,`${m} meses: ${ages.filter(a=>a===m).length} bebés lo probaron por primera vez`])}
+  // cuándo y cómo
+  const howB=tally(L.filter(l=>l.how&&l.how!=="Del menú"&&l.how!=="Antes de empezar"),l=>l.how),mlB=tally(L.filter(l=>l.ml),l=>MLN[String(l.ml).toLowerCase()]||l.ml);
+  // con qué se come (mismo bebé, mismo día)
+  const co={};L.forEach(l=>l._i.L.forEach(o=>{if(o.d===l.d&&o.f!==name)co[o.f]=(co[o.f]||0)+1}));
+  const coRows=Object.entries(co).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  // semanas
+  const thisW=monday(today),W=[];for(let k=11;k>=0;k--){const d=new Date(thisW+"T12:00");d.setDate(d.getDate()-7*k);W.push(d.toISOString().slice(0,10))}
+  const wk=W.map(w=>L.filter(l=>monday(l.d)===w).length),wl=w=>{const d=new Date(w+"T12:00");return d.getDate()+"/"+(d.getMonth()+1)};
+  const rx=L.filter(l=>l.r==="react").length,gs=Object.entries(AGD).filter(([g,fs])=>fs.includes(name)).map(([g])=>AGN[g]);
+  const love=rated.length?pct(rated.filter(l=>l.r==="love").length,rated.length):null,bad=rated.length?pct(rated.filter(l=>BAD(l.r)).length,rated.length):null;
+  const o=document.createElement("div");o.className="fdet";o.innerHTML=`<div class="fdi">
+    <button class="btn sm fx" aria-label="Cerrar">✕</button>
+    <div class="fhd"><span class="fbig">${fi(name)}</span><div><h1>${esc(name)}</h1><p class="mute">${gs.length?`Alérgeno · ${gs.join(", ")} · `:""}${L.length} registros de ${nB} bebés</p></div></div>
+    <div class="heroes">
+      ${hero(`${pct(nB,N)} %`,"Lo han probado",{sub:`${nB} de ${N} bebés`})}
+      ${hero(love!=null?love+" %":"—","Le encanta",{sub:`${rated.length} valoraciones`})}
+      ${hero(bad!=null?bad+" %":"—","No o poco",{sub:`«no lo quiere» ${rc("no")} veces`})}
+      ${hero(ages.length?med(ages)+" m":"—","Edad típica",{sub:ages.length?`la mitad lo prueba antes de los ${med(ages)+1} meses`:"sin fecha de nacimiento"})}
+    </div>
+    <div class="g2">
+      ${card("Cómo lo valoran",`${tot} valoraciones.`,hbars(rateRows.map(([k,v])=>[k,v,`${v} · ${pct(v,tot)} %`]),{c:"s1"}))}
+      ${card("¿Gusta más con los intentos?","% de valoraciones buenas según cuántas veces se lo han ofrecido.",tryRows.length?hbars(tryRows):EMPTY)}
+    </div>
+    <div class="g2">
+      ${card("A qué edad lo prueban","Bebés por mes de vida en que lo probaron por primera vez.",vcols(ageRows))}
+      ${card("Cada semana","Veces que se ha apuntado, últimas 12 semanas.",lineChart(W.map(wl),[{n:"Registros",v:wk,c:"s1"}],{h:170}))}
+    </div>
+    <div class="g2">
+      ${card("Cómo y cuándo","",(stack("Cómo se lo dan",howB.slice(0,5),howB.slice(0,5).reduce((s,x)=>s+x[1],0))+stack("En qué comida",mlB,mlB.reduce((s,x)=>s+x[1],0))).replace(/ bebés</g," registros<")||EMPTY)}
+      ${card("Con qué se come","Alimentos apuntados el mismo día al mismo bebé.",coRows.length?`<div class="cog">${coRows.map(([k,v])=>`<button class="coi" data-food="${esc(k)}"><span>${fi(k)}</span><b>${esc(k)}</b><small>${v} veces</small></button>`).join("")}</div>`:EMPTY)}
+    </div>
+    ${rx?`<div class="card warn">${rx} ${rx===1?"reacción apuntada":"reacciones apuntadas"} con este alimento.</div>`:""}
+  </div>`;
+  document.querySelectorAll(".fdet").forEach(x=>x.remove());document.body.appendChild(o);document.body.style.overflow="hidden";o.scrollTop=0;
+  o.querySelector(".fx").onclick=()=>{o.remove();if(!document.querySelector(".fdet"))document.body.style.overflow=""};
+}
+document.addEventListener("click",e=>{const f=e.target.closest("[data-food]");if(f){e.preventDefault();openFood(f.dataset.food)}});
+
 // Tabla de alimentos ordenable
 let FSORT="t",FALL=false;
 function drawFoods(k){if(k)FSORT=k;const el=$("ftab");if(!el)return;const N=(window.__ST||{}).N||0,fs=[...(window.__FOODS||[])];
@@ -376,18 +445,22 @@ function drawFoods(k){if(k)FSORT=k;const el=$("ftab");if(!el)return;const N=(win
   const val=f=>FSORT==="k"?f.k:f[FSORT]??-1;fs.sort((a,b)=>FSORT==="k"?a.k.localeCompare(b.k):val(b)-val(a)||b.t-a.t);
   const show=FALL?fs:fs.slice(0,15),mt=Math.max(1,...fs.map(f=>f.t)),ok=f=>f.n>=3;
   const th=(key,lab,cls="")=>`<th class="srt ${cls}${FSORT===key?" on":""}" data-s="${key}">${lab}${FSORT===key?" ↓":""}</th>`;
-  el.innerHTML=`<table class="dt">
-    <tr>${th("k","Alimento")}${th("t","Lo han probado")}${th("love","Le encanta","r")}${th("bad","No o poco","r")}${th("n","Valoraciones","r")}</tr>
-    ${show.map(f=>`<tr${tip(`${f.k}: probado por ${f.t} de ${N} bebés · ${f.n} valoraciones de ${f.rb} bebés${ok(f)?` · le encanta ${f.love} % · no o poco ${f.bad} %`:""}`)}><td class="fc"><span class="fic">${fi(f.k)}</span><b>${esc(f.k)}</b></td>
+  el.innerHTML=`<div class="fsort">Ordenar: ${[["t","Probado"],["love","Le encanta"],["bad","No o poco"],["n","Valoraciones"],["k","A-Z"]].map(([k,l])=>`<button class="${FSORT===k?"on":""}" data-s="${k}">${l}</button>`).join("")}</div><table class="dt ft">
+    <tr>${th("k","Alimento")}${th("t","Lo han probado")}${th("love","Le encanta","r")}${th("bad","No o poco","r")}${th("n","Valoraciones","r")}<th></th></tr>
+    ${show.map(f=>`<tr class="frow" data-food="${esc(f.k)}"${tip(`${f.k}: probado por ${f.t} de ${N} bebés · ${f.n} valoraciones de ${f.rb} bebés${ok(f)?` · le encanta ${f.love} % · no o poco ${f.bad} %`:""}`)}><td class="fc"><span class="fic">${fi(f.k)}</span><b>${esc(f.k)}</b></td>
       <td><span class="ib"><i class="s1" style="width:${f.t*100/mt}%"></i></span> ${f.t} <small>(${pct(f.t,N)} %)</small></td>
       <td class="r">${ok(f)?`<span class="pill s1">${f.love} %</span>`:'<span class="mute">—</span>'}</td>
       <td class="r">${ok(f)?`<span class="pill s2">${f.bad} %</span>`:'<span class="mute">—</span>'}</td>
-      <td class="r">${f.n} <small>· ${f.rb} bebés</small></td></tr>`).join("")}</table>
+      <td class="r">${f.n} <small>· ${f.rb} bebés</small></td><td class="r go">›</td></tr>`).join("")}</table>
     ${fs.length>15?`<button class="btn sm" id="fmore" style="margin-top:10px">${FALL?"Ver menos":`Ver los ${fs.length}`}</button>`:""}`;
   el.querySelectorAll("[data-s]").forEach(t=>t.onclick=()=>drawFoods(t.dataset.s));
   const m=$("fmore");if(m)m.onclick=()=>{FALL=!FALL;drawFoods()}}
-// Tooltip compartido y cruceta de las líneas
-(function(){const t=document.createElement("div");t.id="tip";document.body.appendChild(t);
+// Tooltip: al pasar el ratón en ordenador; en el móvil, al tocar se abre una ventanita con ✕
+(function(){const touch=matchMedia("(hover: none)").matches;const t=document.createElement("div");t.id="tip";document.body.appendChild(t);
+  if(touch){const sh=document.createElement("div");sh.id="tipsh";sh.innerHTML='<p></p><button aria-label="Cerrar">✕</button>';document.body.appendChild(sh);
+    const close=()=>sh.classList.remove("on");sh.querySelector("button").onclick=close;
+    document.addEventListener("click",e=>{if(e.target.closest("#tipsh"))return;const el=e.target.closest("[data-tip]");if(!el||el.closest("[data-food]")){close();return}sh.querySelector("p").textContent=el.dataset.tip;sh.classList.add("on");
+      if(el.classList.contains("hit")){const xh=el.ownerSVGElement.querySelector(".xh");xh.setAttribute("x1",el.dataset.x);xh.setAttribute("x2",el.dataset.x);document.querySelectorAll(".lc .xh.on").forEach(x=>x.classList.remove("on"));xh.classList.add("on")}});return}
   document.addEventListener("pointermove",e=>{const el=e.target.closest&&e.target.closest("[data-tip]");
     document.querySelectorAll(".lc .xh.on").forEach(x=>{if(!el||!el.closest("svg")||el.closest("svg")!==x.ownerSVGElement)x.classList.remove("on")});
     if(!el){t.style.opacity=0;return}t.textContent=el.dataset.tip;t.style.opacity=1;
