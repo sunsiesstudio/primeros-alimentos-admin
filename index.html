@@ -9,59 +9,64 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f3e7;--card:#fffdf6;--ink:#2b2a26;--mute:#7a766b;--line:#e6e0cc;--green:#4a8760;--terra:#d26b45;--lav:#6f68d8;--bar:#4a8760;--bar2:#d26b45;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#121232;--card:#1e1d46;--ink:#f1f0ff;--mute:#aeacd8;--line:#36356e;--green:#a29dff;--terra:#ffa77c;--lav:#a29dff;--bar:#a29dff;--bar2:#ffa77c;color-scheme:dark}}
+:root{--bg:#eeead8;--card:#f7f4e8;--ink:#262626;--mute:#6b6a5c;--line:#d8d3bc;--green:#4a8760;--terra:#c96a47;--acc:#3e4cd0;--onacc:#fff;--bar:#4a8760;--bar2:#c96a47;--soft:color-mix(in srgb,var(--green) 12%,var(--card));color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#121232;--card:#1e1d46;--ink:#f1f0ff;--mute:#aeacd8;--line:#36356e;--green:#efeeff;--terra:#ffa77c;--acc:#a29dff;--onacc:#15143a;--bar:#a29dff;--bar2:#ffa77c;--soft:color-mix(in srgb,var(--acc) 14%,var(--card));color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Montserrat,system-ui,sans-serif}
-header{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
-h1,h2{font-family:"Luckiest Guy",system-ui;font-weight:400;letter-spacing:.5px;margin:0}
-h1{font-size:22px;color:var(--green)}h2{font-size:19px;margin-bottom:12px}
-header .sp{flex:1}
-nav{display:flex;gap:6px;flex-wrap:wrap}
-nav button,.btn{font:600 14px Montserrat;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
-nav button.on{background:var(--green);border-color:var(--green);color:var(--bg)}
-.btn.pri{background:var(--green);border-color:var(--green);color:var(--bg)}
-main{max-width:1100px;margin:0 auto;padding:20px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-.g2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
-.kpi b{display:block;font-size:30px;font-weight:700;line-height:1.1}
-.kpi span{color:var(--mute);font-size:13px}
-.kpi small{display:block;color:var(--mute);font-size:12px;margin-top:4px}
-.bars{display:flex;flex-direction:column;gap:6px}
-.row{display:grid;grid-template-columns:minmax(90px,38%) 1fr 48px;gap:8px;align-items:center;font-size:13px}
-.row .tr{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
-.row .tr i{display:block;height:100%;background:var(--bar);border-radius:6px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.45 Montserrat,system-ui,sans-serif}
+.disp,h1,h2{font-family:"Luckiest Guy","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;letter-spacing:.03em;margin:0}
+h2{font-size:1.15rem;color:var(--green);margin-bottom:12px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 20px 0;text-align:center}
+header .top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1100px;margin:0 auto}
+header .logo{width:230px;height:auto}
+header .who{font-size:.8rem;color:var(--mute);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+nav{display:flex;max-width:1100px;margin:6px auto 0;border-bottom:1px solid var(--line)}
+nav button{flex:1;min-height:46px;padding:8px 4px;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--mute);font:700 15px Montserrat,sans-serif;cursor:pointer;margin-bottom:-1px}
+nav button.on{color:var(--terra);border-bottom-color:var(--terra)}
+@media (prefers-color-scheme:dark){nav button.on{color:var(--acc);border-bottom-color:var(--acc)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 20px;border-radius:999px;border:2px solid var(--acc);background:transparent;color:var(--acc);font:700 14px Montserrat,sans-serif;cursor:pointer}
+.btn.pri{background:var(--terra);border-color:var(--terra);color:var(--onacc)}
+.btn.sm{min-height:34px;padding:4px 14px;font-size:13px}
+main{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.g2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 18px}
+.kpi b{display:block;font:400 2rem/1.1 "Luckiest Guy",system-ui;color:var(--green);letter-spacing:.02em}
+.kpi span{display:block;font-weight:700;font-size:.85rem;margin-top:4px}
+.kpi small{display:block;color:var(--mute);font-size:.75rem;margin-top:2px}
+.bars{display:flex;flex-direction:column;gap:7px}
+.row{display:grid;grid-template-columns:minmax(90px,38%) 1fr 48px;gap:8px;align-items:center;font-size:13px;font-weight:600}
+.row .tr{height:12px;border-radius:99px;background:var(--soft);overflow:hidden}
+.row .tr i{display:block;height:100%;background:var(--bar);border-radius:99px}
 .row.alt .tr i{background:var(--bar2)}
-.row em{font-style:normal;text-align:right;color:var(--mute)}
-.cols{display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:10px}
-.cols div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mute)}
-.cols i{display:block;width:100%;background:var(--bar);border-radius:6px 6px 2px 2px;min-height:2px}
+.row em{font-style:normal;text-align:right;color:var(--mute);font-weight:500}
+.cols{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:10px}
+.cols div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mute);font-weight:600}
+.cols i{display:block;width:100%;max-width:34px;background:var(--bar);border-radius:10px 10px 4px 4px;min-height:3px}
 .mute{color:var(--mute)}
-.ideas li{margin-bottom:8px}
-.center{min-height:70vh;display:grid;place-items:center;text-align:center}
-.center .card{max-width:420px}
+.ideas{padding-left:0;list-style:none;margin:0}
+.ideas li{background:var(--soft);border-radius:16px;padding:12px 14px;margin-bottom:8px}
+.center{min-height:72vh;display:grid;place-items:center;text-align:center;padding:20px}
+.center .card{max-width:440px;padding:26px 24px}
+.center .logo{width:min(360px,90%);margin-bottom:18px}
 table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{color:var(--mute);font-weight:600;font-size:12px}
-a{color:var(--lav)}
-.chip{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;background:var(--line)}
-.chip.ok{background:var(--green);color:var(--bg)}
+td,th{padding:10px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{color:var(--mute);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+a{color:var(--acc);font-weight:600}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--soft);color:var(--green)}
 .hide{display:none!important}
-@media (max-width:640px){header{flex-wrap:wrap}main{padding:14px}}
+#err{margin:14px 0 0;color:var(--terra);font-weight:600}
+@media (max-width:640px){header .logo{width:170px}main{padding:14px 12px 50px}nav button{font-size:13px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Primeros Alimentos · Admin</h1>
-  <div class="sp"></div>
+  <div class="top"><span class="who">Admin</span><svg class="logo" viewBox="0 0 640 215" role="img" aria-label="Primeros alimentos"><defs><path id="ARC1" d="M10,185 Q320,10 630,185"/></defs><text class="disp" text-anchor="middle" style="font-size:56px;fill:var(--green)"><textPath href="#ARC1" startOffset="50%">Primeros alimentos</textPath></text><g transform="translate(279 112) scale(3.4)" style="fill:var(--terra)"><polygon points="12,1.5 14.9,8.4 22.4,9.1 16.7,14 18.4,21.4 12,17.5 5.6,21.4 7.3,14 1.6,9.1 9.1,8.4"/><path d="M9.3 11.2v.9M14.7 11.2v.9M9.8 13.4q2.2 1.9 4.4 0" style="stroke:var(--bg);fill:none;stroke-width:.9;stroke-linecap:round"/></g></svg><button id="out" class="btn sm hide">Salir</button><span id="sp" class="who" style="visibility:hidden">Admin</span></div>
   <nav id="nav" class="hide">
     <button data-t="uso" class="on">Uso</button>
     <button data-t="bebes">Qué comen</button>
-    <button data-t="redes">Ideas para redes</button>
+    <button data-t="redes">Ideas</button>
     <button data-t="blog">Blog</button>
   </nav>
-  <button id="out" class="btn hide">Salir</button>
 </header>
 
 <div id="login" class="center"><div class="card">
@@ -108,7 +113,7 @@ $("nav").onclick=e=>{const t=e.target.dataset.t;if(!t)return;
 $("in").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>$("err").textContent="No se ha podido entrar: "+e.code);
 $("out").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,async u=>{
-  $("login").classList.toggle("hide",!!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);
+  $("login").classList.toggle("hide",!!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
   try{const snap=await getDocs(collection(db,"users"));render(snap.docs.map(d=>d.data()));
