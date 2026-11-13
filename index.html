@@ -56,6 +56,23 @@ a{color:var(--acc);font-weight:600}
 .hide{display:none!important}
 #err{margin:14px 0 0;color:var(--terra);font-weight:600}
 @media (max-width:640px){header .logo{width:170px}main{padding:14px 12px 50px}nav button{font-size:13px}}
+.lnk{background:none;border:0;padding:0;color:var(--acc);font:700 14.5px Montserrat,sans-serif;text-align:left;cursor:pointer;text-decoration:underline}
+.sm{font-size:12.5px}.chip.ok{background:color-mix(in srgb,var(--green) 18%,var(--card))}
+select{font:600 13px Montserrat,sans-serif;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:7px 8px;min-height:38px}
+select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-color:var(--terra);color:var(--terra)}select.st-off{opacity:.6}
+.card.warn{border-color:var(--terra);color:var(--terra);font-weight:600}
+.edov{position:fixed;inset:0;z-index:20;background:rgba(10,10,30,.55);display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:24px 12px}
+.edc{background:var(--card);border-radius:22px;width:min(820px,100%);padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.edh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.fl{display:block;margin:12px 0 0}.fl>span{display:block;font-weight:700;font-size:13px;margin-bottom:5px}
+.fl input,.fl textarea,.fl select,.fq input,.fq textarea{width:100%;font:500 14.5px/1.5 Montserrat,sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:9px 11px}
+.fl textarea,.fq textarea{resize:vertical}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 10px}
+.tb{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 6px}.tb button{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:5px 10px;font:600 13px Montserrat,sans-serif;cursor:pointer}
+.rich{min-height:260px;max-height:60vh;overflow:auto;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:6px 14px;line-height:1.6}.rich:focus{outline:2px solid var(--acc)}
+.rich h2{font:700 1.1rem Montserrat,sans-serif;letter-spacing:0;color:var(--ink);margin:14px 0 6px}.rich table{font-size:13px}
+.fq{display:grid;gap:6px;padding:10px;border:1px dashed var(--line);border-radius:12px;margin-bottom:8px}.fq .btn{justify-self:start}
+.edf{display:flex;gap:8px;align-items:center;margin-top:18px;flex-wrap:wrap;position:sticky;bottom:-20px;background:var(--card);padding:10px 0}
 </style>
 </head>
 <body>
@@ -87,7 +104,7 @@ a{color:var(--acc);font-weight:600}
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getFirestore,collection,getDocs,doc,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app=initializeApp({apiKey:"AIzaSyBS8bb9UlOaOCJE92cpWE4nAqIFDuerypQ",authDomain:"primeros-alimentos.firebaseapp.com",projectId:"primeros-alimentos",appId:"1:210048481917:web:f7a4e8f31d067a7152cf14"});
 const auth=getAuth(app),db=getFirestore(app);
@@ -227,20 +244,72 @@ function render(users){
 }
 
 /* ---------- blog ---------- */
+// Estados y cambios compartidos entre las dos (Firestore: blog/{slug}). La web los aplica al generar las páginas.
+const EST={pendiente:["Por revisar",""],revisado:["Revisado","ok"],cambios:["Necesita cambios","warn"],pausa:["En pausa","off"],descartado:["Descartado","off"]};
+const W="https://www.primerosalimentos.com";
+let BL={cola:[],pub:[],ed:{}},EDOK=true;
+const L2=v=>Array.isArray(v)?v.join("\n"):(v??"");
+const toL=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean);
 async function renderBlog(){
-  // Lista en directo desde la web (así nunca se queda vieja); si falla, la copia de blog.json
-  const W="https://www.primerosalimentos.com",get=async u=>new DOMParser().parseFromString(await (await fetch(u,{cache:"no-store"})).text(),"text/html");
-  let B=null;try{const get2=async u=>(await fetch(u,{cache:"no-store"})).json();const [cola,bp]=await Promise.all([get2(W+"/borradores/cola.json"),get(W+"/blog/")]);
-    const borradores=cola.map((a,o)=>({slug:a.slug,t:a.t,url:W+"/borradores/"+a.slug+"/",d:a.d,o,cat:a.cat}));
-    const publicados=[...bp.querySelectorAll("a.card[href*='/blog/']")].map(a=>({slug:a.getAttribute("href").split("/").filter(Boolean).pop(),t:(a.querySelector("h2")||a).textContent.trim(),url:a.getAttribute("href"),d:""}));
-    if(borradores.length||publicados.length)B={borradores,publicados}}catch(e){}
-  if(!B){try{B=await (await fetch("blog.json",{cache:"no-store"})).json()}catch(e){$("t-blog").innerHTML='<p class="mute">No se ha podido cargar la lista del blog.</p>';return}}
-  let rev={};try{rev=JSON.parse(localStorage.getItem("adm_rev")||"{}")}catch(e){}
-  const tbl=(title,list,draft)=>`<div class="card" style="margin-top:14px"><h2>${title} · ${list.length}</h2><table><tr><th>Artículo</th><th>Fecha</th>${draft?"<th>Revisado</th>":""}</tr>
-    ${(draft?list.sort((a,b)=>(a.o??0)-(b.o??0)):list).map(a=>`<tr><td><a href="${a.url}" target="_blank" rel="noopener">${esc(a.t)}</a></td><td class="mute">${esc(a.d||"")}</td>${draft?`<td><button class="btn" data-rv="${a.slug}">${rev[a.slug]?'<span class="chip ok">Revisado</span>':"Marcar"}</button></td>`:""}</tr>`).join("")}</table></div>`;
-  $("t-blog").innerHTML=`<p class="mute">Los borradores se publican solos, uno cada dos días, en el orden de la lista. Ábrelos para revisarlos antes de su fecha; lo de «revisado» se guarda en este navegador.</p>${tbl("Borradores",B.borradores,true)}${tbl("Publicados",B.publicados,false)}`;
-  $("t-blog").onclick=e=>{const b=e.target.closest("[data-rv]");if(!b)return;const s=b.dataset.rv;rev[s]=!rev[s];try{localStorage.setItem("adm_rev",JSON.stringify(rev))}catch(e){}renderBlog()};
+  const get=async u=>new DOMParser().parseFromString(await (await fetch(u,{cache:"no-store"})).text(),"text/html");
+  try{const [cola,bp]=await Promise.all([fetch(W+"/borradores/cola.json",{cache:"no-store"}).then(r=>r.json()),get(W+"/blog/")]);
+    BL.cola=cola;BL.pub=[...bp.querySelectorAll("a.card[href*='/blog/']")].map(a=>({slug:a.getAttribute("href").split("/").filter(Boolean).pop(),t:(a.querySelector("h2")||a).textContent.trim(),url:a.getAttribute("href")}))}
+  catch(e){$("t-blog").innerHTML='<p class="mute">No se ha podido cargar la lista del blog.</p>';return}
+  try{const s=await getDocs(collection(db,"blog"));BL.ed={};s.forEach(d=>BL.ed[d.id]=d.data());EDOK=true}catch(e){EDOK=false}
+  drawBlog()}
+function drawBlog(){
+  const row=a=>{const e=BL.ed[a.slug]||{},st=e.estado||a.fuera||"pendiente",ch=Object.keys(e.cambios||{}).length;
+    return `<tr><td><button class="lnk" data-ed="${esc(a.slug)}">${esc((e.cambios||{}).title||a.t)}</button>${ch?` <span class="chip">Editado</span>`:""}<div class="mute sm">${a.cat==="receta"?"Receta":"Guía"}${e.por?` · ${esc(e.por.split("@")[0])}, ${e.at&&e.at.toDate?e.at.toDate().toLocaleDateString("es-ES",{day:"numeric",month:"short"}):""}`:""}${e.nota?` · <i>${esc(e.nota)}</i>`:""}</div></td>
+      <td class="mute">${esc(a.d||"No se publica")}</td>
+      <td><select class="st st-${EST[st]?EST[st][1]:""}" data-st="${esc(a.slug)}" ${EDOK?"":"disabled"}>${Object.entries(EST).map(([k,[l]])=>`<option value="${k}"${k===st?" selected":""}>${l}</option>`).join("")}</select></td>
+      <td><a href="${W}/borradores/${esc(a.slug)}/" target="_blank" rel="noopener" class="sm">Ver</a></td></tr>`};
+  const n=k=>BL.cola.filter(a=>((BL.ed[a.slug]||{}).estado||"pendiente")===k).length;
+  $("t-blog").innerHTML=`${EDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar estados y cambios falta añadir la colección <b>blog</b> a las reglas de Firestore.</div>`}
+    <p class="mute">Se publica uno cada dos días, en este orden. Los que están <b>en pausa</b> o <b>descartados</b> se saltan. Toca un título para editarlo.</p>
+    <div class="grid" style="margin-bottom:12px">${kpi(BL.cola.filter(a=>!a.fuera).length,"En cola")}${kpi(n("revisado"),"Revisados")}${kpi(n("cambios"),"Necesitan cambios")}${kpi(n("pausa")+n("descartado"),"Apartados")}</div>
+    <div class="card"><h2>Borradores · ${BL.cola.length}</h2><table><tr><th>Artículo</th><th>Fecha</th><th>Estado</th><th></th></tr>${BL.cola.map(row).join("")}</table></div>
+    <div class="card" style="margin-top:14px"><h2>Publicados · ${BL.pub.length}</h2><table>${BL.pub.map(a=>`<tr><td><a href="${a.url}" target="_blank" rel="noopener">${esc(a.t)}</a></td></tr>`).join("")}</table></div>`;
+  $("t-blog").querySelectorAll("[data-st]").forEach(s=>s.onchange=async()=>{const k=s.dataset.st,e=BL.ed[k]||{};s.disabled=true;
+    try{await saveEd(k,{...e,estado:s.value});drawBlog()}catch(err){alert("No se ha podido guardar: "+(err.code||err.message));s.disabled=false}});
+  $("t-blog").querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>openEd(b.dataset.ed));
 }
+async function saveEd(slug,e){const u=auth.currentUser;const d={estado:e.estado||"pendiente",cambios:e.cambios||{},nota:e.nota||"",por:u.email||"",at:serverTimestamp()};
+  await setDoc(doc(db,"blog",slug),d);BL.ed[slug]={...d,at:{toDate:()=>new Date()}}}
+function openEd(slug){
+  const a=BL.cola.find(x=>x.slug===slug);if(!a)return;const src=a.a||{},e=BL.ed[slug]||{},c={...(e.cambios||{})},v=k=>k in c?c[k]:src[k];const rec=a.cat==="receta";
+  const F=(k,lab,type="text",help="")=>k in src||k==="short"?`<label class="fl"><span>${lab}${help?` <small class="mute">${help}</small>`:""}</span>${type==="area"||type==="list"?`<textarea data-k="${k}" data-t="${type}" rows="${type==="list"?Math.max(3,(src[k]||[]).length+1):3}">${esc(type==="list"?L2(v(k)):v(k))}</textarea>`:`<input data-k="${k}" data-t="${type}" type="${type==="num"?"number":"text"}" value="${esc(v(k))}">`}</label>`:"";
+  const faq=(v("faq")||[]);
+  const o=document.createElement("div");o.className="edov";o.innerHTML=`<div class="edc">
+    <div class="edh"><div><h2 style="margin:0">${rec?"Receta":"Guía"} · ${esc(a.d||"no se publica")}</h2><a class="sm" href="${W}/borradores/${esc(slug)}/" target="_blank" rel="noopener">Ver la página</a></div><button class="btn sm" data-x>Cerrar</button></div>
+    <label class="fl"><span>Estado</span><select data-k="estado">${Object.entries(EST).map(([k,[l]])=>`<option value="${k}"${k===(e.estado||"pendiente")?" selected":""}>${l}</option>`).join("")}</select></label>
+    ${F("title","Título")}${F("short","Título corto","text","para las tarjetas")}${F("desc","Descripción","area","la que sale en Google · <b data-cnt></b>")}${F("lead","Entradilla","area")}
+    ${rec?`<div class="g3">${F("age","Edad")}${F("prep","Preparación (min)","num")}${F("cook","Cocción (min)","num")}${F("yld","Raciones")}</div>${F("alg","Alérgenos","list","uno por línea")}${F("ing","Ingredientes","list","uno por línea")}${F("steps","Pasos","list","uno por línea")}${F("serve","Cómo servirlo","list","uno por línea")}${F("keep","Conservación","area")}`:""}
+    ${"body" in src?`<label class="fl"><span>Texto</span></label><div class="tb"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="h2">Subtítulo</button><button type="button" data-cmd="p">Párrafo</button><button type="button" data-cmd="ul">• Lista</button><button type="button" data-cmd="link">Enlace</button></div><div class="rich" contenteditable="true" data-k="body">${v("body")}</div>`:""}
+    ${"faq" in src?`<label class="fl"><span>Preguntas frecuentes</span></label><div id="faqs">${faq.map(([q,r])=>fq(q,r)).join("")}</div><button type="button" class="btn sm" data-addq>Añadir pregunta</button>`:""}
+    <label class="fl"><span>Nota interna <small class="mute">solo la veis vosotras</small></span><input data-k="nota" value="${esc(e.nota||"")}"></label>
+    <p class="mute sm">Los cambios se guardan para las dos y se aplican a la página al publicarse. Si escribes en <b>negrita</b> o enlaces en las listas, se mantienen.</p>
+    <div class="edf"><button class="btn sm" data-reset ${Object.keys(c).length?"":"disabled"}>Volver al original</button><span style="flex:1"></span><button class="btn" data-x>Cancelar</button><button class="btn pri" data-save>Guardar</button></div></div>`;
+  document.body.appendChild(o);document.body.style.overflow="hidden";
+  const close=()=>{o.remove();document.body.style.overflow=""};
+  o.querySelectorAll("[data-x]").forEach(b=>b.onclick=close);
+  const cnt=()=>{const d=o.querySelector('[data-k="desc"]'),b=o.querySelector("[data-cnt]");if(d&&b){b.textContent=d.value.length+" caracteres"+(d.value.length>160?" (mejor menos de 160)":"")}};cnt();o.querySelector('[data-k="desc"]')?.addEventListener("input",cnt);
+  o.querySelectorAll("[data-cmd]").forEach(b=>b.onclick=()=>{const k=b.dataset.cmd;o.querySelector(".rich").focus();
+    if(k==="bold")document.execCommand("bold");else if(k==="h2")document.execCommand("formatBlock",false,"h2");else if(k==="p")document.execCommand("formatBlock",false,"p");else if(k==="ul")document.execCommand("insertUnorderedList");
+    else if(k==="link"){const u=prompt("Enlace (https://…)");if(u)document.execCommand("createLink",false,u)}});
+  o.querySelector("[data-addq]")?.addEventListener("click",()=>{o.querySelector("#faqs").insertAdjacentHTML("beforeend",fq("",""))});
+  o.addEventListener("click",ev=>{const r=ev.target.closest("[data-rmq]");if(r)r.closest(".fq").remove()});
+  o.querySelector("[data-reset]").onclick=async()=>{if(!confirm("¿Quitar todos los cambios de este artículo y volver al texto original?"))return;await saveEd(slug,{...e,cambios:{}});close();drawBlog()};
+  o.querySelector("[data-save]").onclick=async ev=>{const b=ev.target;b.disabled=true;b.textContent="Guardando…";
+    const nc={},same=(x,y)=>JSON.stringify(x??"")===JSON.stringify(y??"");
+    o.querySelectorAll("[data-k]").forEach(el=>{const k=el.dataset.k;if(k==="estado"||k==="nota")return;let val;
+      if(k==="body")val=el.innerHTML;else if(el.dataset.t==="list")val=toL(el.value);else if(el.dataset.t==="num")val=el.value===""?null:+el.value;else val=el.value.trim();
+      if(k==="body"&&same(val.replace(/\s+/g," "),String(src.body||"").replace(/\s+/g," ")))return;
+      if(!same(val,src[k])&&!(k==="short"&&!src.short&&!val))nc[k]=val});
+    if("faq" in src){const fs=[...o.querySelectorAll(".fq")].map(x=>[x.querySelector("input").value.trim(),x.querySelector("textarea").value.trim()]).filter(x=>x[0]&&x[1]);if(!same(fs,src.faq))nc.faq=fs}
+    try{await saveEd(slug,{estado:o.querySelector('[data-k="estado"]').value,cambios:nc,nota:o.querySelector('[data-k="nota"]').value.trim()});close();drawBlog()}
+    catch(err){b.disabled=false;b.textContent="Guardar";alert("No se ha podido guardar: "+(err.code||err.message))}};
+}
+const fq=(q,r)=>`<div class="fq"><input placeholder="Pregunta" value="${esc(q)}"><textarea rows="2" placeholder="Respuesta">${esc(r)}</textarea><button type="button" class="btn sm" data-rmq>Quitar</button></div>`;
 </script>
 </body>
 </html>
