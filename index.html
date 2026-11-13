@@ -34,7 +34,7 @@ main{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
 .kpi span{display:block;font-weight:700;font-size:.85rem;margin-top:4px}
 .kpi small{display:block;color:var(--mute);font-size:.75rem;margin-top:2px}
 .bars{display:flex;flex-direction:column;gap:7px}
-.row{display:grid;grid-template-columns:minmax(90px,38%) 1fr 48px;gap:8px;align-items:center;font-size:13px;font-weight:600}
+.row{display:grid;grid-template-columns:minmax(90px,32%) 1fr minmax(48px,auto);gap:8px;align-items:center;font-size:13px;font-weight:600}
 .row .tr{height:12px;border-radius:99px;background:var(--soft);overflow:hidden}
 .row .tr i{display:block;height:100%;background:var(--bar);border-radius:99px}
 .row.alt .tr i{background:var(--bar2)}
@@ -73,6 +73,8 @@ select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-
 .rich h2{font:700 1.1rem Montserrat,sans-serif;letter-spacing:0;color:var(--ink);margin:14px 0 6px}.rich table{font-size:13px}
 .fq{display:grid;gap:6px;padding:10px;border:1px dashed var(--line);border-radius:12px;margin-bottom:8px}.fq .btn{justify-self:start}
 .edf{display:flex;gap:8px;align-items:center;margin-top:18px;flex-wrap:wrap;position:sticky;bottom:-20px;background:var(--card);padding:10px 0}
+.sech{font:400 1.2rem "Luckiest Guy",system-ui;letter-spacing:.03em;color:var(--terra);margin:26px 0 10px}
+.row em{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -123,7 +125,7 @@ const pct=(a,b)=>b?Math.round(a*100/b):0;
 /* ---------- pestañas ---------- */
 $("nav").onclick=e=>{const t=e.target.dataset.t;if(!t)return;
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  ["uso","bebes","redes","blog"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));
+  ["uso","bebes","redes","blog"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));$("upd").classList.toggle("hide",t==="blog");
   try{localStorage.setItem("adm_tab",t)}catch(e){}};
 
 /* ---------- entrar ---------- */
@@ -194,14 +196,14 @@ function render(users){
   </div>`;
 
   // ---------- qué comen ----------
-  const tried={},love={},bad={},rated={},firstAge={};
+  const tried={},love={},bad={},rated={},firstAge={},ratedB={};
   started.forEach(i=>{const seen=new Set();i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);tried[l.f]=(tried[l.f]||0)+1;
       if(i.b.bd){const m=months(i.b.bd,l.d);if(m!=null&&m>=4&&m<=24)(firstAge[l.f]=firstAge[l.f]||[]).push(m)}}
-    if(["love","ok","meh","no"].includes(l.r)){rated[l.f]=(rated[l.f]||0)+1;if(l.r==="love")love[l.f]=(love[l.f]||0)+1;if(l.r==="meh"||l.r==="no")bad[l.f]=(bad[l.f]||0)+1}})});
+    if(["love","ok","meh","no"].includes(l.r)){rated[l.f]=(rated[l.f]||0)+1;(ratedB[l.f]=ratedB[l.f]||new Set()).add(i);if(l.r==="love")love[l.f]=(love[l.f]||0)+1;if(l.r==="meh"||l.r==="no")bad[l.f]=(bad[l.f]||0)+1}})});
   const N=started.length;
-  const topT=Object.entries(tried).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,pct(v,N)+" %"]);
-  const ratio=(o)=>Object.entries(o).filter(([k])=>(rated[k]||0)>=Math.max(3,MIN)).map(([k,v])=>[k,pct(v,rated[k]),pct(v,rated[k])+" %"]).sort((a,b)=>b[1]-a[1]).slice(0,12);
-  const algT=Object.entries(AGD).map(([g,fs])=>{const n=started.filter(i=>fs.some(f=>i.foods.has(f))).length;return [AGN[g],n,pct(n,N)+" %"]}).sort((a,b)=>b[1]-a[1]);
+  const topT=Object.entries(tried).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,`${pct(v,N)} % · ${v} de ${N} bebés`]);
+  const ratio=(o)=>Object.entries(o).filter(([k])=>(rated[k]||0)>=3).map(([k,v])=>[k,pct(v,rated[k]),`${pct(v,rated[k])} % · ${v} de ${rated[k]} · ${ratedB[k].size} bebés`,rated[k]]).sort((a,b)=>b[1]-a[1]||b[3]-a[3]).slice(0,15);
+  const algT=Object.entries(AGD).map(([g,fs])=>{const n=started.filter(i=>fs.some(f=>i.foods.has(f))).length;return [AGN[g],n,`${pct(n,N)} % · ${n} de ${N} bebés`]}).sort((a,b)=>b[1]-a[1]);
   const rxG={};real.forEach(b=>(Array.isArray(b.rx)?b.rx:[]).forEach(r=>{if(!r)return;const k=AGN[r.g]||r.f||r.g||"Otro";rxG[k]=(rxG[k]||0)+1}));
   const alG={},alS={};real.forEach(b=>{const al=b.al&&typeof b.al==="object"?b.al:{};Object.entries(Array.isArray(al)?Object.fromEntries(al.map(x=>[x,"alergia"])):al).forEach(([g,v])=>{const k=AGN[g]||g;if(v==="alergia")alG[k]=(alG[k]||0)+1;else if(v==="sospecha")alS[k]=(alS[k]||0)+1})});
   // cacas: días con dato
@@ -210,7 +212,7 @@ function render(users){
   const avgFoods=N?Math.round(started.reduce((s,i)=>s+i.foods.size,0)/N):0;
   const med=a=>{a=[...a].sort((x,y)=>x-y);return a.length?a[Math.floor(a.length/2)]:null};
 
-  $("t-bebes").innerHTML=`<p class="mute">Todo en agregado y anónimo. Los porcentajes de gustos solo salen con ${MIN} valoraciones o más.</p>
+  $("t-bebes").innerHTML=`<p class="mute">Todo en agregado y anónimo. En cada gráfica: el porcentaje, cuántos casos hay detrás y de cuántos bebés.</p>
   <div class="grid">
     ${kpi(N,"Bebés que ya han empezado")}
     ${kpi(avgFoods,"Alimentos distintos de media")}
@@ -219,8 +221,8 @@ function render(users){
   </div>
   <div class="g2">
     ${bars("Los más probados",topT,{note:"% de bebés que ya lo han probado."})}
-    ${bars("Los que más encantan",ratio(love),{note:"% de valoraciones «le encanta»."})}
-    ${bars("Los que más cuestan",ratio(bad),{alt:true,note:"% de valoraciones «poco» o «no»."})}
+    ${bars("Los que más encantan",ratio(love),{note:"% de valoraciones «le encanta» · cuántas sobre el total · cuántos bebés. Salen con 3 valoraciones o más."})}
+    ${bars("Los que más cuestan",ratio(bad),{alt:true,note:"% de valoraciones «poco» o «no» · cuántas sobre el total · cuántos bebés. Salen con 3 valoraciones o más."})}
     ${bars("Alérgenos ya introducidos",algT,{note:"% de bebés que ya han probado cada grupo."})}
     ${bars("Reacciones por grupo",Object.entries(rxG).sort((a,b)=>b[1]-a[1]),{alt:true})}
     ${bars("Alergias confirmadas",Object.entries(alG).sort((a,b)=>b[1]-a[1]),{alt:true})}
@@ -241,7 +243,106 @@ function render(users){
   $("t-redes").innerHTML=`<div class="card"><h2>Ideas para redes</h2>
     <p class="mute">Frases sacadas de los datos de hoy. Antes de publicarlas, revisa que haya bastantes familias detrás (ahora ${N}) y cítalo como «familias que usan Primeros Alimentos».</p>
     ${ideas.length?`<ul class="ideas">${ideas.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p>Aún no hay suficientes familias (mínimo ${MIN}) para sacar conclusiones.</p>`}</div>`;
+  renderMore(users,real,started);
 }
+/* ---------- más datos ---------- */
+const GOALN={iron:"Hierro",fiber:"Fibra",omega3:"Omega-3",calcium:"Calcio",protein:"Proteína",zinc:"Zinc",vitc:"Vitamina C",alg:"Alérgenos a tiempo",verd:"Más verduras",x100:"100 alimentos",xvar:"Rico y variado"};
+const DIETN={om:"Come de todo",veg:"Vegetariana",vegan:"Vegana",ovo:"Ovolacto",pesc:"Pescetariana"};
+const RN={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción",mix:"Mezclado"};
+const TAGN={dientes:"Dientes",malito:"Malito",vacuna:"Vacuna",fuera:"Fuera de casa",cansado:"Muy cansado",nocaca:"Sin caca",nocuenta:"No cuenta"};
+const WD=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+const cnt=(arr,key)=>{const o={};arr.forEach(x=>{const k=key(x);if(k!=null&&k!=="")o[k]=(o[k]||0)+1});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
+const pr=(rows,tot)=>rows.map(([k,v])=>[k,v,v+" · "+pct(v,tot)+" %"]);
+function renderMore(users,real,started){
+  const N=started.length,LL=[];started.forEach(i=>i.L.forEach(l=>LL.push({...l,_i:i})));
+  const now=Date.now();
+  // embudo
+  const nf=i=>i.foods.size;
+  const fun=[["Cuentas",users.length],["Con bebé",real.length],["1+ alimento",N],["5+ alimentos",started.filter(i=>nf(i)>=5).length],["20+",started.filter(i=>nf(i)>=20).length],["50+",started.filter(i=>nf(i)>=50).length],["100+",started.filter(i=>nf(i)>=100).length]].map(([k,v])=>[k,v,v+(users.length?" · "+pct(v,users.length)+" %":"")]);
+  // actividad
+  const last30=[];for(let i=29;i>=0;i--){const d=new Date(now-i*DAY).toISOString().slice(0,10);last30.push([d.slice(8,10),LL.filter(l=>l.d===d).length])}
+  const wdc=WD.map((w,i)=>[w,LL.filter(l=>((new Date(l.d+"T12:00").getDay()+6)%7)===i).length]);
+  const daysAct=started.map(i=>new Set(i.L.map(l=>l.d)).size);
+  const dact=[["1 día",daysAct.filter(x=>x===1).length],["2-7",daysAct.filter(x=>x>=2&&x<=7).length],["8-30",daysAct.filter(x=>x>=8&&x<=30).length],["31-90",daysAct.filter(x=>x>30&&x<=90).length],["90+",daysAct.filter(x=>x>90).length]];
+  const sinceLast=started.map(i=>dd(i.last,today));
+  const churn=[["Hoy o ayer",sinceLast.filter(x=>x<=1).length],["2-7 días",sinceLast.filter(x=>x>=2&&x<=7).length],["8-30 días",sinceLast.filter(x=>x>7&&x<=30).length],["Más de 30",sinceLast.filter(x=>x>30).length]];
+  // funciones de la app
+  const fromMenu=LL.filter(l=>l.m).length,rec=LL.filter(l=>l.sv==="rec").length;
+  const withPh=started.filter(i=>i.L.some(l=>l.ph)).length;
+  const fav=real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,frz=real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length;
+  const gd=real.filter(b=>b.gd&&(typeof b.gd!=="object"||Object.keys(b.gd).length)).length,diary=real.filter(b=>b.dn&&Object.keys(b.dn).length).length;
+  const fams=users.filter(u=>u.members&&Object.keys(u.members).length).length,cg=users.filter(u=>u.fam).length,multi=users.filter(u=>(u.babies||[]).length>1).length;
+  const pre=real.filter(b=>b.ga&&b.ga<37).length;
+  const feat=[["Menú del día (lo anotado desde el menú)",fromMenu,pct(fromMenu,LL.length)+" % de registros"],["Recetas (platos de varios alimentos)",rec,pct(rec,LL.length)+" % de registros"],["Diario (cacas, dientes…)",diary,pct(diary,real.length)+" % de bebés"],["Favoritos",fav,pct(fav,real.length)+" % de bebés"],["Nevera y congelador",frz,pct(frz,real.length)+" % de bebés"],["Fotos",withPh,pct(withPh,real.length)+" % de bebés"],["Escuela infantil",gd,pct(gd,real.length)+" % de bebés"],["Comparten con cuidadores",fams,pct(fams,users.length)+" % de cuentas"]].sort((a,b)=>parseInt(b[2])-parseInt(a[2]));
+  const goals=cnt(real.flatMap(b=>((b.prefs||{}).goals)||[]),g=>GOALN[g]||g);
+  const diet=cnt(real,b=>DIETN[(b.prefs||{}).diet||"om"]||(b.prefs||{}).diet);
+  const milk=cnt(real,b=>({pecho:"Pecho",formula:"Fórmula",mixta:"Mixta",vaca:"Leche de vaca",no:"Ya no toma"})[(b.prefs||{}).milk]||(b.prefs||{}).milk||"Sin indicar");
+  const startAge=cnt(started.filter(i=>i.b.bd),i=>{const m=months(i.b.bd,i.first);return m==null?null:m<4?"<4 m":m>=9?"9+ m":m+" m"}).sort((a,b)=>parseInt(a[0].replace("<",""))-parseInt(b[0].replace("<","")));
+  $("t-uso").insertAdjacentHTML("beforeend",`<h3 class="sech">Cómo se usa</h3><div class="grid">
+      ${kpi(multi,"Familias con 2+ bebés")}${kpi(fams,"Cuentas que comparten",cg+" cuentas de cuidador")}${kpi(pre,"Prematuros",pct(pre,real.length)+" % de los bebés")}${kpi(N?Math.round(LL.length/N):"—","Registros por bebé","de media")}
+    </div><div class="g2">
+    ${bars("Embudo",fun,{note:"Cuántas cuentas llegan a cada punto (sobre el total de cuentas)."})}
+    ${cols("Registros cada día (últimos 30)",last30,"Alimentos apuntados por día, todas las familias.")}
+    ${cols("Qué día de la semana se apunta más",wdc,"Total de registros por día de la semana.")}
+    ${bars("Días con algo apuntado",dact,{note:"Por bebé, desde que empezó."})}
+    ${bars("Última vez que apuntaron",churn,{alt:true,note:"Por bebé. Los de más de 30 días probablemente lo han dejado."})}
+    ${bars("Funciones que usan",feat.map(([k,v,l])=>[k,parseInt(l),l]))}
+    ${bars("Objetivos que eligen",pr(goals,real.length),{note:"% de bebés que lo tienen marcado."})}
+    ${bars("Dieta de la familia",pr(diet,real.length))}
+    ${bars("Leche",pr(milk,real.length),{alt:true})}
+    ${bars("Edad al empezar",pr(startAge,startAge.reduce((s,x)=>s+x[1],0)),{note:"Mes de vida del primer alimento apuntado."})}
+  </div>`);
+
+  // ---------- qué comen: más ----------
+  // ritmo: alimentos nuevos por semana desde el inicio
+  const rit=[];for(let w=0;w<8;w++){const el=started.filter(i=>dd(i.first,today)>=(w+1)*7);if(el.length<1){rit.push(["S"+(w+1),0]);continue}
+    const avg=el.reduce((s,i)=>{const seen=new Set();let n=0;i.L.slice().sort((a,b)=>a.d<b.d?-1:1).forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);const x=dd(i.first,l.d);if(x>=w*7&&x<(w+1)*7)n++}});return s+n},0)/el.length;rit.push(["S"+(w+1),Math.round(avg*10)/10])}
+  const meals=cnt(LL.filter(l=>l.ml),l=>({desayuno:"Desayuno",comida:"Comida",merienda:"Merienda",cena:"Cena",media:"Media mañana"})[String(l.ml).toLowerCase()]||l.ml);
+  const how=cnt(LL.filter(l=>l.how&&!l.pre&&l.how!=="Del menú"),l=>l.how).slice(0,10);
+  const rates=cnt(LL.filter(l=>RN[l.r]),l=>RN[l.r]);
+  // insistir: alimentos que al principio no gustaron y después sí
+  let firstBad=0,laterOk=0;const tries=[];
+  started.forEach(i=>{const by={};i.L.slice().sort((a,b)=>a.d<b.d?-1:1).forEach(l=>(by[l.f]=by[l.f]||[]).push(l.r));
+    Object.values(by).forEach(rs=>{if(rs[0]==="meh"||rs[0]==="no"){firstBad++;const k=rs.findIndex(r=>r==="love"||r==="ok");if(k>0){laterOk++;tries.push(k+1)}}})});
+  const medT=tries.length?[...tries].sort((a,b)=>a-b)[Math.floor(tries.length/2)]:null;
+  // diario: cómo comen esos días
+  const tagDays={},tagLove={},tagN={};let baseL=0,baseN=0;
+  started.forEach(i=>{const dn=i.b.dn&&typeof i.b.dn==="object"?i.b.dn:{};i.L.forEach(l=>{if(!["love","ok","meh","no"].includes(l.r))return;const t=((dn[l.d]||{}).t)||[];const tags=t.filter(x=>TAGN[x]&&x!=="nocaca"&&x!=="nocuenta");
+      if(!tags.length){baseN++;if(l.r==="love"||l.r==="ok")baseL++}tags.forEach(x=>{tagN[x]=(tagN[x]||0)+1;if(l.r==="love"||l.r==="ok")tagLove[x]=(tagLove[x]||0)+1})})});
+  real.forEach(b=>Object.values(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(v=>((v&&v.t)||[]).forEach(x=>{if(TAGN[x])tagDays[TAGN[x]]=(tagDays[TAGN[x]]||0)+1})));
+  const tagEat=[["Días normales",pct(baseL,baseN),pct(baseL,baseN)+" % · "+baseN+" valoraciones"],...Object.entries(tagN).filter(([k,v])=>v>=3).map(([k,v])=>[TAGN[k],pct(tagLove[k]||0,v),pct(tagLove[k]||0,v)+" % · "+v+" valoraciones"])];
+  // rechazos: cuántas veces han marcado «no lo quiere» y «poco», por alimento
+  const noF={},noB={},mehF={};LL.forEach(l=>{if(l.r==="no"){noF[l.f]=(noF[l.f]||0)+1;(noB[l.f]=noB[l.f]||new Set()).add(l._i)}if(l.r==="meh")mehF[l.f]=(mehF[l.f]||0)+1});
+  const noRows=Object.entries(noF).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,`${v} veces · ${noB[k].size} bebés`]);
+  const mehRows=Object.entries(mehF).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,v+" veces"]);
+  // edad de introducción de alérgenos (mediana)
+  const algAge=Object.entries(AGD).map(([g,fs])=>{const ms=started.filter(i=>i.b.bd).map(i=>{const d=i.L.filter(l=>fs.includes(l.f)).map(l=>l.d).sort()[0];return d?months(i.b.bd,d):null}).filter(m=>m!=null&&m>=4&&m<=36).sort((a,b)=>a-b);
+    return ms.length>=Math.min(3,MIN)?[AGN[g],ms[Math.floor(ms.length/2)],ms[Math.floor(ms.length/2)]+" m · "+ms.length+" bebés"]:null}).filter(Boolean).sort((a,b)=>a[1]-b[1]);
+  // cacas por edad
+  const ccAge={};real.forEach(b=>Object.entries(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(([d,v])=>{if(!v||!Array.isArray(v.t))return;const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;const m=months(b.bd,d);if(m==null)return;const k=m<6?"<6":m>=12?"12+":String(m);(ccAge[k]=ccAge[k]||[]).push(n)}));
+  const ccA=["<6","6","7","8","9","10","11","12+"].filter(k=>ccAge[k]&&ccAge[k].length>=3).map(k=>[k+" m",Math.round(ccAge[k].reduce((a,b)=>a+b,0)/ccAge[k].length*10)/10]);
+  // variedad: distribución de alimentos distintos
+  const vb=[["1-9",0],["10-24",0],["25-49",0],["50-99",0],["100+",0]];started.forEach(i=>{const n=i.foods.size;vb[n<10?0:n<25?1:n<50?2:n<100?3:4][1]++});
+  $("t-bebes").insertAdjacentHTML("beforeend",`<h3 class="sech">Más a fondo</h3><div class="grid">
+      ${kpi(firstBad?pct(laterOk,firstBad)+" %":"—","Acaban gustando","de los alimentos que la 1.ª vez no quiso, luego le gustaron")}
+      ${kpi(medT?medT+".ª":"—","Vez en que le gusta","mediana, cuando al principio no lo quiso")}
+      ${kpi(rates.length?pct((rates.find(r=>r[0]==="Le encanta")||[0,0])[1],LL.filter(l=>RN[l.r]).length)+" %":"—","Valoraciones «le encanta»")}
+      ${kpi(Object.values(tagDays).reduce((a,b)=>a+b,0),"Días con notas del diario")}
+    </div><div class="g2">
+    ${cols("Alimentos nuevos por semana",rit,"Media por bebé en sus primeras 8 semanas.")}
+    ${bars("Cuántos alimentos llevan",vb,{note:"Bebés según los alimentos distintos que han probado."})}
+    ${bars("Cómo lo valoran",pr(rates,rates.reduce((s,x)=>s+x[1],0)),{note:"Número de valoraciones y % del total."})}
+    ${bars("Los que más «no lo quiere»",noRows,{alt:true,note:"Veces que lo han marcado y cuántos bebés."})}
+    ${bars("Los que más «poco»",mehRows,{alt:true,note:"Veces que lo han marcado."})}
+    ${bars("En qué comida",pr(meals,meals.reduce((s,x)=>s+x[1],0)))}
+    ${bars("Cómo se lo dan",pr(how,how.reduce((s,x)=>s+x[1],0)),{note:"Las 10 formas más usadas."})}
+    ${bars("Edad a la que prueban cada alérgeno",algAge,{alt:true,note:"Mediana del mes de vida en que lo prueban por primera vez."})}
+    ${bars("Comen bien según el día",tagEat,{note:"% de valoraciones «le encanta» o «ha comido bien»."})}
+    ${bars("Qué apuntan en el diario",Object.entries(tagDays).sort((a,b)=>b[1]-a[1]),{alt:true,note:"Días con cada nota."})}
+    ${cols("Cacas al día según la edad",ccA,"Media por mes de vida (con 3 días apuntados o más).")}
+  </div>`);
+}
+
 
 /* ---------- blog ---------- */
 // Estados y cambios compartidos entre las dos (Firestore: blog/{slug}). La web los aplica al generar las páginas.
