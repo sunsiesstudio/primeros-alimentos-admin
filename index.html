@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin · Primeros Alimentos</title>
+<link rel="icon" href="https://app.primerosalimentos.com/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3e7;--card:#fffdf6;--ink:#2b2a26;--mute:#7a766b;--line:#e6e0cc;--green:#4a8760;--terra:#d26b45;--lav:#6f68d8;--bar:#4a8760;--bar2:#d26b45;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#121232;--card:#1e1d46;--ink:#f1f0ff;--mute:#aeacd8;--line:#36356e;--green:#a29dff;--terra:#ffa77c;--lav:#a29dff;--bar:#a29dff;--bar2:#ffa77c;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Montserrat,system-ui,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+h1,h2{font-family:"Luckiest Guy",system-ui;font-weight:400;letter-spacing:.5px;margin:0}
+h1{font-size:22px;color:var(--green)}h2{font-size:19px;margin-bottom:12px}
+header .sp{flex:1}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button,.btn{font:600 14px Montserrat;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+nav button.on{background:var(--green);border-color:var(--green);color:var(--bg)}
+.btn.pri{background:var(--green);border-color:var(--green);color:var(--bg)}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.g2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.kpi b{display:block;font-size:30px;font-weight:700;line-height:1.1}
+.kpi span{color:var(--mute);font-size:13px}
+.kpi small{display:block;color:var(--mute);font-size:12px;margin-top:4px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.row{display:grid;grid-template-columns:minmax(90px,38%) 1fr 48px;gap:8px;align-items:center;font-size:13px}
+.row .tr{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.row .tr i{display:block;height:100%;background:var(--bar);border-radius:6px}
+.row.alt .tr i{background:var(--bar2)}
+.row em{font-style:normal;text-align:right;color:var(--mute)}
+.cols{display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:10px}
+.cols div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mute)}
+.cols i{display:block;width:100%;background:var(--bar);border-radius:6px 6px 2px 2px;min-height:2px}
+.mute{color:var(--mute)}
+.ideas li{margin-bottom:8px}
+.center{min-height:70vh;display:grid;place-items:center;text-align:center}
+.center .card{max-width:420px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:600;font-size:12px}
+a{color:var(--lav)}
+.chip{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;background:var(--line)}
+.chip.ok{background:var(--green);color:var(--bg)}
+.hide{display:none!important}
+@media (max-width:640px){header{flex-wrap:wrap}main{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Primeros Alimentos · Admin</h1>
+  <div class="sp"></div>
+  <nav id="nav" class="hide">
+    <button data-t="uso" class="on">Uso</button>
+    <button data-t="bebes">Qué comen</button>
+    <button data-t="redes">Ideas para redes</button>
+    <button data-t="blog">Blog</button>
+  </nav>
+  <button id="out" class="btn hide">Salir</button>
+</header>
+
+<div id="login" class="center"><div class="card">
+  <h2>Solo para el equipo</h2>
+  <p class="mute">Entra con tu cuenta de Google. Solo las cuentas autorizadas en Firebase pueden ver los datos.</p>
+  <button id="in" class="btn pri">Entrar con Google</button>
+  <p id="err" class="mute"></p>
+</div></div>
+
+<main id="app" class="hide">
+  <p id="upd" class="mute"></p>
+  <section id="t-uso"></section>
+  <section id="t-bebes" class="hide"></section>
+  <section id="t-redes" class="hide"></section>
+  <section id="t-blog" class="hide"></section>
+</main>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyBS8bb9UlOaOCJE92cpWE4nAqIFDuerypQ",authDomain:"primeros-alimentos.firebaseapp.com",projectId:"primeros-alimentos",appId:"1:210048481917:web:f7a4e8f31d067a7152cf14"});
+const auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MIN=5; // con menos familias no se enseñan porcentajes de un grupo, para que nadie sea identificable
+
+const AGD={gluten:["Avena","Bebida de avena","Cebada","Centeno","Cuscús","Espelta","Harina de trigo","Pan","Pasta","Sémola de trigo"],huevo:["Huevo"],pescado:["Bacalao","Boquerones","Caballa","Dorada","Gallo","Jurel","Lenguado","Lubina","Merluza","Pescadilla","Rape","Rodaballo","Salmón","Sardinas","Trucha"],crustaceos:["Gambas"],moluscos:["Calamar","Mejillones","Pulpo","Sepia"],cacahuete:["Cacahuete"],frutoscascara:["Almendra","Anacardo","Avellana","Macadamia","Nuez","Nuez de Brasil","Nuez pecana","Pistacho"],sesamo:["Sésamo (tahini)"],soja:["Edamame","Tofu","Tempeh","Bebida de soja","Yogur de soja"],apio:["Apio"],legumbres:["Lentejas","Garbanzos","Alubias blancas","Alubias negras","Alubias pintas","Guisantes","Habas tiernas"],lacteos:["Kéfir","Mantequilla","Mozzarella","Queso de cabra","Queso fresco","Queso tierno","Requesón","Ricotta","Yogur griego","Yogur natural"]};
+const AGN={gluten:"Gluten",huevo:"Huevo",pescado:"Pescado",crustaceos:"Crustáceos",moluscos:"Moluscos",cacahuete:"Cacahuete",frutoscascara:"Frutos secos",sesamo:"Sésamo",soja:"Soja",apio:"Apio",legumbres:"Legumbres",lacteos:"Lácteos"};
+const STY={pure:"Purés",grum:"Purés con grumos",grad:"Poco a poco",blw:"BLW",mix:"Mixto","":"Sin elegir"};
+const DAY=864e5,today=new Date().toISOString().slice(0,10);
+const dd=(a,b)=>Math.round((new Date(b)-new Date(a))/DAY);
+const months=(bd,d)=>bd?Math.floor(dd(bd,d)/30.44):null;
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+
+/* ---------- pestañas ---------- */
+$("nav").onclick=e=>{const t=e.target.dataset.t;if(!t)return;
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  ["uso","bebes","redes","blog"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));
+  try{localStorage.setItem("adm_tab",t)}catch(e){}};
+
+/* ---------- entrar ---------- */
+$("in").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>$("err").textContent="No se ha podido entrar: "+e.code);
+$("out").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async u=>{
+  $("login").classList.toggle("hide",!!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);
+  if(!u)return;
+  $("upd").textContent="Cargando datos…";
+  try{const snap=await getDocs(collection(db,"users"));render(snap.docs.map(d=>d.data()));
+    $("upd").textContent=`Datos de ${snap.size} cuentas · ${new Date().toLocaleString("es-ES")} · Lectura de Firestore: ${snap.size} documentos`;}
+  catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");
+    $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
+  renderBlog();
+  try{const t=localStorage.getItem("adm_tab");if(t)document.querySelector(`#nav [data-t="${t}"]`)?.click()}catch(e){}
+});
+
+/* ---------- piezas de UI ---------- */
+const kpi=(v,l,s)=>`<div class="card kpi"><b>${v}</b><span>${l}</span>${s?`<small>${s}</small>`:""}</div>`;
+const bars=(title,rows,{alt=false,suf="",note=""}={})=>{const mx=Math.max(1,...rows.map(r=>r[1]));
+  return `<div class="card"><h2>${title}</h2>${note?`<p class="mute">${note}</p>`:""}<div class="bars">${rows.length?rows.map(([k,v,lab])=>`<div class="row${alt?" alt":""}"><span>${esc(k)}</span><span class="tr"><i style="width:${v*100/mx}%"></i></span><em>${lab??v+suf}</em></div>`).join(""):'<p class="mute">Aún no hay datos suficientes.</p>'}</div></div>`};
+const cols=(title,rows,note)=>{const mx=Math.max(1,...rows.map(r=>r[1]));
+  return `<div class="card"><h2>${title}</h2>${note?`<p class="mute">${note}</p>`:""}<div class="cols">${rows.map(([k,v])=>`<div><span>${v}</span><i style="height:${v*110/mx}px"></i><span>${esc(k)}</span></div>`).join("")}</div></div>`};
+
+/* ---------- cálculos ---------- */
+function render(users){
+  const babies=[];
+  users.forEach(u=>(u.babies||[]).forEach(b=>babies.push({...b,_ts:u.ts||0})));
+  const real=babies.filter(b=>(b.log||[]).some(l=>l&&!l.pre)||(b.nm||"").trim());
+  const now=Date.now();
+  const act7=users.filter(u=>u.ts&&now-u.ts<7*DAY).length,act30=users.filter(u=>u.ts&&now-u.ts<30*DAY).length;
+
+  // primer y último día con registro por bebé
+  const info=real.map(b=>{const L=(b.log||[]).filter(l=>l&&l.d&&!l.pre);const ds=L.map(l=>l.d).sort();
+    const first=ds[0]||null,last=ds[ds.length-1]||null;
+    const foods=new Set(L.map(l=>l.f));
+    const firstWeek=first?new Set(L.filter(l=>dd(first,l.d)<7).map(l=>l.f)).size:0;
+    const w4=first&&dd(first,today)>=28?L.some(l=>{const x=dd(first,l.d);return x>=21&&x<35}):null;
+    return {b,L,first,last,foods,firstWeek,w4,mo:months(b.bd,today)}});
+  const started=info.filter(i=>i.first);
+  const actv=started.filter(i=>i.firstWeek>=5).length;
+  const elig=started.filter(i=>i.w4!==null),ret=elig.filter(i=>i.w4).length;
+
+  // nuevas por semana (primer registro), últimas 10 semanas
+  const wk=d=>{const x=new Date(d);const day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);return x.toISOString().slice(5,10)};
+  const weeks=[];for(let i=9;i>=0;i--){const x=new Date(now-i*7*DAY);weeks.push(wk(x.toISOString().slice(0,10)))}
+  const newW=weeks.map(w=>[w.split("-").reverse().join("/"),started.filter(i=>wk(i.first)===w).length]);
+
+  // edad
+  const ageB={"<6":0,"6 m":0,"7 m":0,"8 m":0,"9 m":0,"10 m":0,"11 m":0,"12-17 m":0,"18+ m":0};
+  real.forEach(b=>{const m=months(b.bd,today);if(m==null)return;const k=m<6?"<6":m<12?m+" m":m<18?"12-17 m":"18+ m";ageB[k]++});
+  const sty={};real.forEach(b=>{const k=STY[(b.prefs||{}).sty||""]||"Otro";sty[k]=(sty[k]||0)+1});
+  const pais={};real.forEach(b=>{const k=b.pais||"ES";pais[k]=(pais[k]||0)+1});
+
+  $("t-uso").innerHTML=`<div class="grid">
+    ${kpi(users.length,"Cuentas")}
+    ${kpi(real.length,"Bebés con datos")}
+    ${kpi(act7,"Activas en 7 días",pct(act7,users.length)+" % de las cuentas")}
+    ${kpi(act30,"Activas en 30 días")}
+    ${kpi(started.length?pct(actv,started.length)+" %":"—","Activación","5 alimentos o más la primera semana · objetivo 50 %")}
+    ${kpi(elig.length?pct(ret,elig.length)+" %":"—","Retención semana 4",elig.length+" bebés con 4 semanas o más · objetivo 30 %")}
+  </div>
+  <div class="g2">
+    ${cols("Familias nuevas por semana",newW,"Por la semana de su primer alimento apuntado.")}
+    ${bars("Edad de los bebés (meses)",Object.entries(ageB))}
+    ${bars("Cómo comen",Object.entries(sty).sort((a,b)=>b[1]-a[1]))}
+    ${bars("País",Object.entries(pais).sort((a,b)=>b[1]-a[1]),{alt:true})}
+  </div>`;
+
+  // ---------- qué comen ----------
+  const tried={},love={},bad={},rated={},firstAge={};
+  started.forEach(i=>{const seen=new Set();i.L.forEach(l=>{if(!seen.has(l.f)){seen.add(l.f);tried[l.f]=(tried[l.f]||0)+1;
+      if(i.b.bd){const m=months(i.b.bd,l.d);if(m!=null&&m>=4&&m<=24)(firstAge[l.f]=firstAge[l.f]||[]).push(m)}}
+    if(["love","ok","meh","no"].includes(l.r)){rated[l.f]=(rated[l.f]||0)+1;if(l.r==="love")love[l.f]=(love[l.f]||0)+1;if(l.r==="meh"||l.r==="no")bad[l.f]=(bad[l.f]||0)+1}})});
+  const N=started.length;
+  const topT=Object.entries(tried).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([k,v])=>[k,v,pct(v,N)+" %"]);
+  const ratio=(o)=>Object.entries(o).filter(([k])=>(rated[k]||0)>=Math.max(3,MIN)).map(([k,v])=>[k,pct(v,rated[k]),pct(v,rated[k])+" %"]).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const algT=Object.entries(AGD).map(([g,fs])=>{const n=started.filter(i=>fs.some(f=>i.foods.has(f))).length;return [AGN[g],n,pct(n,N)+" %"]}).sort((a,b)=>b[1]-a[1]);
+  const rxG={};real.forEach(b=>(b.rx||[]).forEach(r=>{const k=AGN[r.g]||r.f||r.g||"Otro";rxG[k]=(rxG[k]||0)+1}));
+  const alG={};real.forEach(b=>(b.al||[]).forEach(a=>{const k=AGN[a]||a;alG[k]=(alG[k]||0)+1}));
+  // cacas: días con dato
+  let ccDays=0,ccSum=0,cc0=0;real.forEach(b=>Object.values(b.dn||{}).forEach(v=>{if(!v||!Array.isArray(v.t))return;
+    const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccDays++;ccSum+=n;if(n===0)cc0++}));
+  const avgFoods=N?Math.round(started.reduce((s,i)=>s+i.foods.size,0)/N):0;
+  const med=a=>{a=[...a].sort((x,y)=>x-y);return a.length?a[Math.floor(a.length/2)]:null};
+
+  $("t-bebes").innerHTML=`<p class="mute">Todo en agregado y anónimo. Los porcentajes de gustos solo salen con ${MIN} valoraciones o más.</p>
+  <div class="grid">
+    ${kpi(N,"Bebés que ya han empezado")}
+    ${kpi(avgFoods,"Alimentos distintos de media")}
+    ${kpi(ccDays?(ccSum/ccDays).toFixed(1):"—","Cacas al día de media",ccDays?`${ccDays} días apuntados · ${pct(cc0,ccDays)} % sin caca`:"")}
+    ${kpi(Object.values(rxG).reduce((a,b)=>a+b,0),"Reacciones apuntadas")}
+  </div>
+  <div class="g2">
+    ${bars("Los más probados",topT,{note:"% de bebés que ya lo han probado."})}
+    ${bars("Los que más encantan",ratio(love),{note:"% de valoraciones «le encanta»."})}
+    ${bars("Los que más cuestan",ratio(bad),{alt:true,note:"% de valoraciones «poco» o «no»."})}
+    ${bars("Alérgenos ya introducidos",algT,{note:"% de bebés que ya han probado cada grupo."})}
+    ${bars("Reacciones por grupo",Object.entries(rxG).sort((a,b)=>b[1]-a[1]),{alt:true})}
+    ${bars("Alergias diagnosticadas",Object.entries(alG).sort((a,b)=>b[1]-a[1]),{alt:true})}
+  </div>`;
+
+  // ---------- ideas para redes ----------
+  const ideas=[];
+  if(N>=MIN){
+    if(topT[0])ideas.push(`El alimento que más bebés han probado es <b>${esc(topT[0][0].toLowerCase())}</b>: ya lo ha probado el ${topT[0][2]} de los bebés.`);
+    const l=ratio(love)[0];if(l)ideas.push(`<b>${esc(l[0])}</b> es lo que más gusta: el ${l[2]} de las veces «le encanta».`);
+    const b=ratio(bad)[0];if(b)ideas.push(`<b>${esc(b[0])}</b> es lo que más cuesta (${b[2]} de las veces «poco» o «no»). Buen tema para un reel de trucos.`);
+    ideas.push(`De media, cada bebé ha probado <b>${avgFoods} alimentos distintos</b>.`);
+    const eg=med(firstAge["Huevo"]||[]);if(eg!=null&&(firstAge["Huevo"]||[]).length>=MIN)ideas.push(`La mitad de los bebés prueba el <b>huevo</b> antes de los ${eg+1} meses.`);
+    const al=algT.find(x=>x[0]==="Cacahuete");if(al)ideas.push(`El ${al[2]} de los bebés ya ha probado el <b>cacahuete</b> (en crema). Recordar que se introduce pronto y en poca cantidad.`);
+    if(ccDays>=MIN*3)ideas.push(`Los bebés hacen de media <b>${(ccSum/ccDays).toFixed(1)} cacas al día</b> (${pct(cc0,ccDays)} % de días sin caca).`);
+  }
+  $("t-redes").innerHTML=`<div class="card"><h2>Ideas para redes</h2>
+    <p class="mute">Frases sacadas de los datos de hoy. Antes de publicarlas, revisa que haya bastantes familias detrás (ahora ${N}) y cítalo como «familias que usan Primeros Alimentos».</p>
+    ${ideas.length?`<ul class="ideas">${ideas.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p>Aún no hay suficientes familias (mínimo ${MIN}) para sacar conclusiones.</p>`}</div>`;
+}
+
+/* ---------- blog ---------- */
+async function renderBlog(){
+  let B;try{B=await (await fetch("blog.json",{cache:"no-store"})).json()}catch(e){$("t-blog").innerHTML='<p class="mute">No se ha podido cargar la lista del blog.</p>';return}
+  let rev={};try{rev=JSON.parse(localStorage.getItem("adm_rev")||"{}")}catch(e){}
+  const tbl=(title,list,draft)=>`<div class="card" style="margin-top:14px"><h2>${title} · ${list.length}</h2><table><tr><th>Artículo</th><th>Fecha</th>${draft?"<th>Revisado</th>":""}</tr>
+    ${list.sort((a,b)=>(a.d||"").localeCompare(b.d||"")).map(a=>`<tr><td><a href="${a.url}" target="_blank" rel="noopener">${esc(a.t)}</a></td><td class="mute">${esc(a.d||"")}</td>${draft?`<td><button class="btn" data-rv="${a.slug}">${rev[a.slug]?'<span class="chip ok">Revisado</span>':"Marcar"}</button></td>`:""}</tr>`).join("")}</table></div>`;
+  $("t-blog").innerHTML=`<p class="mute">Los borradores aún no están publicados: ábrelos para revisarlos. Lo de «revisado» se guarda en este navegador.</p>${tbl("Borradores",B.borradores,true)}${tbl("Publicados",B.publicados,false)}`;
+  $("t-blog").onclick=e=>{const b=e.target.closest("[data-rv]");if(!b)return;const s=b.dataset.rv;rev[s]=!rev[s];try{localStorage.setItem("adm_rev",JSON.stringify(rev))}catch(e){}renderBlog()};
+}
+</script>
+</body>
+</html>
