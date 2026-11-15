@@ -174,6 +174,7 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
 .card:has(.ft){overflow:visible}.fhd h1{font-size:1.6rem}.fbig{width:72px;height:72px}
 }
 .pvcap{white-space:pre-wrap;line-height:1.5;padding:14px 16px;border-radius:14px;border:1px solid var(--line);font-size:.95rem}
+.rql li{flex-wrap:wrap}.fbl li span:first-child{white-space:pre-wrap;flex:1}.rqok{margin-left:auto;border:0;border-radius:99px;padding:6px 14px;background:#c96a47;color:#fff;font:700 12px Montserrat,sans-serif;cursor:pointer}.rqd{margin-left:auto;font:700 12px Montserrat,sans-serif;color:#4a8760}.rql li.done b{opacity:.6}.rqf{flex:0 0 100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:10px 0 4px;padding:12px;border-radius:14px;background:var(--soft)}.rqf label{display:flex;flex-direction:column;gap:4px;font:600 12px Montserrat,sans-serif}.rqf input:not([type=checkbox]),.rqf select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}.rqf .rqck{flex-direction:row;align-items:center;gap:8px}.rqbt{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}.rqbt button{border-radius:99px;padding:8px 16px;font:700 13px Montserrat,sans-serif;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}.rqbt .rqsave{background:#c96a47;border-color:#c96a47;color:#fff}.rqst{grid-column:1/-1;margin:0;font-size:12px}
 .rqn{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:#c96a47;color:#fff;font-size:.75rem;font-weight:800;vertical-align:middle}.rql{list-style:none;margin:8px 0 0;padding:0}.rql li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.rql li:first-child{border-top:0}
 </style>
 </head>
@@ -185,6 +186,7 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
     <button data-t="bebes">Qué comen</button>
     <button data-t="redes">Ideas</button>
     <button data-t="blog">Blog</button>
+    <button data-t="buzon">Buzón</button>
   </nav>
 </header>
 
@@ -195,6 +197,7 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
   <section id="t-bebes" class="hide"></section>
   <section id="t-redes" class="hide"></section>
   <section id="t-blog" class="hide"></section>
+  <section id="t-buzon" class="hide"></section>
   <p id="upd" class="mute sm" style="text-align:center;margin:32px 0 8px;font-size:.8rem"></p>
 </main>
 
@@ -219,9 +222,9 @@ const months=(bd,d)=>bd?Math.floor(dd(bd,d)/30.44):null;
 const pct=(a,b)=>b?Math.round(a*100/b):0;
 
 /* ---------- pestañas ---------- */
-$("nav").onclick=e=>{const t=e.target.dataset.t;if(!t)return;
+$("nav").onclick=e=>{const t=(e.target.closest("[data-t]")||{dataset:{}}).dataset.t;if(!t)return;
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  ["uso","bebes","redes","blog"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));$("upd").classList.toggle("hide",t==="blog");
+  ["uso","bebes","redes","blog","buzon"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));$("upd").classList.toggle("hide",t==="blog");
   try{localStorage.setItem("adm_tab",t)}catch(e){}};
 
 /* ---------- entrar ---------- */
@@ -287,6 +290,23 @@ const med=a=>{a=[...a].sort((x,y)=>x-y);return a.length?a[Math.floor(a.length/2)
 const monday=d=>{const x=new Date(d+"T12:00");x.setDate(x.getDate()-((x.getDay()+6)%7));return x.toISOString().slice(0,10)};
 const LIKE=r=>r==="love"||r==="ok",BAD=r=>r==="meh"||r==="no",RATED=r=>["love","ok","meh","no"].includes(r);
 
+
+/* ---------- alimentos aceptados desde peticiones (colección «alimentos») ---------- */
+const CATS=["Frutas","Verduras","Proteínas","Cereales","Frutos secos","Lácteos","Condimentos"];
+const slugF=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"x";
+async function loadExt(){try{const q=await getDocs(collection(db,"alimentos"));const E={};q.forEach(d=>{const x=d.data();if(x&&x.n)E[x.n.trim().toLowerCase()]=x});
+  document.querySelectorAll(".rql li[data-rq]").forEach(li=>{const x=E[li.dataset.rq.trim().toLowerCase()];if(x){li.classList.add("done");const b=li.querySelector(".rqok");if(b)b.outerHTML=`<span class="rqd">Añadido ✓ · ${esc(x.c)}</span>`}});
+  const pend=document.querySelectorAll(".rql li[data-rq]:not(.done)").length,nb=document.querySelector('#nav [data-t="buzon"] .rqn'),hd=document.querySelector(".rql")?.closest(".card")?.querySelector("h2 .rqn");if(nb)nb.textContent=pend;if(hd)hd.textContent=pend;if(nb&&!pend)nb.remove()}catch(e){console.warn("alimentos",e)}}
+document.addEventListener("click",async e=>{
+  const a=e.target.closest("[data-acc]");
+  if(a){const li=a.closest("li");if(li.querySelector(".rqf"))return;const n=a.dataset.acc;
+    li.insertAdjacentHTML("beforeend",`<div class="rqf"><label>Nombre<input class="rqn1" value="${esc(n.charAt(0).toUpperCase()+n.slice(1))}"></label><label>Categoría<select class="rqc">${CATS.map(c=>`<option>${c}</option>`).join("")}</select></label><label>Desde<select class="rqm"><option value="6">6 meses</option><option value="9">9 meses</option><option value="12">12 meses</option></select></label><label class="rqck"><input type="checkbox" class="rqa"> Es alérgeno</label><label class="rqck"><input type="checkbox" class="rqfe"> Tiene hierro</label><div class="rqbt"><button type="button" class="rqcan">Cancelar</button><button type="button" class="rqsave">Añadir a la lista</button></div><p class="mute rqst"></p></div>`);return}
+  const c=e.target.closest(".rqcan");if(c){c.closest(".rqf").remove();return}
+  const sv=e.target.closest(".rqsave");if(sv){const f=sv.closest(".rqf"),li=f.closest("li"),n=f.querySelector(".rqn1").value.trim();if(!n)return;sv.disabled=true;f.querySelector(".rqst").textContent="Guardando…";
+    try{await setDoc(doc(db,"alimentos",slugF(n)),{n,c:f.querySelector(".rqc").value,min:+f.querySelector(".rqm").value,a:f.querySelector(".rqa").checked,fe:f.querySelector(".rqfe").checked,req:li.dataset.rq,at:serverTimestamp()});
+      f.remove();li.classList.add("done");a?.remove();const b=li.querySelector(".rqok");if(b)b.outerHTML=`<span class="rqd">Añadido ✓</span>`;loadExt()}
+    catch(err){sv.disabled=false;f.querySelector(".rqst").textContent=/permission/i.test(err.message||"")?"Sin permiso: falta la regla de Firestore para «alimentos».":"No se pudo guardar: "+(err.message||err)}}
+});
 function render(users){
   const babies=[];users.forEach(u=>(u.babies||[]).forEach(b=>babies.push(b)));
   const real=babies.filter(b=>(Array.isArray(b.log)?b.log:[]).some(l=>l&&!l.pre)||(b.nm||"").trim());
@@ -389,8 +409,11 @@ function render(users){
   // ===== ALIMENTOS QUE PIDEN =====
   {const RQ={};users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).req)||[]).forEach(r=>{if(!r||typeof r.n!=="string")return;const k=r.n.trim().toLowerCase();if(!k)return;const o=RQ[k]=RQ[k]||{n:r.n.trim(),c:0,d:""};o.c++;if((r.d||"")>o.d)o.d=r.d||""})));
    const L=Object.values(RQ).sort((a,b)=>b.d.localeCompare(a.d)||b.c-a.c);
-   if(L.length){$("t-uso").insertAdjacentHTML("afterbegin",card(`Alimentos que piden <span class="rqn">${L.length}</span>`,"Lo piden desde Registro porque no está en la lista. Para añadirlo hay que darlo de alta en la web (icono, edad, alérgeno y nutrientes).",`<ul class="rql">${L.map(x=>`<li><b>${esc(x.n)}</b><span class="mute">${x.c} ${x.c===1?"cuenta":"cuentas"}${x.d?` · ${x.d.split("-").reverse().join("/")}`:""}</span></li>`).join("")}</ul>`));
-     const nb=document.querySelector('#nav [data-t="uso"]');if(nb&&!nb.querySelector(".rqn"))nb.insertAdjacentHTML("beforeend",` <span class="rqn">${L.length}</span>`)}}
+   {const bz=$("t-buzon");bz.innerHTML="";const FB=[];users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).fb)||[]).forEach(f=>{if(f&&typeof f.t==="string"&&f.t.trim())FB.push({t:f.t.trim(),d:f.d||""})})));FB.sort((a,b)=>b.d.localeCompare(a.d));
+     bz.insertAdjacentHTML("beforeend",card(`Sugerencias <span class="rqn">${FB.length}</span>`,"Lo que escriben en Perfil › Ajustes › Sugerencias.",FB.length?`<ul class="rql fbl">${FB.map(x=>`<li><span>${esc(x.t)}</span><span class="mute">${x.d?x.d.split("-").reverse().join("/"):""}</span></li>`).join("")}</ul>`:'<p class="mute">Aún no hay sugerencias.</p>'))}
+   if(L.length){$("t-buzon").insertAdjacentHTML("afterbegin",card(`Alimentos que piden <span class="rqn">${L.length}</span>`,"Lo piden desde Registro porque no está en la lista. Al aceptarlo se añade a la lista de todas las familias y a quien lo pidió le sale un aviso.",`<ul class="rql">${L.map(x=>`<li data-rq="${esc(x.n)}"><b>${esc(x.n)}</b><span class="mute">${x.c} ${x.c===1?"cuenta":"cuentas"}${x.d?` · ${x.d.split("-").reverse().join("/")}`:""}</span><button type="button" class="rqok" data-acc="${esc(x.n)}">Aceptar</button></li>`).join("")}</ul>`));
+     loadExt();
+     const nb=document.querySelector('#nav [data-t="buzon"]');if(nb&&!nb.querySelector(".rqn"))nb.insertAdjacentHTML("beforeend",` <span class="rqn">${L.length}</span>`)}}
 
   // ===== IDEAS =====
   window.__IDX={N,foods,alg,tagEat,firstBad,laterOk,tries,avgF,ccS,ccD,cc0,howB,mlB,actW,newW,users,started};
