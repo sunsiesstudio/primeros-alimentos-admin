@@ -215,7 +215,9 @@ const MIN=5; // con menos familias no se enseñan porcentajes de un grupo, para 
 
 const AGD={gluten:["Avena","Bebida de avena","Cebada","Centeno","Cuscús","Espelta","Harina de trigo","Pan","Pasta","Sémola de trigo"],huevo:["Huevo"],pescado:["Bacalao","Boquerones","Caballa","Dorada","Gallo","Jurel","Lenguado","Lubina","Merluza","Pescadilla","Rape","Rodaballo","Salmón","Sardinas","Trucha"],crustaceos:["Gambas"],moluscos:["Calamar","Mejillones","Pulpo","Sepia"],cacahuete:["Cacahuete"],frutoscascara:["Almendra","Anacardo","Avellana","Macadamia","Nuez","Nuez de Brasil","Nuez pecana","Pistacho"],sesamo:["Sésamo (tahini)"],soja:["Edamame","Tofu","Tempeh","Bebida de soja","Yogur de soja"],apio:["Apio"],legumbres:["Lentejas","Garbanzos","Alubias blancas","Alubias negras","Alubias pintas","Guisantes","Habas tiernas"],lacteos:["Kéfir","Mantequilla","Mozzarella","Queso de cabra","Queso fresco","Queso tierno","Requesón","Ricotta","Yogur griego","Yogur natural"]};
 const AGN={gluten:"Gluten",huevo:"Huevo",pescado:"Pescado",crustaceos:"Crustáceos",moluscos:"Moluscos",cacahuete:"Cacahuete",frutoscascara:"Frutos secos",sesamo:"Sésamo",soja:"Soja",apio:"Apio",legumbres:"Legumbres",lacteos:"Lácteos"};
-const STY={pure:"Purés",grum:"Purés con grumos",grad:"Poco a poco",blw:"BLW",mix:"Mixto","":"Sin elegir"};
+const STY={grad:"Según su edad",grum:"Poco a poco",blw:"BLW total",pure:"Solo purés",mix:"Como la familia","":"Según su edad"}
+const EVN={1:"Cada día",2:"Cada 2 días",3:"Cada 3 días"},MEALN={0:"Según su edad",1:"1",2:"2",3:"3",4:"4 o más"},CXN={easy:"Fáciles",mix:"Un poco de todo",elab:"Elaboradas"},FZN={fresh:"Todo fresco",split:"A veces",freeze:"En tandas"}
+const SITN={e:"Estreñido",d:"Diarrea",g:"Gases",r:"Regurgita",m:"Malito",t:"Dientes",a:"Come poco",h:"Hito o regresión",c:"Calor",v:"De viaje"};
 const DAY=864e5,today=new Date().toISOString().slice(0,10);
 const dd=(a,b)=>Math.round((new Date(b)-new Date(a))/DAY);
 const months=(bd,d)=>bd?Math.floor(dd(bd,d)/30.44):null;
@@ -280,8 +282,8 @@ heart:`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42S6 31 6 18c0-6
 plate:`<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="26" r="18" fill="#fffdf6" stroke="#d8d3bc" stroke-width="2"/><circle cx="24" cy="26" r="11" fill="none" stroke="#e8e2cc" stroke-width="2"/><circle cx="20" cy="23" r="4" fill="#f08a2a"/><circle cx="28" cy="28" r="4" fill="#4a8a3c"/><circle cx="25" cy="21" r="3" fill="#e0402a"/></svg>`,
 retry:`<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="18" fill="#a7c7a0"/><path d="M16 26a8 8 0 1 0 3-7" stroke="#26402e" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14 14v7h7" stroke="#26402e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`};
 /* ---------- cálculos y pintado ---------- */
-const GOALN={iron:"Hierro",fiber:"Fibra",omega3:"Omega-3",calcium:"Calcio",protein:"Proteína",zinc:"Zinc",vitc:"Vitamina C",alg:"Alérgenos a tiempo",verd:"Más verduras",x100:"100 alimentos",xvar:"Rico y variado"};
-const DIETN={om:"De todo",veg:"Vegetariana",vegan:"Vegana",ovo:"Ovolacto",pesc:"Pescetariana"};
+const GOALN={iron:"Hierro",fiber:"Fibra",omega3:"Omega-3",calcium:"Calcio",protein:"Proteína",zinc:"Zinc",vitc:"Vitamina C",vitd:"Vitamina D",b12:"Vitamina B12"};
+const DIETN={om:"De todo",veg:"Vegetariana",vgn:"Vegana",vegan:"Vegana"};
 const MILKN={pecho:"Pecho",formula:"Fórmula",mixta:"Mixta",vaca:"Leche de vaca",no:"Ya no toma"};
 const TAGN={dientes:"Dientes",malito:"Malito",vacuna:"Vacuna",fuera:"Fuera de casa",cansado:"Muy cansado"};
 const MLN={desayuno:"Desayuno",comida:"Comida",merienda:"Merienda",cena:"Cena",media:"Media mañana"};
@@ -329,16 +331,25 @@ function render(users){
   const fun=[["Cuentas",users.length],["Con bebé",real.length],["Han empezado",N],["5+ alimentos",started.filter(i=>nf(i)>=5).length],["20+ alimentos",started.filter(i=>nf(i)>=20).length],["50+ alimentos",started.filter(i=>nf(i)>=50).length],["100 alimentos",started.filter(i=>nf(i)>=100).length]];
   const funnel=fun.map(([k,v],j)=>`<div class="fn"${tip(`${k}: ${v} (${pct(v,fun[0][1])} % de las cuentas)`)}><span>${k}</span><span class="fb"><i class="s1" style="width:${Math.max(1.5,v*100/Math.max(1,fun[0][1]))}%"></i></span><b>${v}</b><em>${j?pct(v,fun[j-1][1])+" %":""}</em></div>`).join("");
   const fromMenu=LL.filter(l=>l.m).length;
+  const P_=b=>b.prefs||{},has=o=>o&&typeof o==="object"&&Object.keys(o).length>0;
   const feat=[["Apunta desde el menú del día",pct(fromMenu,LL.length),`${pct(fromMenu,LL.length)} % de registros`],
-    ["Diario (cacas, dientes…)",pct(started.filter(i=>Object.keys(i.dn).length).length,N)],["Favoritos",pct(real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,real.length)],
-    ["Nevera y congelador",pct(real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length,real.length)],["Fotos",pct(started.filter(i=>i.L.some(l=>l.ph)).length,N)],
-    ["Escuela infantil",pct(real.filter(b=>b.gd&&(typeof b.gd!=="object"||Object.keys(b.gd).length)).length,real.length)],
+    ["Diario (cacas y notas)",pct(started.filter(i=>Object.keys(i.dn).length).length,N)],
+    ["Vitamina D",pct(real.filter(b=>Object.values(P_(b).dck||{}).some(x=>x&&x.v)).length,real.length)],
+    ["Situaciones (estreñido, dientes…)",pct(real.filter(b=>has(P_(b).sit)).length,real.length)],
+    ["Recetas propias o guardadas",pct(real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,real.length)],
+    ["En casa (nevera, congelador)",pct(real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length,real.length)],
+    ["Adapta el menú a un nutriente",pct(real.filter(b=>P_(b).boost).length,real.length)],
+    ["Refuerzo del pediatra",pct(real.filter(b=>(P_(b).goals||[]).length).length,real.length)],
+    ["Fotos",pct(started.filter(i=>i.L.some(l=>l.ph)).length,N)],
+    ["Ha visto el recorrido",pct(real.filter(b=>P_(b).tour).length,real.length)],
+    ["Pide alimentos",pct(real.filter(b=>(P_(b).req||[]).length).length,real.length)],
+    ["Envía sugerencias",pct(real.filter(b=>(P_(b).fb||[]).length).length,real.length)],
     ["Comparte con cuidadores",pct(users.filter(u=>u.members&&Object.keys(u.members).length).length,users.length),null,"% de cuentas"]]
     .map(([k,v,lab,t])=>[k,v,lab||v+" %",t?`${k}: ${v} ${t}`:`${k}: ${v} % de los bebés`]).sort((a,b)=>b[1]-a[1]);
   const ageB=tally(real.filter(b=>b.bd),b=>{const m=months(b.bd,today);return m<6?"<6 m":m<9?"6-8 m":m<12?"9-11 m":m<18?"12-17 m":"18+ m"}).sort((a,b)=>["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(a[0])-["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(b[0]));
   const startB=tally(started.filter(i=>i.b.bd),i=>{const m=months(i.b.bd,i.first);return m<5?"Antes de 5 m":m<6?"5 m":m<7?"6 m":"7 m o más"}).sort((a,b)=>["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(a[0])-["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(b[0]));
-  const styB=tally(real,b=>STY[(b.prefs||{}).sty||""]||"Otro"),milkB=tally(real,b=>MILKN[(b.prefs||{}).milk]||"Sin indicar"),dietB=tally(real,b=>DIETN[(b.prefs||{}).diet||"om"]||"Otra"),paisB=tally(real,b=>b.pais||"ES");
-  const goals=tally(real.flatMap(b=>((b.prefs||{}).goals)||[]),g=>GOALN[g]||g).map(([k,v])=>[k,pct(v,real.length),pct(v,real.length)+" %",`${k}: ${v} de ${real.length} bebés`]);
+  const styB=tally(real,b=>STY[(b.prefs||{}).sty||""]||"Otro"),dietB=tally(real,b=>DIETN[(b.prefs||{}).diet||"om"]||"Otra"),paisB=tally(real,b=>b.pais||"ES"),evB=tally(real,b=>EVN[(b.prefs||{}).every||1]||"Cada día"),mealB=tally(real,b=>MEALN[+b.meals||0]||"Según su edad"),cxB=tally(real,b=>CXN[(b.prefs||{}).cx||"mix"]||"Un poco de todo"),fzB=tally(real,b=>FZN[(b.prefs||{}).fz||"fresh"]||"Todo fresco");
+  const goals=tally(real.flatMap(b=>((b.prefs||{}).goals)||[]).filter(g=>GOALN[g]),g=>GOALN[g]).map(([k,v])=>[k,pct(v,real.length),pct(v,real.length)+" %",`${k}: ${v} de ${real.length} bebés`]);
   const pre=real.filter(b=>b.ga&&b.ga<37).length,multi=users.filter(u=>(u.babies||[]).length>1).length;
 
   $("t-uso").innerHTML=`<div class="heroes">
@@ -357,8 +368,11 @@ function render(users){
     </div>
     <h3 class="sech">Quiénes son</h3>
     <div class="g2">
-      ${card("Las familias",`${pre} prematuros · ${multi} familias con 2 o más bebés.`,stack("Edad ahora",ageB,ageB.reduce((s,x)=>s+x[1],0))+stack("Empezaron a comer a los",startB,startB.reduce((s,x)=>s+x[1],0))+stack("Cómo comen",styB,real.length)+stack("Leche",milkB,real.length)+stack("Dieta",dietB,real.length)+stack("País",paisB,real.length))}
-      ${card("Qué objetivos eligen","% de bebés que lo tienen marcado en el plan.",hbars(goals))}
+      ${card("Las familias",`${pre} prematuros · ${multi} familias con 2 o más bebés.`,stack("Edad ahora",ageB,ageB.reduce((s,x)=>s+x[1],0))+stack("Empezaron a comer a los",startB,startB.reduce((s,x)=>s+x[1],0))+stack("País",paisB,real.length))}
+      ${card("Cómo configuran el plan","Lo que tienen elegido en Perfil › Ajustes.",stack("Textura",styB,real.length)+stack("Comidas al día",mealB,real.length)+stack("Alimento nuevo",evB,real.length)+stack("Dieta",dietB,real.length)+stack("Recetas",cxB,real.length)+stack("Congelar",fzB,real.length))}
+    </div>
+    <div class="g2">
+      ${card("Refuerzos del pediatra","% de bebés con algo marcado en «Reforzar (indicado por pediatra)».",goals.length?hbars(goals):'<p class="mute">Nadie tiene refuerzos marcados.</p>')}
     </div>`;
 
   // ===== QUÉ COMEN =====
@@ -381,7 +395,8 @@ function render(users){
   const howB=tally(LL.filter(l=>l.how&&l.how!=="Del menú"&&l.how!=="Antes de empezar"),l=>l.how),mlB=tally(LL.filter(l=>l.ml),l=>MLN[String(l.ml).toLowerCase()]||l.ml);
   const topHow=howB.slice(0,4),restHow=howB.slice(4).reduce((s,x)=>s+x[1],0);if(restHow)topHow.push(["Otras",restHow]);
   // diario
-  const tagN={},tagL={};let bN=0,bL=0;started.forEach(i=>i.L.forEach(l=>{if(!RATED(l.r))return;const t=(((i.dn[l.d]||{}).t)||[]).filter(x=>TAGN[x]);if(!t.length){bN++;if(LIKE(l.r))bL++}t.forEach(x=>{tagN[x]=(tagN[x]||0)+1;if(LIKE(l.r))tagL[x]=(tagL[x]||0)+1})}));
+  const tagN={},tagL={};let bN=0,bL=0;started.forEach(i=>{const sit=((i.b.prefs||{}).sit)||{},S0=sit&&sit.k?{[sit.k]:{s:sit.s,a:sit.a}}:sit,act=d=>Object.keys(S0||{}).filter(k=>SITN[k]&&S0[k]&&S0[k].s&&d>=S0[k].s&&(!S0[k].a||d<=S0[k].a));i.L.forEach(l=>{if(!RATED(l.r))return;const t=act(l.d);if(!t.length){bN++;if(LIKE(l.r))bL++}t.forEach(x=>{tagN[x]=(tagN[x]||0)+1;if(LIKE(l.r))tagL[x]=(tagL[x]||0)+1})})});
+  const TAGN=SITN;
   const tagEat=[["Días normales",pct(bL,bN),pct(bL,bN)+" %",`Días normales: ${bL} de ${bN} valoraciones buenas`],...Object.entries(tagN).filter(([k,v])=>v>=3).map(([k,v])=>[TAGN[k],pct(tagL[k]||0,v),pct(tagL[k]||0,v)+" %",`${TAGN[k]}: ${tagL[k]||0} de ${v} valoraciones buenas`])];
   const ccA={};let ccD=0,ccS=0,cc0=0;real.forEach(b=>Object.entries(b.dn&&typeof b.dn==="object"?b.dn:{}).forEach(([d,v])=>{if(!v||!Array.isArray(v.t))return;const n=v.t.includes("nocaca")?0:(v.cc||(v.t.includes("caca")?1:null));if(n==null)return;ccD++;ccS+=n;if(!n)cc0++;const m=months(b.bd,d);if(m==null)return;const k=m<6?"<6":m>=12?"12+":String(m);(ccA[k]=ccA[k]||[]).push(n)}));
   const ccRows=["<6","6","7","8","9","10","11","12+"].filter(k=>ccA[k]&&ccA[k].length>=3).map(k=>{const a=ccA[k],v=Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10;return [k+" m",v,`${k} meses: ${v} cacas al día de media (${a.length} días apuntados)`]});
@@ -399,7 +414,7 @@ function render(users){
     ${card("Alérgenos","% de bebés que ya han probado cada grupo, edad a la que la mitad ya lo ha probado, reacciones y alergias apuntadas.",algTable)}
     <div class="g2">
       ${card("Ritmo","Alimentos nuevos por semana desde que empiezan (media por bebé).",vcols(rit,{fmt:v=>v}))}
-      ${card("¿Comen peor esos días?","% de valoraciones buenas («le encanta» o «ha comido bien») según lo apuntado en el diario.",hbars(tagEat))}
+      ${card("¿Comen peor esos días?","% de valoraciones buenas («le ha encantado» o «ha comido bien») según la situación marcada ese día (estreñido, dientes, malito…). Con 3 valoraciones o más.",hbars(tagEat))}
     </div>
     <div class="g2">
       ${card("Cacas al día",ccD?`${(ccS/ccD).toFixed(1)} de media · ${pct(cc0,ccD)} % de días sin caca · ${ccD} días apuntados. Por mes de vida:`:"",vcols(ccRows,{fmt:v=>v}))}
