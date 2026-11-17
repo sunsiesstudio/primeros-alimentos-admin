@@ -339,7 +339,7 @@ function render(users){
     ["Recetas propias o guardadas",pct(real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,real.length)],
     ["En casa (nevera, congelador)",pct(real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length,real.length)],
     ["Adapta el menú a un nutriente",pct(real.filter(b=>P_(b).boost).length,real.length)],
-    ["Refuerzo del pediatra",pct(real.filter(b=>(P_(b).goals||[]).length).length,real.length)],
+    ["Refuerzo del pediatra",(()=>{const R=real.filter(b=>P_(b).gped2);return pct(R.filter(b=>(P_(b).goals||[]).length).length,R.length)})()],
     ["Fotos",pct(started.filter(i=>i.L.some(l=>l.ph)).length,N)],
     ["Ha visto el recorrido",pct(real.filter(b=>P_(b).tour).length,real.length)],
     ["Pide alimentos",pct(real.filter(b=>(P_(b).req||[]).length).length,real.length)],
@@ -349,7 +349,7 @@ function render(users){
   const ageB=tally(real.filter(b=>b.bd),b=>{const m=months(b.bd,today);return m<6?"<6 m":m<9?"6-8 m":m<12?"9-11 m":m<18?"12-17 m":"18+ m"}).sort((a,b)=>["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(a[0])-["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(b[0]));
   const startB=tally(started.filter(i=>i.b.bd),i=>{const m=months(i.b.bd,i.first);return m<5?"Antes de 5 m":m<6?"5 m":m<7?"6 m":"7 m o más"}).sort((a,b)=>["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(a[0])-["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(b[0]));
   const styB=tally(real,b=>STY[(b.prefs||{}).sty||""]||"Otro"),dietB=tally(real,b=>DIETN[(b.prefs||{}).diet||"om"]||"Otra"),paisB=tally(real,b=>b.pais||"ES"),evB=tally(real,b=>EVN[(b.prefs||{}).every||1]||"Cada día"),mealB=tally(real,b=>MEALN[+b.meals||0]||"Según su edad"),cxB=tally(real,b=>CXN[(b.prefs||{}).cx||"mix"]||"Un poco de todo"),fzB=tally(real,b=>FZN[(b.prefs||{}).fz||"fresh"]||"Todo fresco");
-  const goals=tally(real.flatMap(b=>((b.prefs||{}).goals)||[]).filter(g=>GOALN[g]),g=>GOALN[g]).map(([k,v])=>[k,pct(v,real.length),pct(v,real.length)+" %",`${k}: ${v} de ${real.length} bebés`]);
+  const realG=real.filter(b=>(b.prefs||{}).gped2),goals=tally(realG.flatMap(b=>((b.prefs||{}).goals)||[]).filter(g=>GOALN[g]),g=>GOALN[g]).map(([k,v])=>[k,pct(v,realG.length),pct(v,realG.length)+" %",`${k}: ${v} de ${realG.length} bebés`]);
   const pre=real.filter(b=>b.ga&&b.ga<37).length,multi=users.filter(u=>(u.babies||[]).length>1).length;
 
   $("t-uso").innerHTML=`<div class="heroes">
@@ -372,7 +372,7 @@ function render(users){
       ${card("Cómo configuran el plan","Lo que tienen elegido en Perfil › Ajustes.",stack("Textura",styB,real.length)+stack("Comidas al día",mealB,real.length)+stack("Alimento nuevo",evB,real.length)+stack("Dieta",dietB,real.length)+stack("Recetas",cxB,real.length)+stack("Congelar",fzB,real.length))}
     </div>
     <div class="g2">
-      ${card("Refuerzos del pediatra","% de bebés con algo marcado en «Reforzar (indicado por pediatra)».",goals.length?hbars(goals):'<p class="mute">Nadie tiene refuerzos marcados.</p>')}
+      ${card("Refuerzos del pediatra",`% de bebés con algo marcado en «Reforzar (indicado por pediatra)». Solo cuenta lo marcado desde que «objetivos» pasó a ser «refuerzos» (${realG.length} bebés).`,goals.length?hbars(goals):'<p class="mute">Nadie tiene refuerzos marcados.</p>')}
     </div>`;
 
   // ===== QUÉ COMEN =====
@@ -422,7 +422,7 @@ function render(users){
     </div>`;
   drawFoods("t");
   // ===== ALIMENTOS QUE PIDEN =====
-  {const RQ={};users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).req)||[]).forEach(r=>{if(!r||typeof r.n!=="string")return;const k=r.n.trim().toLowerCase();if(!k)return;const o=RQ[k]=RQ[k]||{n:r.n.trim(),c:0,d:""};o.c++;if((r.d||"")>o.d)o.d=r.d||""})));
+  {const RQ={};users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).req)||[]).forEach(r=>{if(!r||typeof r.n!=="string")return;const k=r.n.trim().toLowerCase();if(!k)return;const o=RQ[k]=RQ[k]||{n:r.n.trim(),c:0,d:"",w:{}};o.w[u.__id]=o.w[u.__id]||{em:u.em||u.email||"",b:new Set()};if((b.nm||"").trim())o.w[u.__id].b.add(b.nm.trim());o.c=Object.keys(o.w).length;if((r.d||"")>o.d)o.d=r.d||""})));
    const L=Object.values(RQ).sort((a,b)=>b.d.localeCompare(a.d)||b.c-a.c);
    {const bz=$("t-buzon");bz.innerHTML="";{const TR=[];users.forEach(u=>(u.trash||[]).forEach((t,i)=>{if(t&&t.b&&Date.now()-(t.at||0)<30*864e5)TR.push({id:u.__id,i,at:t.at||0,nm:t.nm||t.b.nm||"Sin nombre",em:u.em||u.email||"",n:(t.b.log||[]).length})}));TR.sort((a,b)=>b.at-a.at);
       bz.insertAdjacentHTML("beforeend",card(`Perfiles eliminados <span class="rqn">${TR.length}</span>`,"Se guardan 30 días. Si alguien escribe porque lo borró sin querer, toca Recuperar y le vuelve a salir.",TR.length?`<ul class="rql trl">${TR.map(x=>`<li><span><b>${esc(x.nm)}</b> <span class="mute">${esc(x.em)}${x.em?" · ":""}${x.n} registros · ${new Date(x.at).toLocaleDateString("es-ES")}</span></span><button type="button" class="btn sm trok" data-tid="${esc(x.id)}" data-ti="${x.i}">Recuperar</button></li>`).join("")}</ul>`:'<p class="mute">Nadie ha borrado un perfil.</p>'));
@@ -431,7 +431,7 @@ function render(users){
         catch(e){b.disabled=false;b.textContent="Recuperar";alert(/permission/.test(e&&e.code||"")?"Falta permiso de escritura para el admin en las reglas de Firestore (users).":"No se ha podido: "+(e&&e.message||e))}})}
 const FB=[];users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).fb)||[]).forEach(f=>{if(f&&typeof f.t==="string"&&f.t.trim())FB.push({t:f.t.trim(),d:f.d||""})})));FB.sort((a,b)=>b.d.localeCompare(a.d));
      bz.insertAdjacentHTML("beforeend",card(`Sugerencias <span class="rqn">${FB.length}</span>`,"Lo que escriben en Perfil › Ajustes › Sugerencias.",FB.length?`<ul class="rql fbl">${FB.map(x=>`<li><span>${esc(x.t)}</span><span class="mute">${x.d?x.d.split("-").reverse().join("/"):""}</span></li>`).join("")}</ul>`:'<p class="mute">Aún no hay sugerencias.</p>'))}
-   if(L.length){$("t-buzon").insertAdjacentHTML("afterbegin",card(`Alimentos que piden <span class="rqn">${L.length}</span>`,"Lo piden desde Registro porque no está en la lista. Al aceptarlo se añade a la lista de todas las familias y a quien lo pidió le sale un aviso.",`<ul class="rql">${L.map(x=>`<li data-rq="${esc(x.n)}"><b>${esc(x.n)}</b><span class="mute">${x.c} ${x.c===1?"cuenta":"cuentas"}${x.d?` · ${x.d.split("-").reverse().join("/")}`:""}</span><button type="button" class="rqok" data-acc="${esc(x.n)}">Aceptar</button></li>`).join("")}</ul>`));
+   if(L.length){$("t-buzon").insertAdjacentHTML("afterbegin",card(`Alimentos que piden <span class="rqn">${L.length}</span>`,"Lo piden desde Registro porque no está en la lista. Al aceptarlo se añade a la lista de todas las familias y a quien lo pidió le sale un aviso.",`<ul class="rql">${L.map(x=>`<li data-rq="${esc(x.n)}"><b>${esc(x.n)}</b><span class="mute">${x.c} ${x.c===1?"cuenta":"cuentas"}${x.d?` · ${x.d.split("-").reverse().join("/")}`:""}<br><small>${Object.values(x.w).map(w=>esc((w.em||"sin email")+(w.b.size?` (${[...w.b].join(", ")})`:""))).join(" · ")}</small></span><button type="button" class="rqok" data-acc="${esc(x.n)}">Aceptar</button></li>`).join("")}</ul>`));
      loadExt();
      const nb=document.querySelector('#nav [data-t="buzon"]');if(nb&&!nb.querySelector(".rqn"))nb.insertAdjacentHTML("beforeend",` <span class="rqn">${L.length}</span>`)}}
 
