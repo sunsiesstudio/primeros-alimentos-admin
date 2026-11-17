@@ -178,6 +178,20 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
 .rql li{flex-wrap:wrap}.fbl li span:first-child{white-space:pre-wrap;flex:1}#t-buzon>.card+.card{margin-top:20px}.rqno{margin-left:auto;border:1px solid #6b6a9a;border-radius:99px;padding:6px 14px;background:transparent;color:inherit;font:700 12px Montserrat,sans-serif;cursor:pointer;margin-right:6px}.rqno+.rqok{margin-left:0}.rqok{margin-left:auto;border:0;border-radius:99px;padding:6px 14px;background:#c96a47;color:#fff;font:700 12px Montserrat,sans-serif;cursor:pointer}.rqd{margin-left:auto;font:700 12px Montserrat,sans-serif;color:#4a8760}.rql li.done b{opacity:.6}.rqf{flex:0 0 100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:10px 0 4px;padding:12px;border-radius:14px;background:var(--soft)}.rqf label{display:flex;flex-direction:column;gap:4px;font:600 12px Montserrat,sans-serif}.rqf input:not([type=checkbox]),.rqf select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}.rqf .rqck{flex-direction:row;align-items:center;gap:8px}.rqbt{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}.rqbt button{border-radius:99px;padding:8px 16px;font:700 13px Montserrat,sans-serif;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}.rqbt .rqsave{background:#c96a47;border-color:#c96a47;color:#fff}.rqst{grid-column:1/-1;margin:0;font-size:12px}
 .rqn{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:#c96a47;color:#fff;font-size:.75rem;font-weight:800;vertical-align:middle}.rql{list-style:none;margin:8px 0 0;padding:0}.rql li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.rql li:first-child{border-top:0}
 .rql li .acts{display:flex;align-items:center;gap:10px;flex:none}.trdel,.fbdel{opacity:.75}
+
+.bl{display:flex;flex-direction:column}.br{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid var(--line)}.br:first-child{border-top:0}
+.brl{display:flex;gap:16px;align-items:center;flex:1;min-width:0}.brm{min-width:0;display:flex;flex-direction:column;gap:8px}
+.brt{font:700 16px/1.35 Montserrat,sans-serif!important;text-align:left;padding:0}
+.brd{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font:600 13px Montserrat,sans-serif}.brd .chip{font-family:Montserrat,sans-serif}
+.brk{display:inline-flex;align-items:baseline;gap:6px}.brk small{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.55}
+.chip.chg{color:var(--blue,#7b7ff0);background:color-mix(in srgb,var(--blue,#7b7ff0) 16%,transparent)}
+.bra{display:flex;align-items:center;gap:10px;flex:none}.bra .st{min-width:150px}
+.pn.pnv{border:0;padding:0;background:none;cursor:pointer;border-radius:8px;overflow:hidden}.pn.pnv:after{display:none}.pn img{width:56px!important;height:84px!important}
+.pne{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.35);color:#fff;opacity:.85;transition:opacity .15s}.pn.pnv:hover .pne{opacity:1;background:rgba(0,0,0,.5)}
+.pn0{width:56px;height:84px;border-radius:8px;background:var(--soft)}
+.pbx{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:24px}.pbi{display:flex;flex-direction:column;align-items:center;gap:14px;max-height:100%}
+.pbi img{max-height:calc(100vh - 140px);max-width:100%;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.4)}.pbb{display:flex;gap:10px}
+@media (max-width:720px){.br{flex-direction:column;align-items:stretch}.bra{justify-content:space-between}.bra .st{flex:1}}
 </style>
 </head>
 <body class="out">
@@ -688,7 +702,8 @@ const EST={pendiente:["Por revisar",""],revisado:["Revisado","ok"],cambios:["Nec
 const W="https://www.primerosalimentos.com";
 let BL={cola:[],pub:[],ed:{}},EDOK=true;
 let PINS={};fetch("pins/pins.json",{cache:"no-store"}).then(r=>r.ok?r.json():{}).then(j=>{PINS=j;if(!$("t-blog").classList.contains("hide")&&BL.cola.length)drawBlog()}).catch(()=>{});
-const pinImg=slug=>PINS[slug]?`<a class="pn" href="pins/${esc(slug)}.png" download="${esc(slug)}-pinterest.png" title="Descargar la imagen para Pinterest"><img src="pins/${esc(slug)}.png" alt="" loading="lazy"></a>`:"";
+const pinImg=slug=>PINS[slug]?`<button type="button" class="pn pnv" data-pin="${esc(slug)}" title="Ver la imagen de Pinterest"><img src="pins/${esc(slug)}.png" alt="" loading="lazy"><span class="pne"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span></button>`:`<span class="pn pn0"></span>`;
+const fdS=d=>new Date(d+"T12:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"});
 const pinDate=slug=>PINS[slug]?` · Pin ${new Date(PINS[slug]+"T12:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"})}`:"";
 const L2=v=>Array.isArray(v)?v.join("\n"):(v??"");
 const toL=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean);
@@ -700,22 +715,25 @@ async function renderBlog(){
   try{const s=await getDocs(collection(db,"blog"));BL.ed={};s.forEach(d=>BL.ed[d.id]=d.data());EDOK=true}catch(e){EDOK=false}
   drawBlog()}
 function drawBlog(){
-  const row=a=>{const e=BL.ed[a.slug]||{},st=e.estado||a.fuera||"pendiente",ch=Object.keys(e.cambios||{}).length;
-    return `<tr><td><div class="pr">${pinImg(a.slug)}<div><button class="lnk" data-ed="${esc(a.slug)}">${esc((e.cambios||{}).title||a.t)}</button>${ch?` <span class="chip">Editado</span>`:""}<div class="mute sm"><span class="chip ${a.cat==="receta"?"chr":""}">${a.cat==="receta"?"Receta":"Guía"}</span>${e.por?` · ${esc(e.por.split("@")[0])}, ${e.at&&e.at.toDate?e.at.toDate().toLocaleDateString("es-ES",{day:"numeric",month:"short"}):""}`:""}${e.nota?` · <i>${esc(e.nota)}</i>`:""}${pinDate(a.slug)}</div></div></div></td>
-      <td class="mute">${esc(a.d||"No se publica")}</td>
-      <td><select class="st st-${EST[st]?EST[st][1]:""}" data-st="${esc(a.slug)}" ${EDOK?"":"disabled"}>${Object.entries(EST).map(([k,[l]])=>`<option value="${k}"${k===st?" selected":""}>${l}</option>`).join("")}</select></td>
-      <td><button class="lnk sm" data-pv="${esc(a.slug)}">Ver</button></td></tr>`};
+  const row=a=>{const e=BL.ed[a.slug]||{},st=e.estado||a.fuera||"pendiente",ch=Object.keys(e.cambios||{}).length,by=e.por?`${esc(e.por.split("@")[0])}${e.at&&e.at.toDate?", "+e.at.toDate().toLocaleDateString("es-ES",{day:"numeric",month:"short"}):""}`:"";
+    return `<div class="br"><div class="brl">${pinImg(a.slug)}<div class="brm"><button class="lnk brt" data-ed="${esc(a.slug)}">${esc((e.cambios||{}).title||a.t)}</button>
+      <div class="brd"><span class="chip ${a.cat==="receta"?"chr":""}">${a.cat==="receta"?"Receta":"Guía"}</span>${ch?`<span class="chip chg">Editado</span>`:""}<span class="brk"><small>Blog</small>${esc(a.d||"No se publica")}</span>${PINS[a.slug]?`<span class="brk"><small>Pinterest</small>${fdS(PINS[a.slug])}</span>`:""}</div>
+      ${by||e.nota?`<div class="mute sm brn">${by}${by&&e.nota?" · ":""}${e.nota?`<i>${esc(e.nota)}</i>`:""}</div>`:""}</div></div>
+      <div class="bra"><select class="st st-${EST[st]?EST[st][1]:""}" data-st="${esc(a.slug)}" ${EDOK?"":"disabled"}>${Object.entries(EST).map(([k,[l]])=>`<option value="${k}"${k===st?" selected":""}>${l}</option>`).join("")}</select><button class="btn sm" data-pv="${esc(a.slug)}">Ver artículo</button></div></div>`};
   const n=k=>BL.cola.filter(a=>((BL.ed[a.slug]||{}).estado||"pendiente")===k).length;
   $("t-blog").innerHTML=`${EDOK?"":`<div class="card warn" style="margin-bottom:12px">Para guardar estados y cambios falta añadir la colección <b>blog</b> a las reglas de Firestore.</div>`}
-    <p class="mute">Toca la miniatura para bajarte la imagen de Pinterest de cada artículo, o <a href="pins/pinterest_pines.csv" download>descarga el CSV</a> para subirlos todos de golpe.</p>
-    <p class="mute">Se publica uno cada dos días, en este orden. Los que están <b>en pausa</b> o <b>descartados</b> se saltan. Toca un título para editarlo.</p>
+    <p class="mute">Se publica uno cada dos días, en este orden; los que están <b>en pausa</b> o <b>descartados</b> se saltan. Toca un título para editarlo y la miniatura para ver la imagen de Pinterest. <a href="pins/pinterest_pines.csv" download>Descargar el CSV de Pinterest</a></p>
     <div class="grid" style="margin-bottom:12px">${kpi(BL.cola.filter(a=>!a.fuera).length,"En cola")}${kpi(n("revisado"),"Revisados")}${kpi(n("cambios"),"Necesitan cambios")}${kpi(n("pausa")+n("descartado"),"Apartados")}</div>
-    <div class="card"><h2>Borradores · ${BL.cola.length}</h2><table class="bt"><tr><th>Artículo</th><th>Fecha</th><th>Estado</th><th></th></tr>${BL.cola.map(row).join("")}</table></div>
-    <div class="card" style="margin-top:14px"><h2>Publicados · ${BL.pub.length}</h2><table>${BL.pub.map(a=>`<tr><td><div class="pr">${pinImg(a.slug)}<div><a href="${a.url}" target="_blank" rel="noopener">${esc(a.t)}</a><div class="mute sm">${pinDate(a.slug).replace(" · ","")}</div></div></div></td></tr>`).join("")}</table></div>`;
+    <div class="card"><h2>Borradores · ${BL.cola.length}</h2><div class="bl">${BL.cola.map(row).join("")}</div></div>
+    <div class="card" style="margin-top:14px"><h2>Publicados · ${BL.pub.length}</h2><div class="bl">${BL.pub.map(a=>`<div class="br"><div class="brl">${pinImg(a.slug)}<div class="brm"><a class="brt" href="${a.url}" target="_blank" rel="noopener">${esc(a.t)}</a>${PINS[a.slug]?`<div class="brd"><span class="brk"><small>Pinterest</small>${fdS(PINS[a.slug])}</span></div>`:""}</div></div></div>`).join("")}</div></div>`;
   $("t-blog").querySelectorAll("[data-st]").forEach(s=>s.onchange=async()=>{const k=s.dataset.st,e=BL.ed[k]||{};s.disabled=true;
     try{await saveEd(k,{...e,estado:s.value});drawBlog()}catch(err){alert("No se ha podido guardar: "+(err.code||err.message));s.disabled=false}});
   $("t-blog").querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>openEd(b.dataset.ed));
 }
+// Vista previa de la imagen de Pinterest
+document.addEventListener("click",e=>{const b=e.target.closest("[data-pin]");if(!b)return;e.preventDefault();const sl=b.dataset.pin,o=document.createElement("div");o.className="pbx";
+  o.innerHTML=`<div class="pbi"><img src="pins/${esc(sl)}.png" alt=""><div class="pbb"><a class="btn pri" href="pins/${esc(sl)}.png" download="${esc(sl)}-pinterest.png">Descargar</a><button type="button" class="btn" data-pbx>Cerrar</button></div></div>`;
+  o.onclick=ev=>{if(ev.target===o||ev.target.closest("[data-pbx]"))o.remove()};document.body.appendChild(o)});
 // Vista previa del borrador (el HTML vive en Firestore, no en la web pública)
 document.addEventListener("click",e=>{const b=e.target.closest("[data-pv]");if(!b)return;e.preventDefault();const h=(BL.h||{})[b.dataset.pv];
   if(!h){alert("Aún no hay vista previa de este artículo.");return}const u=URL.createObjectURL(new Blob([h],{type:"text/html"}));window.open(u,"_blank","noopener");setTimeout(()=>URL.revokeObjectURL(u),60000)});
