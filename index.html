@@ -109,7 +109,7 @@ select.st-ok{border-color:var(--green);color:var(--green)}select.st-warn{border-
 .lc .hit{fill:transparent;stroke:none}.lc .xh{stroke:var(--mute);stroke-width:1;stroke-dasharray:3 3;opacity:0}.lc .xh.on{opacity:.6}
 .leg{display:flex;gap:14px;font-size:12.5px;font-weight:600;margin:-4px 0 6px}.leg i{display:inline-block;width:12px;height:4px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .row .tr i{border-radius:0 99px 99px 0}.cols i{border-radius:6px 6px 2px 2px}.cols i.s1,.row .tr i.s1{background:var(--s1)}.row .tr i.s2{background:var(--s2)}
-.funnel{display:flex;flex-direction:column;gap:7px}.fn{display:grid;grid-template-columns:minmax(96px,30%) 1fr 42px 48px;gap:8px;align-items:center;font-size:13px;font-weight:600}
+.funnel{display:flex;flex-direction:column;gap:10px}.fn2 small,.use small{display:block;color:var(--mute);font-size:12px;margin-top:3px}.sum{margin:0 0 14px;font-size:14px;line-height:1.5}.uses{display:flex;flex-direction:column;gap:12px}.ut{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:5px}.ut em{font-style:normal;font-weight:700}.use .fb{display:block;height:10px}.fn{grid-template-columns:minmax(96px,30%) 1fr 42px!important}.fn{display:grid;grid-template-columns:minmax(96px,30%) 1fr 42px 48px;gap:8px;align-items:center;font-size:13px;font-weight:600}
 .fb{height:22px;background:var(--soft);border-radius:6px;overflow:hidden}.fb i{display:block;height:100%;border-radius:0 6px 6px 0}.fn b{text-align:right}.fn em{font-style:normal;color:var(--mute);font-size:12px;text-align:right}
 .stk{margin-bottom:14px}.sl{font-weight:700;font-size:13px;margin-bottom:5px}.sl small{color:var(--mute);font-weight:500}
 .sb{display:flex;gap:2px;height:16px;border-radius:6px;overflow:hidden}.sb i{display:block;background:var(--s1);min-width:3px}
@@ -334,23 +334,28 @@ function render(users){
   const r4=started.filter(i=>dd(i.first,today)>=35),r4ok=r4.filter(i=>i.ds.some(d=>{const x=dd(i.first,d);return x>=28&&x<35})).length;
   const nf=i=>i.foods.size;
   const fun=[["Cuentas",users.length],["Con bebé",real.length],["Han empezado",N],["5+ alimentos",started.filter(i=>nf(i)>=5).length],["20+ alimentos",started.filter(i=>nf(i)>=20).length],["50+ alimentos",started.filter(i=>nf(i)>=50).length],["100 alimentos",started.filter(i=>nf(i)>=100).length]];
-  const funnel=fun.map(([k,v],j)=>`<div class="fn"${tip(`${k}: ${v} (${pct(v,fun[0][1])} % de las cuentas)`)}><span>${k}</span><span class="fb"><i class="s1" style="width:${Math.max(1.5,v*100/Math.max(1,fun[0][1]))}%"></i></span><b>${v}</b><em>${j?pct(v,fun[j-1][1])+" %":""}</em></div>`).join("");
+  const FD=["cuentas creadas","de las cuentas tienen un bebé creado","de los bebés han apuntado al menos un alimento","de los que empezaron han probado 5 o más alimentos","de los anteriores llegan a 20 o más","de los anteriores llegan a 50 o más","de los anteriores llegan a 100"];
+  const funnel=fun.map(([k,v],j)=>`<div class="fn2"><div class="fn"><span>${k}</span><span class="fb"><i class="s1" style="width:${Math.max(1.5,v*100/Math.max(1,fun[0][1]))}%"></i></span><b>${v}</b></div><small>${j?`${v} de ${fun[j-1][1]} ${FD[j]}${fun[j-1][1]?` (${pct(v,fun[j-1][1])} %)`:""}`:`${v} ${FD[0]}`}</small></div>`).join("");
+  let fdrop=null;fun.forEach(([k,v],j)=>{if(j&&fun[j-1][1]&&(fdrop===null||v/fun[j-1][1]<fdrop.r))fdrop={r:v/fun[j-1][1],from:fun[j-1][0],to:k}});
+  const funSum=`<p class="sum">De <b>${fun[0][1]} cuentas</b>, <b>${fun[2][1]}</b> han empezado a apuntar y <b>${fun[4][1]}</b> llevan 20 alimentos o más.${fdrop?` Donde más gente se queda: de «${fdrop.from}» a «${fdrop.to}».`:""}</p>`;
   const fromMenu=LL.filter(l=>l.m).length;
   const P_=b=>b.prefs||{},has=o=>o&&typeof o==="object"&&Object.keys(o).length>0;
-  const feat=[["Apunta desde el menú del día",pct(fromMenu,LL.length),`${pct(fromMenu,LL.length)} % de registros`],
-    ["Diario (cacas y notas)",pct(started.filter(i=>Object.keys(i.dn).length).length,N)],
-    ["Vitamina D",pct(real.filter(b=>Object.values(P_(b).dck||{}).some(x=>x&&x.v)).length,real.length)],
-    ["Situaciones (estreñido, dientes…)",pct(real.filter(b=>has(P_(b).sit)).length,real.length)],
-    ["Recetas propias o guardadas",pct(real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,real.length)],
-    ["En casa (nevera, congelador)",pct(real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length,real.length)],
-    ["Adapta el menú a un nutriente",pct(real.filter(b=>P_(b).boost).length,real.length)],
-    ["Refuerzo del pediatra",(()=>{const R=real.filter(b=>P_(b).gped2);return pct(R.filter(b=>(P_(b).goals||[]).length).length,R.length)})()],
-    ["Fotos",pct(started.filter(i=>i.L.some(l=>l.ph)).length,N)],
-    ["Ha visto el recorrido",pct(real.filter(b=>P_(b).tour).length,real.length)],
-    ["Pide alimentos",pct(real.filter(b=>(P_(b).req||[]).length).length,real.length)],
-    ["Envía sugerencias",pct(real.filter(b=>(P_(b).fb||[]).length).length,real.length)],
-    ["Comparte con cuidadores",pct(users.filter(u=>u.members&&Object.keys(u.members).length).length,users.length),null,"% de cuentas"]]
-    .map(([k,v,lab,t])=>[k,v,lab||v+" %",t?`${k}: ${v} ${t}`:`${k}: ${v} % de los bebés`]).sort((a,b)=>b[1]-a[1]);
+  const FU=(k,n,d,u="bebés",q="")=>[k,pct(n,d),n,d,u,q];const RG=real.filter(b=>P_(b).gped2);
+  const feat=[FU("Apunta desde el menú del día",fromMenu,LL.length,"registros","de lo que apuntan, sale del menú del día"),
+    FU("Diario (cacas y notas)",started.filter(i=>Object.keys(i.dn).length).length,N,"bebés","han apuntado alguna caca o nota"),
+    FU("Vitamina D",real.filter(b=>Object.values(P_(b).dck||{}).some(x=>x&&x.v)).length,real.length,"bebés","marcan la vitamina D"),
+    FU("Situaciones (estreñido, dientes…)",real.filter(b=>has(P_(b).sit)).length,real.length,"bebés","han activado alguna situación"),
+    FU("Recetas propias o guardadas",real.filter(b=>Array.isArray(b.fav)&&b.fav.length).length,real.length,"bebés","tienen recetas guardadas"),
+    FU("En casa (nevera, congelador)",real.filter(b=>Array.isArray(b.frz)&&b.frz.length).length,real.length,"bebés","tienen algo en nevera o congelador"),
+    FU("Adapta el menú a un nutriente",real.filter(b=>P_(b).boost).length,real.length,"bebés","adaptan el menú a un nutriente"),
+    FU("Refuerzo del pediatra",RG.filter(b=>(P_(b).goals||[]).length).length,RG.length,"bebés","tienen algo en «Reforzar» (desde el cambio)"),
+    FU("Fotos",started.filter(i=>i.L.some(l=>l.ph)).length,N,"bebés","han subido alguna foto"),
+    FU("Ha visto el recorrido",real.filter(b=>P_(b).tour).length,real.length,"bebés","han visto el recorrido de bienvenida"),
+    FU("Pide alimentos",real.filter(b=>(P_(b).req||[]).length).length,real.length,"bebés","han pedido algún alimento"),
+    FU("Envía sugerencias",real.filter(b=>(P_(b).fb||[]).length).length,real.length,"bebés","han enviado alguna sugerencia"),
+    FU("Comparte con cuidadores",users.filter(u=>u.members&&Object.keys(u.members).length).length,users.length,"cuentas","comparten con otro cuidador")].sort((a,b)=>b[1]-a[1]);
+  const featTop=feat.filter(x=>x[3]).slice(0,2),featLow=feat.filter(x=>x[3]&&x[1]<15);
+  const featHTML=`<p class="sum">${featTop.length?`Lo más usado: <b>${featTop.map(x=>x[0].toLowerCase()).join("</b> y <b>")}</b>.`:""}${featLow.length?` Casi nadie usa: ${featLow.map(x=>x[0].toLowerCase()).join(", ")}.`:""}</p><div class="uses">${feat.map(([k,v,n,d,u,q])=>`<div class="use"><div class="ut"><b>${esc(k)}</b><em>${d?v+" %":"—"}</em></div><span class="fb"><i class="s1" style="width:${Math.max(1.5,v)}%"></i></span><small>${d?`${n} de ${d} ${u} ${esc(q)}`:"Sin datos todavía"}</small></div>`).join("")}</div>`;
   const ageB=tally(real.filter(b=>b.bd),b=>{const m=months(b.bd,today);return m<6?"<6 m":m<9?"6-8 m":m<12?"9-11 m":m<18?"12-17 m":"18+ m"}).sort((a,b)=>["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(a[0])-["<6 m","6-8 m","9-11 m","12-17 m","18+ m"].indexOf(b[0]));
   const startB=tally(started.filter(i=>i.b.bd),i=>{const m=months(i.b.bd,i.first);return m<5?"Antes de 5 m":m<6?"5 m":m<7?"6 m":"7 m o más"}).sort((a,b)=>["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(a[0])-["Antes de 5 m","5 m","6 m","7 m o más"].indexOf(b[0]));
   const styB=tally(real,b=>STY[(b.prefs||{}).sty||""]||"Otro"),dietB=tally(real,b=>DIETN[(b.prefs||{}).diet||"om"]||"Otra"),paisB=tally(real,b=>b.pais||"ES"),evB=tally(real,b=>EVN[(b.prefs||{}).every||1]||"Cada día"),mealB=tally(real,b=>MEALN[+b.meals||0]||"Según su edad"),cxB=tally(real,b=>CXN[(b.prefs||{}).cx||"mix"]||"Un poco de todo"),fzB=tally(real,b=>FZN[(b.prefs||{}).fz||"fresh"]||"Todo fresco");
@@ -368,8 +373,8 @@ function render(users){
       ${card("¿Siguen apuntando?","% de bebés que apuntan algo en cada semana desde que empezaron (con 3 bebés o más en esa semana).",ret.some(v=>v!=null)?lineChart(["S1","S2","S3","S4","S5","S6","S7","S8"],[{n:"Siguen",v:ret,c:"s1"}],{pct:true}):EMPTY)}
     </div>
     <div class="g2">
-      ${card("Embudo","De todas las cuentas, cuántas llegan a cada punto. A la derecha, el % que pasa desde el paso anterior.",`<div class="funnel">${funnel}</div>`)}
-      ${card("Qué usan","% de bebés que usan cada parte de la app.",hbars(feat))}
+      ${card("Embudo","Cada barra es cuántas cuentas llegan a ese punto. Debajo, cuántas pasan desde el paso anterior.",funSum+`<div class="funnel">${funnel}</div>`)}
+      ${card("Qué usan","Cuántos usan cada parte de la app. La barra llena es el 100 %.",featHTML)}
     </div>
     <h3 class="sech">Quiénes son</h3>
     <div class="g2">
