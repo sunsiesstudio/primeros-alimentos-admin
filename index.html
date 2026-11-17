@@ -298,7 +298,7 @@ const CATS=["Frutas","Verduras","Proteínas","Cereales","Frutos secos","Lácteos
 const slugF=n=>n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"x";
 async function loadExt(){try{const q=await getDocs(collection(db,"alimentos"));const E={};q.forEach(d=>{const x=d.data();if(x&&x.n)E[x.n.trim().toLowerCase()]=x});let X={};try{const qr=await getDocs(collection(db,"rechazados"));qr.forEach(d=>{const x=d.data();if(x&&x.n)X[x.n.trim().toLowerCase()]=1})}catch(e){console.warn("rechazados",e)}
   document.querySelectorAll(".rql li[data-rq]").forEach(li=>{if(X[li.dataset.rq.trim().toLowerCase()])li.remove()});
-  document.querySelectorAll(".rql li[data-rq]").forEach(li=>{const x=E[li.dataset.rq.trim().toLowerCase()];if(x){li.classList.add("done");const b=li.querySelector(".rqok");if(b)b.outerHTML=`<span class="rqd">Añadido ✓ · ${esc(x.c)}</span>`}});
+  document.querySelectorAll(".rql li[data-rq]").forEach(li=>{const x=E[li.dataset.rq.trim().toLowerCase()];if(x){li.classList.add("done");li.querySelector(".rqno")?.remove();const b=li.querySelector(".rqok");if(b)b.outerHTML=`<span class="rqd">Añadido ✓ · ${esc(x.c)}</span>`}});
   const pend=document.querySelectorAll(".rql li[data-rq]:not(.done)").length,nb=document.querySelector('#nav [data-t="buzon"] .rqn'),hd=document.querySelector(".rql")?.closest(".card")?.querySelector("h2 .rqn");if(nb)nb.textContent=pend;if(hd)hd.textContent=pend;if(nb&&!pend)nb.remove()}catch(e){console.warn("alimentos",e)}}
 document.addEventListener("click",async e=>{
   const rj=e.target.closest("[data-rej]");
@@ -311,7 +311,7 @@ document.addEventListener("click",async e=>{
   const c=e.target.closest(".rqcan");if(c){c.closest(".rqf").remove();return}
   const sv=e.target.closest(".rqsave");if(sv){const f=sv.closest(".rqf"),li=f.closest("li"),n=f.querySelector(".rqn1").value.trim();if(!n)return;sv.disabled=true;f.querySelector(".rqst").textContent="Guardando…";
     try{await setDoc(doc(db,"alimentos",slugF(n)),{n,c:f.querySelector(".rqc").value,min:+f.querySelector(".rqm").value,a:f.querySelector(".rqa").checked,fe:f.querySelector(".rqfe").checked,req:li.dataset.rq,at:serverTimestamp()});
-      f.remove();li.classList.add("done");a?.remove();const b=li.querySelector(".rqok");if(b)b.outerHTML=`<span class="rqd">Añadido ✓</span>`;loadExt()}
+      f.remove();li.classList.add("done");a?.remove();li.querySelector(".rqno")?.remove();const b=li.querySelector(".rqok");if(b)b.outerHTML=`<span class="rqd">Añadido ✓</span>`;loadExt()}
     catch(err){sv.disabled=false;f.querySelector(".rqst").textContent=/permission/i.test(err.message||"")?"Sin permiso: falta la regla de Firestore para «alimentos».":"No se pudo guardar: "+(err.message||err)}}
 });
 function render(users){
