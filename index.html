@@ -666,7 +666,7 @@ function openFam(id){const r=famRows().find(x=>x.id===id);if(!r)return;const u=r
   const owner=r.fam?U.find(x=>x.__id===r.fam):null;
   const mem=Object.values(u.members||{}).map(m=>esc(m.em||"sin email")).join(", ");
   const baby=b=>{const L=(b.log||[]).filter(l=>l&&l.f&&l.d&&!l.pre).sort((a,c)=>a.d<c.d?-1:1),F={};L.forEach(l=>{const o=F[l.f]=F[l.f]||{f:l.f,d:l.d,n:0,rx:false,r:""};o.n++;o.r=l.r||o.r;if(l.r==="react")o.rx=true});
-    const fl=Object.values(F),pr=b.prefs||{},al=Object.entries(b.al||{}).map(([g,v])=>`${esc(g)} (${esc(v)})`).join(", ");
+    const fl=Object.values(F),pr=b.prefs||{};
     const ml=b.ml||{},nm=new Set();Object.values(ml).forEach(dd=>Object.values(dd||{}).forEach(e=>{if(e&&e.d&&e.n)nm.add(e.n)}));Object.entries(b.ov||{}).forEach(([d,mm])=>Object.entries(mm||{}).forEach(([m,v])=>{if(v&&v.n&&((ml[d]||{})[m]||{}).d)nm.add(v.n)}));
     return card(esc((b.nm||"Sin nombre").trim()),"",`<div class="pfg">
       ${kv("Fecha de nacimiento",fdL(b.bd))}${kv("Edad",ageS(b.bd))}${kv("Prematuro",b.early?`Sí${b.ga?` (${b.ga} semanas)`:""}`:"No")}
@@ -674,9 +674,9 @@ function openFam(id){const r=famRows().find(x=>x.id===id);if(!r)return;const u=r
       ${kv("Dieta",esc(DIETL[pr.diet]||pr.diet||"—"))}${kv("Objetivos",esc((pr.goals||[]).map(g=>GOALL[g]||g).join(", ")||"—"))}${kv("País",esc(b.pais||"—"))}
       ${kv("Alimentos probados",`${fl.length} de 100`)}${kv("Diploma de 100",b.dip?"Sí":"Todavía no")}${kv("Comidas apuntadas",L.length)}
       ${kv("Recetas probadas",b.rcN?`${nm.size} de ${b.rcN}`:nm.size||"—")}${kv("Primera comida apuntada",fdL(L[0]&&L[0].d))}${kv("Última comida apuntada",fdL(L.at(-1)&&L.at(-1).d))}
-      ${kv("Alergias marcadas",al||"Ninguna")}${kv("Reacciones apuntadas",(b.rx||[]).length||"Ninguna")}${kv("Perfil creado",fdL(b.cd))}
-    </div><h3 class="sech" style="margin-top:14px">Alimentos que ha probado</h3><p class="mute note">Por orden, con la fecha de la primera vez. En rojo, los que tienen una reacción apuntada.</p>
-    <div class="fch">${fl.map(o=>`<span class="${o.rx?"rx":""}" title="${o.n} ${o.n===1?"vez":"veces"} · ${esc(RLAB[o.r]||"")}">${esc(o.f)} <small class="mute">${fdS(o.d)}</small></span>`).join("")||'<span>Todavía ninguno</span>'}</div>`)};
+      ${kv("Perfil creado",fdL(b.cd))}
+    </div><h3 class="sech" style="margin-top:14px">Alimentos que ha probado</h3><p class="mute note">Por orden, con la fecha de la primera vez. Las alergias y reacciones de cada bebé no se muestran aquí por privacidad: solo salen sumadas en «Qué comen».</p>
+    <div class="fch">${fl.map(o=>`<span title="${o.n} ${o.n===1?"vez":"veces"}">${esc(o.f)} <small class="mute">${fdS(o.d)}</small></span>`).join("")||'<span>Todavía ninguno</span>'}</div>`)};
   const o=document.createElement("div");o.className="fdet";
   o.innerHTML=`<div class="fdi"><button class="btn sm fx" aria-label="Cerrar">✕</button><h2 style="margin:0 0 14px">${esc(r.bs.map(b=>(b.nm||"Sin nombre").trim()).join(" y ")||"Cuenta sin bebé")}</h2>
     ${card("Cuenta","",`<div class="pfg">${kv("Email",esc(r.em||"Se verá cuando abra la app nueva"))}${kv("Desde",esc(r.plat.map(x=>PLATL[x]||x).join(", ")||"—"))}${kv("Idioma",esc(LANGL[u.lang]||u.lang||"—"))}
@@ -684,7 +684,7 @@ function openFam(id){const r=famRows().find(x=>x.id===id);if(!r)return;const u=r
       ${kv("Veces que ha entrado",r.sN||"—")}${kv("Tiempo por sesión",r.sN?dur(r.sT/r.sN):"—")}${kv("Tiempo total",r.sT?dur(r.sT):"—")}
       ${owner?kv("Cuidador/a de",esc(owner.em||(owner.babies||[]).map(b=>b.nm).join(", ")||"otra cuenta")):""}${mem?kv("Ha invitado a",mem):""}</div>
       <h3 class="sech" style="margin-top:14px">Sesiones · últimos 28 días</h3><div class="sesb">${sv.map((v,i)=>`<i style="height:${v?Math.max(6,v*100/mx):2}%"${tip(`${fdS(D[i])}: ${v} ${v===1?"sesión":"sesiones"}${((u.ses||{})[D[i]]||{}).s?` · ${dur(u.ses[D[i]].s)}`:""}`)}></i>`).join("")}</div>
-      <p class="mute note" style="margin-top:12px">Para el póster gratis a casa: la app todavía no pide la dirección. Cuando lleguen a 100 alimentos habrá que pedírsela (y su consentimiento) en la app o por email.</p>`)}
+`)}
     ${r.bs.map(baby).join("")}</div>`;
   document.body.appendChild(o);document.body.style.overflow="hidden";const close=()=>{o.remove();document.body.style.overflow=""};o.querySelector(".fx").onclick=close;o.onclick=e=>{if(e.target===o)close()}}
 function openFood(name){const st=window.__ST;if(!st)return;const {started,N,LL}=st;
