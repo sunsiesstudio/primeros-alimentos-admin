@@ -263,7 +263,7 @@ onAuthStateChanged(auth,async u=>{
   if(!u)return;
   $("upd").textContent="Cargando datos…";
   try{const snap=await getDocs(collection(db,"users"));loadIdeas();try{render(snap.docs.map(d=>{const x=d.data();x.__id=d.id;window.__UD=window.__UD||{};window.__UD[d.id]=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
-    $("upd").textContent=`Datos de ${snap.size} cuentas · actualizado ${new Date().toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"})}`;}
+    {const ns=snap.docs.filter(d=>(d.data()||{}).noStats).length;$("upd").textContent=`Datos de ${snap.size-ns} cuentas${ns?` (${ns} ${ns===1?"no comparte":"no comparten"} estadísticas y no se ${ns===1?"cuenta":"cuentan"})`:""} · actualizado ${new Date().toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"})}`}}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");document.body.classList.add("out");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
   renderBlog();
@@ -341,6 +341,7 @@ document.addEventListener("click",async e=>{
     catch(err){sv.disabled=false;f.querySelector(".rqst").textContent=/permission/i.test(err.message||"")?"Sin permiso: falta la regla de Firestore para «alimentos».":"No se pudo guardar: "+(err.message||err)}}
 });
 function render(users){
+  window.__ALLU=users;users=users.filter(u=>!u.noStats);
   const babies=[];users.forEach(u=>(u.babies||[]).forEach(b=>babies.push(b)));
   const real=babies.filter(b=>(Array.isArray(b.log)?b.log:[]).some(l=>l&&!l.pre)||(b.nm||"").trim());
   const info=real.map(b=>{const L=(Array.isArray(b.log)?b.log:[]).filter(l=>l&&l.f&&l.d&&!l.pre).sort((a,c)=>a.d<c.d?-1:1);const ds=[...new Set(L.map(l=>l.d))];
@@ -464,7 +465,7 @@ function render(users){
   // ===== ALIMENTOS QUE PIDEN =====
   {const RQ={};users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).req)||[]).forEach(r=>{if(!r||typeof r.n!=="string")return;const k=r.n.trim().toLowerCase();if(!k)return;const o=RQ[k]=RQ[k]||{n:r.n.trim(),c:0,d:"",w:{}};o.w[u.__id]=o.w[u.__id]||{em:u.em||u.email||"",b:new Set()};if((b.nm||"").trim())o.w[u.__id].b.add(b.nm.trim());o.c=Object.keys(o.w).length;if((r.d||"")>o.d)o.d=r.d||""})));
    const L=Object.values(RQ).sort((a,b)=>b.d.localeCompare(a.d)||b.c-a.c);
-   {const bz=$("t-buzon");bz.innerHTML="";{const TR=[];users.forEach(u=>(u.trash||[]).forEach((t,i)=>{if(t&&t.b&&Date.now()-(t.at||0)<30*864e5)TR.push({id:u.__id,i,at:t.at||0,nm:t.nm||t.b.nm||"Sin nombre",em:u.em||u.email||"",n:(t.b.log||[]).length})}));TR.sort((a,b)=>b.at-a.at);
+   {const bz=$("t-buzon");bz.innerHTML="";{const TR=[];(window.__ALLU||users).forEach(u=>(u.trash||[]).forEach((t,i)=>{if(t&&t.b&&Date.now()-(t.at||0)<30*864e5)TR.push({id:u.__id,i,at:t.at||0,nm:t.nm||t.b.nm||"Sin nombre",em:u.em||u.email||"",n:(t.b.log||[]).length})}));TR.sort((a,b)=>b.at-a.at);
       bz.insertAdjacentHTML("beforeend",card(`Perfiles eliminados <span class="rqn">${TR.length}</span>`,"Se guardan 30 días. Si alguien escribe porque lo borró sin querer, toca Recuperar y le vuelve a salir.",TR.length?`<ul class="rql trl">${TR.map(x=>`<li><span><b>${esc(x.nm)}</b> <span class="mute">${esc(x.em)}${x.em?" · ":""}${x.n} registros · ${new Date(x.at).toLocaleDateString("es-ES")}</span></span><span class="acts"><button type="button" class="btn sm trdel" data-tid="${esc(x.id)}" data-ti="${x.i}">Eliminar</button><button type="button" class="btn sm trok" data-tid="${esc(x.id)}" data-ti="${x.i}">Recuperar</button></span></li>`).join("")}</ul>`:'<p class="mute">Nadie ha borrado un perfil.</p>'));
       bz.querySelectorAll(".trdel").forEach(b=>b.onclick=async()=>{const id=b.dataset.tid,i=+b.dataset.ti,u=(window.__UD||{})[id];if(!u)return;const t=(u.trash||[]).slice(),it=t[i];if(!it)return;if(!confirm(`¿Eliminar para siempre el perfil de ${it.nm||it.b.nm||"este bebé"}? No se podrá recuperar.`))return;b.disabled=true;b.textContent="Eliminando…";
         try{t.splice(i,1);await setDoc(doc(db,"users",id),{trash:t,ts:Date.now()+60000},{merge:true});u.trash=t;b.closest("li").remove();bz.querySelectorAll(".trdel,.trok").forEach(x=>{if(x.dataset.tid===id&&+x.dataset.ti>i)x.dataset.ti=+x.dataset.ti-1})}
