@@ -669,13 +669,13 @@ function openFam(id){const r=famRows().find(x=>x.id===id);if(!r)return;const u=r
     const fl=Object.values(F),pr=b.prefs||{};
     const ml=b.ml||{},nm=new Set();Object.values(ml).forEach(dd=>Object.values(dd||{}).forEach(e=>{if(e&&e.d&&e.n)nm.add(e.n)}));Object.entries(b.ov||{}).forEach(([d,mm])=>Object.entries(mm||{}).forEach(([m,v])=>{if(v&&v.n&&((ml[d]||{})[m]||{}).d)nm.add(v.n)}));
     return card(esc((b.nm||"Sin nombre").trim()),"",`<div class="pfg">
-      ${kv("Fecha de nacimiento",fdL(b.bd))}${kv("Edad",ageS(b.bd))}${kv("Prematuro",b.early?`Sí${b.ga?` (${b.ga} semanas)`:""}`:"No")}
+      ${kv("Fecha de nacimiento",fdL(b.bd))}${kv("Edad",ageS(b.bd))}
       ${kv("Empezó a comer",fdL(b.eat))}${kv("Forma de empezar",esc(APPL[b.app]||b.app||"—"))}${kv("Comidas al día",b.meals||"—")}
-      ${kv("Dieta",esc(DIETL[pr.diet]||pr.diet||"—"))}${kv("Objetivos",esc((pr.goals||[]).map(g=>GOALL[g]||g).join(", ")||"—"))}${kv("País",esc(b.pais||"—"))}
+      ${kv("País",esc(b.pais||"—"))}
       ${kv("Alimentos probados",`${fl.length} de 100`)}${kv("Diploma de 100",b.dip?"Sí":"Todavía no")}${kv("Comidas apuntadas",L.length)}
       ${kv("Recetas probadas",b.rcN?`${nm.size} de ${b.rcN}`:nm.size||"—")}${kv("Primera comida apuntada",fdL(L[0]&&L[0].d))}${kv("Última comida apuntada",fdL(L.at(-1)&&L.at(-1).d))}
       ${kv("Perfil creado",fdL(b.cd))}
-    </div><h3 class="sech" style="margin-top:14px">Alimentos que ha probado</h3><p class="mute note">Por orden, con la fecha de la primera vez. Las alergias y reacciones de cada bebé no se muestran aquí por privacidad: solo salen sumadas en «Qué comen».</p>
+    </div><h3 class="sech" style="margin-top:14px">Alimentos que ha probado</h3><p class="mute note">Por orden, con la fecha de la primera vez. Por privacidad, aquí no salen datos de salud (alergias, reacciones, prematuridad) ni la dieta: solo salen sumados y anónimos en «Qué comen».</p>
     <div class="fch">${fl.map(o=>`<span title="${o.n} ${o.n===1?"vez":"veces"}">${esc(o.f)} <small class="mute">${fdS(o.d)}</small></span>`).join("")||'<span>Todavía ninguno</span>'}</div>`)};
   const o=document.createElement("div");o.className="fdet";
   o.innerHTML=`<div class="fdi"><button class="btn sm fx" aria-label="Cerrar">✕</button><h2 style="margin:0 0 14px">${esc(r.bs.map(b=>(b.nm||"Sin nombre").trim()).join(" y ")||"Cuenta sin bebé")}</h2>
