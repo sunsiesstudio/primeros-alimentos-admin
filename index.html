@@ -161,6 +161,14 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
 #tipsh.on{transform:none}#tipsh p{margin:0}#tipsh button{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;border:0;background:color-mix(in srgb,var(--bg) 18%,transparent);color:var(--bg);font-size:14px}
 .frow,.pi{cursor:pointer}.dt .go{color:var(--mute);font-size:18px;width:14px}
 .fsort{display:flex;flex-wrap:wrap;gap:6px;margin:-2px 0 10px;font-size:12.5px;font-weight:700;color:var(--mute);align-items:center}.fsort button{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:99px;padding:5px 11px;font:700 12.5px Montserrat,sans-serif;cursor:pointer}.fsort button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fq{width:100%;max-width:360px;min-height:44px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:inherit;font:500 15px Montserrat,sans-serif;margin:0 0 12px}
+.ftbl{width:100%;border-collapse:collapse;font-size:14px}.ftbl th{text-align:left;font-weight:700;color:var(--mute);font-size:12px;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.ftbl td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}.ftbl tr[data-fu]{cursor:pointer}.ftbl tr[data-fu]:hover td{background:rgba(127,127,127,.07)}
+.ftw{overflow-x:auto;-webkit-overflow-scrolling:touch}.ftbl .r{text-align:right;white-space:nowrap}.ftbl small{display:block;color:var(--mute);font-size:12px;margin-top:2px;word-break:break-all}
+.pfg{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin:6px 0 4px}.pfg div{background:rgba(127,127,127,.07);border-radius:12px;padding:10px 12px}
+.pfg small{display:block;color:var(--mute);font-size:12px;font-weight:600}.pfg b{display:block;font-size:15px;margin-top:3px;word-break:break-word}
+.fch{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.fch span{font-size:13px;padding:5px 10px;border-radius:99px;background:rgba(127,127,127,.1)}.fch span.rx{background:rgba(192,57,43,.15)}
+.sesb{display:flex;align-items:flex-end;gap:3px;height:70px;margin-top:8px}.sesb i{flex:1;background:var(--green);border-radius:3px 3px 0 0;min-height:2px;opacity:.85}
 .fdet{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch;animation:fdIn .22s ease-out}@keyframes fdIn{from{opacity:0;transform:translateY(12px)}}
 .fdi{max-width:1100px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top,0px)) 20px 60px;position:relative}
 .fx{position:sticky;top:10px;float:right;z-index:2;width:44px;height:44px;padding:0;border-radius:50%;background:var(--card)}
@@ -200,6 +208,7 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
   <nav id="nav" class="hide">
     <button data-t="uso" class="on">Uso</button>
     <button data-t="bebes">Qué comen</button>
+    <button data-t="fam">Familias</button>
     <button data-t="redes">Ideas</button>
     <button data-t="blog">Blog</button>
     <button data-t="buzon">Buzón</button>
@@ -211,6 +220,7 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
 <main id="app" class="hide">
   <section id="t-uso"></section>
   <section id="t-bebes" class="hide"></section>
+  <section id="t-fam" class="hide"></section>
   <section id="t-redes" class="hide"></section>
   <section id="t-blog" class="hide"></section>
   <section id="t-buzon" class="hide"></section>
@@ -242,7 +252,7 @@ const pct=(a,b)=>b?Math.round(a*100/b):0;
 /* ---------- pestañas ---------- */
 $("nav").onclick=e=>{const t=(e.target.closest("[data-t]")||{dataset:{}}).dataset.t;if(!t)return;
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  ["uso","bebes","redes","blog","buzon"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));$("upd").classList.toggle("hide",t==="blog");
+  ["uso","bebes","fam","redes","blog","buzon"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));$("upd").classList.toggle("hide",t==="blog");
   try{localStorage.setItem("adm_tab",t)}catch(e){}};
 
 /* ---------- entrar ---------- */
@@ -450,6 +460,7 @@ function render(users){
       ${card("Cómo y cuándo",`${LL.length} registros.`,stack("Cómo se lo dan",topHow,topHow.reduce((s,x)=>s+x[1],0)).replace(/ bebés</,' registros<')+stack("En qué comida",mlB,mlB.reduce((s,x)=>s+x[1],0)).replace(/ bebés</,' registros<'))}
     </div>`;
   drawFoods("t");
+  window.__FAMU=users;try{drawFam()}catch(e){console.error(e);$("t-fam").innerHTML=`<div class="card">No se han podido cargar las familias: ${esc(e.message)}</div>`}
   // ===== ALIMENTOS QUE PIDEN =====
   {const RQ={};users.forEach(u=>(u.babies||[]).forEach(b=>(((b.prefs||{}).req)||[]).forEach(r=>{if(!r||typeof r.n!=="string")return;const k=r.n.trim().toLowerCase();if(!k)return;const o=RQ[k]=RQ[k]||{n:r.n.trim(),c:0,d:"",w:{}};o.w[u.__id]=o.w[u.__id]||{em:u.em||u.email||"",b:new Set()};if((b.nm||"").trim())o.w[u.__id].b.add(b.nm.trim());o.c=Object.keys(o.w).length;if((r.d||"")>o.d)o.d=r.d||""})));
    const L=Object.values(RQ).sort((a,b)=>b.d.localeCompare(a.d)||b.c-a.c);
@@ -616,6 +627,66 @@ async function showImg(x){const o=document.createElement("div");o.className="fde
   draw()}
 // Ficha completa de un alimento
 const RLAB={love:"Le encanta",ok:"Ha comido bien",meh:"Poco",no:"No lo quiere",play:"Ha jugado",react:"Reacción"};
+
+// ===== FAMILIAS: perfil de cada cuenta =====
+const dur=x=>{x=Math.round(x||0);if(x<60)return x+" s";const m=Math.round(x/60);return m<60?m+" min":Math.floor(m/60)+" h "+(m%60)+" min"};
+const fdL=d=>d?new Date((String(d).length<=10?d+"T12:00":d)).toLocaleDateString("es-ES",{day:"numeric",month:"short",year:"numeric"}):"—";
+const ageS=bd=>{if(!bd)return"—";const b=new Date(bd+"T12:00"),n=new Date();let m=(n.getFullYear()-b.getFullYear())*12+n.getMonth()-b.getMonth();if(n.getDate()<b.getDate())m--;return m<0?"—":m<24?m+" meses":Math.floor(m/12)+" años y "+(m%12)+" meses"};
+const GOALL={iron:"Hierro",calcium:"Calcio",protein:"Proteína",veg:"Verdura",fiber:"Fibra",omega:"Omega 3",variety:"Variedad"},PLATL={ios:"iPhone",android:"Android",web:"Web"},LANGL={es:"Castellano",ca:"Catalán",en:"Inglés"};
+const APPL={blw:"BLW (trozos)",pure:"Purés",purés:"Purés",mix:"Mixto",mixto:"Mixto"},DIETL={om:"Come de todo",veg:"Vegetariana",vgn:"Vegana"};
+function famRows(){const U=window.__FAMU||[];const own={};U.forEach(u=>Object.entries(u.members||{}).forEach(([id,m])=>{own[id]=u.__id}));
+  return U.map(u=>{const bs=(u.babies||[]).filter(b=>b&&((b.nm||"").trim()||(b.log||[]).some(l=>l&&!l.pre)));const act=Object.keys(u.act||{}).sort();
+    const ses=u.ses||{},sd=Object.keys(ses).sort(),sN=u.sesN||0,sT=u.sesT||0;const lastLog=bs.flatMap(b=>(b.log||[]).filter(l=>l&&l.d&&!l.pre).map(l=>l.d)).sort().at(-1)||"";
+    const last=u.last?new Date(u.last).toISOString().slice(0,10):(act.at(-1)||lastLog);
+    const foods=bs.map(b=>new Set((b.log||[]).filter(l=>l&&l.f&&!l.pre).map(l=>l.f)).size);
+    const cd=bs.map(b=>b.cd).filter(Boolean).sort()[0]||act[0]||"";
+    return {u,id:u.__id,em:u.em||u.email||"",bs,act,sd,sN,sT,last,foods,cd,fam:u.fam||own[u.__id]||"",plat:Object.keys(u.plat||{}).length?Object.keys(u.plat):[...new Set(act.flatMap(d=>Object.keys((u.act||{})[d]||{})))]}}).filter(r=>r.bs.length||r.fam||r.sN||r.act.length)}
+let FQ="";
+function drawFam(){const el=$("t-fam");if(!el)return;const R=famRows().sort((a,b)=>(b.last||"").localeCompare(a.last||""));
+  const withS=R.filter(r=>r.sN),sN=withS.reduce((s,r)=>s+r.sN,0),sT=withS.reduce((s,r)=>s+r.sT,0);
+  const d7=new Date();d7.setDate(d7.getDate()-6);const k7=d7.toISOString().slice(0,10);
+  const s7=withS.reduce((s,r)=>s+r.sd.filter(d=>d>=k7).reduce((a,d)=>a+((r.u.ses[d]||{}).n||0),0),0),u7=withS.filter(r=>r.sd.some(d=>d>=k7)).length;
+  const q=FQ.trim().toLowerCase(),L=q?R.filter(r=>(r.em+" "+r.bs.map(b=>b.nm||"").join(" ")).toLowerCase().includes(q)):R;
+  const row=r=>`<tr data-fu="${esc(r.id)}"><td><b>${esc(r.bs.map(b=>(b.nm||"Sin nombre").trim()).join(", ")||(r.fam?"Cuidador/a":"Sin bebé"))}</b><small>${esc(r.em||"email: se verá cuando abra la app nueva")}</small></td>
+    <td class="r">${r.foods.length?r.foods.join(" · "):"—"}</td><td class="r">${r.sN||"—"}</td><td class="r">${r.sN?dur(r.sT/r.sN):"—"}</td><td class="r">${r.act.length||"—"}</td><td class="r">${r.last?fdS(r.last):"—"}</td></tr>`;
+  el.innerHTML=`<div class="heroes">
+      ${hero(R.length,"Cuentas",{sub:`${R.filter(r=>r.fam).length} de cuidadores invitados`,ill:ILL.baby})}
+      ${hero(u7,"Han entrado esta semana",{sub:`en los últimos 7 días · ${s7} ${s7===1?"sesión":"sesiones"}`})}
+      ${hero(withS.length?(sN/withS.length).toFixed(1):"—","Sesiones por cuenta",{sub:withS.length?`de media · ${sN} en total`:"se empieza a contar con la app nueva"})}
+      ${hero(sN?dur(sT/sN):"—","Tiempo por sesión",{sub:sN?`de media · ${dur(sT)} en total`:"se empieza a contar con la app nueva"})}
+    </div>
+    ${card("Familia a familia","Toca una fila para ver todo lo que sabemos de esa cuenta. Las sesiones y el tiempo se cuentan desde que abren la versión nueva de la app: una sesión nueva cada vez que vuelven después de 30 minutos fuera, y solo el tiempo con la app en pantalla.",
+      `<input class="fq" id="fq" type="search" placeholder="Buscar por nombre o email" value="${esc(FQ)}"><div class="ftw"><table class="ftbl"><thead><tr><th>Bebé y email</th><th class="r">Alimentos</th><th class="r">Sesiones</th><th class="r">Por sesión</th><th class="r">Días</th><th class="r">Última vez</th></tr></thead><tbody>${L.map(row).join("")||`<tr><td colspan="6" class="mute">Nada con esa búsqueda.</td></tr>`}</tbody></table></div>`)}`;
+  const f=$("fq");f.oninput=()=>{FQ=f.value;const p=f.selectionStart;drawFam();const g=$("fq");g.focus();try{g.setSelectionRange(p,p)}catch(e){}};
+  el.querySelectorAll("[data-fu]").forEach(t=>t.onclick=()=>openFam(t.dataset.fu))}
+function openFam(id){const r=famRows().find(x=>x.id===id);if(!r)return;const u=r.u,U=window.__FAMU||[];
+  const kv=(l,v)=>`<div><small>${l}</small><b>${v}</b></div>`;
+  const D=[];for(let k=27;k>=0;k--){const d=new Date();d.setDate(d.getDate()-k);D.push(d.toISOString().slice(0,10))}
+  const sv=D.map(d=>((u.ses||{})[d]||{}).n||0),mx=Math.max(1,...sv);
+  const owner=r.fam?U.find(x=>x.__id===r.fam):null;
+  const mem=Object.values(u.members||{}).map(m=>esc(m.em||"sin email")).join(", ");
+  const baby=b=>{const L=(b.log||[]).filter(l=>l&&l.f&&l.d&&!l.pre).sort((a,c)=>a.d<c.d?-1:1),F={};L.forEach(l=>{const o=F[l.f]=F[l.f]||{f:l.f,d:l.d,n:0,rx:false,r:""};o.n++;o.r=l.r||o.r;if(l.r==="react")o.rx=true});
+    const fl=Object.values(F),pr=b.prefs||{},al=Object.entries(b.al||{}).map(([g,v])=>`${esc(g)} (${esc(v)})`).join(", ");
+    const ml=b.ml||{},nm=new Set();Object.values(ml).forEach(dd=>Object.values(dd||{}).forEach(e=>{if(e&&e.d&&e.n)nm.add(e.n)}));Object.entries(b.ov||{}).forEach(([d,mm])=>Object.entries(mm||{}).forEach(([m,v])=>{if(v&&v.n&&((ml[d]||{})[m]||{}).d)nm.add(v.n)}));
+    return card(esc((b.nm||"Sin nombre").trim()),"",`<div class="pfg">
+      ${kv("Fecha de nacimiento",fdL(b.bd))}${kv("Edad",ageS(b.bd))}${kv("Prematuro",b.early?`Sí${b.ga?` (${b.ga} semanas)`:""}`:"No")}
+      ${kv("Empezó a comer",fdL(b.eat))}${kv("Forma de empezar",esc(APPL[b.app]||b.app||"—"))}${kv("Comidas al día",b.meals||"—")}
+      ${kv("Dieta",esc(DIETL[pr.diet]||pr.diet||"—"))}${kv("Objetivos",esc((pr.goals||[]).map(g=>GOALL[g]||g).join(", ")||"—"))}${kv("País",esc(b.pais||"—"))}
+      ${kv("Alimentos probados",`${fl.length} de 100`)}${kv("Diploma de 100",b.dip?"Sí":"Todavía no")}${kv("Comidas apuntadas",L.length)}
+      ${kv("Recetas probadas",b.rcN?`${nm.size} de ${b.rcN}`:nm.size||"—")}${kv("Primera comida apuntada",fdL(L[0]&&L[0].d))}${kv("Última comida apuntada",fdL(L.at(-1)&&L.at(-1).d))}
+      ${kv("Alergias marcadas",al||"Ninguna")}${kv("Reacciones apuntadas",(b.rx||[]).length||"Ninguna")}${kv("Perfil creado",fdL(b.cd))}
+    </div><h3 class="sech" style="margin-top:14px">Alimentos que ha probado</h3><p class="mute note">Por orden, con la fecha de la primera vez. En rojo, los que tienen una reacción apuntada.</p>
+    <div class="fch">${fl.map(o=>`<span class="${o.rx?"rx":""}" title="${o.n} ${o.n===1?"vez":"veces"} · ${esc(RLAB[o.r]||"")}">${esc(o.f)} <small class="mute">${fdS(o.d)}</small></span>`).join("")||'<span>Todavía ninguno</span>'}</div>`)};
+  const o=document.createElement("div");o.className="fdet";
+  o.innerHTML=`<div class="fdi"><button class="btn sm fx" aria-label="Cerrar">✕</button><h2 style="margin:0 0 14px">${esc(r.bs.map(b=>(b.nm||"Sin nombre").trim()).join(" y ")||"Cuenta sin bebé")}</h2>
+    ${card("Cuenta","",`<div class="pfg">${kv("Email",esc(r.em||"Se verá cuando abra la app nueva"))}${kv("Desde",esc(r.plat.map(x=>PLATL[x]||x).join(", ")||"—"))}${kv("Idioma",esc(LANGL[u.lang]||u.lang||"—"))}
+      ${kv("Alta",fdL(r.cd))}${kv("Última vez",fdL(r.last))}${kv("Días que ha entrado",r.act.length||"—")}
+      ${kv("Veces que ha entrado",r.sN||"—")}${kv("Tiempo por sesión",r.sN?dur(r.sT/r.sN):"—")}${kv("Tiempo total",r.sT?dur(r.sT):"—")}
+      ${owner?kv("Cuidador/a de",esc(owner.em||(owner.babies||[]).map(b=>b.nm).join(", ")||"otra cuenta")):""}${mem?kv("Ha invitado a",mem):""}</div>
+      <h3 class="sech" style="margin-top:14px">Sesiones · últimos 28 días</h3><div class="sesb">${sv.map((v,i)=>`<i style="height:${v?Math.max(6,v*100/mx):2}%"${tip(`${fdS(D[i])}: ${v} ${v===1?"sesión":"sesiones"}${((u.ses||{})[D[i]]||{}).s?` · ${dur(u.ses[D[i]].s)}`:""}`)}></i>`).join("")}</div>
+      <p class="mute note" style="margin-top:12px">Para el póster gratis a casa: la app todavía no pide la dirección. Cuando lleguen a 100 alimentos habrá que pedírsela (y su consentimiento) en la app o por email.</p>`)}
+    ${r.bs.map(baby).join("")}</div>`;
+  document.body.appendChild(o);document.body.style.overflow="hidden";const close=()=>{o.remove();document.body.style.overflow=""};o.querySelector(".fx").onclick=close;o.onclick=e=>{if(e.target===o)close()}}
 function openFood(name){const st=window.__ST;if(!st)return;const {started,N,LL}=st;
   const L=LL.filter(l=>l.f===name);if(!L.length)return;
   const babies=started.filter(i=>i.foods.has(name)),nB=babies.length;
