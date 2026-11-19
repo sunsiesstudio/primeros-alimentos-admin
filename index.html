@@ -209,7 +209,6 @@ svg.fd{width:100%;height:100%;fill:none;display:block}.fd .o{stroke:none}.fd .o[
     <button data-t="uso" class="on">Uso</button>
     <button data-t="bebes">Qué comen</button>
     <button data-t="fam">Familias</button>
-    <button data-t="redes">Ideas</button>
     <button data-t="blog">Blog</button>
     <button data-t="buzon">Buzón</button>
   </nav>
@@ -262,7 +261,7 @@ onAuthStateChanged(auth,async u=>{
   $("login").classList.toggle("hide",!!u);document.body.classList.toggle("out",!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
-  try{const snap=await getDocs(collection(db,"users"));loadIdeas();try{render(snap.docs.map(d=>{const x=d.data();x.__id=d.id;window.__UD=window.__UD||{};window.__UD[d.id]=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
+  try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>{const x=d.data();x.__id=d.id;window.__UD=window.__UD||{};window.__UD[d.id]=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
     {const ns=snap.docs.filter(d=>(d.data()||{}).noStats).length;$("upd").textContent=`Datos de ${snap.size-ns} cuentas${ns?` (${ns} ${ns===1?"no comparte":"no comparten"} estadísticas y no se ${ns===1?"cuenta":"cuentan"})`:""} · actualizado ${new Date().toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"})}`}}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");document.body.classList.add("out");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
