@@ -283,7 +283,9 @@ function pubItems(users,day){const out=[];
   return out}
 async function pubComedor(users){let el=$("pubst");if(!el&&$("upd")){el=document.createElement("p");el.id="pubst";el.style.cssText="font-size:.8rem;opacity:.75;margin:4px 0";$("upd").after(el)}
   try{const day=pubDay(new Date()),items=pubItems(users,day);
-    await setDoc(doc(db,"publico","comedor"),{day,items,n:items.length,at:serverTimestamp()});
+    const yd=new Date(day+"T12:00:00Z");yd.setUTCDate(yd.getUTCDate()-1);const yday=yd.toISOString().slice(0,10);
+    const ayer=users.filter(u=>u&&!u.noStats&&!u.fam).reduce((n,u)=>n+(Array.isArray(u.babies)?u.babies:[]).filter(b=>b&&b.ml&&b.ml[yday]&&Object.values(b.ml[yday]).some(v=>v&&v.d===true)).length,0);
+    await setDoc(doc(db,"publico","comedor"),{day,items,n:items.length,ayer,at:serverTimestamp()});
     if(el)el.textContent=`Comedor público actualizado: ${items.length} ${items.length===1?"comida":"comidas"} de hoy · ${new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"})}`}
   catch(e){console.error(e);if(el)el.textContent=/permission/i.test(e.message||"")?"Comedor público: falta la regla de Firestore para «publico».":"Comedor público: no se pudo actualizar ("+(e.message||e)+")"}}
 setInterval(async()=>{try{if(!auth.currentUser)return;const snap=await getDocs(collection(db,"users"));pubComedor(snap.docs.map(d=>({...d.data(),__id:d.id})))}catch(e){}},5*60*1000);
