@@ -279,7 +279,7 @@ function pubItems(users,day){const out=[];
       const ings=[...new Set((Array.isArray(o.i)&&o.i.length?o.i:ls.map(l=>l.f)).filter(x=>typeof x==="string"))].slice(0,6);if(!ings.length)return;
       const r=pubRate(v,ls);if(!r)return;
       const nm=(typeof o.n==="string"&&!o.a&&PUB_CAT.has(o.n.trim()))?o.n.trim():ings.length===1?ings[0]:[ings[0],...ings.slice(1).map(x=>x.toLowerCase())].slice(0,-1).join(", ")+" y "+ings.at(-1).toLowerCase();
-      out.push({k:pubH(day+"|"+(u.__id||"")+"|"+bi+"|"+m),ml:meal,m:mo,dish:nm,ings,tex:pubTex(b,mo,nm),r,nw:ings.some(f=>first[f]===day)?1:0})})}));
+      out.push({k:pubH(day+"|"+(u.__id||"")+"|"+bi+"|"+m),u:pubH(day+"|"+(u.__id||"")),b:pubH(day+"|"+(u.__id||"")+"|"+bi),ml:meal,m:mo,dish:nm,ings,tex:pubTex(b,mo,nm),r,nw:ings.some(f=>first[f]===day)?1:0})})}));
   return out}
 async function pubComedor(users){let el=$("pubst");if(!el&&$("upd")){el=document.createElement("p");el.id="pubst";el.style.cssText="font-size:.8rem;opacity:.75;margin:4px 0";$("upd").after(el)}
   try{const day=pubDay(new Date()),items=pubItems(users,day);
