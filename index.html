@@ -254,6 +254,42 @@ $("nav").onclick=e=>{const t=(e.target.closest("[data-t]")||{dataset:{}}).datase
   ["uso","bebes","fam","redes","blog","buzon"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==t));$("upd").classList.toggle("hide",t==="blog");
   try{localStorage.setItem("adm_tab",t)}catch(e){}};
 
+
+/* ---------- comedor público (anónimo) ----------
+   Publica en publico/comedor solo lo de hoy: servicio, edad en meses, plato, ingredientes, textura, cómo le sentó y si era alimento nuevo.
+   Sin nombres, sin ids, sin fechas de nacimiento. Respeta "no compartir estadísticas". Nombres de plato solo si son del catálogo de la app. */
+const PUB_CAT=new Set(["Aguacate aplastado con huevo duro", "Albóndigas de ternera con zanahoria", "Alubias blancas con verduras", "Boniato asado con huevo duro", "Cordero estofado con patatas", "Crema de brócoli y patata", "Crema de calabacín y patata", "Crema de calabaza con pollo", "Crema de calabaza y zanahoria", "Cuscús con verduras", "Ensaladilla suave de patata, zanahoria y huevo", "Gachas de avena con pera asada y canela", "Gachas de avena con plátano", "Gachas de avena con plátano aplastado", "Garbanzos con calabaza", "Guiso de pavo con patata y zanahoria", "Hamburguesas caseras con boniato asado", "Hamburguesas de lentejas", "Hummus con bastones de verdura", "Hummus suave de aguacate", "Lentejas estofadas con zanahoria", "Menestra de verduras", "Merluza al horno con patata y calabacín", "Merluza con patata y calabacín", "Mousse de aguacate y plátano", "Pasta con brócoli", "Pasta con verduras y pollo", "Pera asada con canela", "Pollo al horno con patatas y zanahorias", "Quinoa con verduras", "Salmón al horno con brócoli", "Salteado de tofu con verduras", "Sopa de pescado con verduras", "Tortilla de calabacín", "Tortilla de patata", "Tortilla francesa", "Tortitas de plátano y avena", "Tostada con aguacate", "Tostada con aguacate y huevo hervido aplastado", "Tostada con queso fresco", "Tostadas de aguacate con huevo duro", "Yogur con plátano aplastado", "Yogur con plátano y avena"]);
+const PUB_ML={"Desayuno":"Desayuno","Media mañana":"Desayuno","Comida":"Comida","Merienda":"Merienda","Cena":"Cena"};
+const pubDay=d=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Madrid"}).format(d);
+const pubH=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36)};
+function pubTex(b,mo,name){const n=(name||"").toLowerCase(),sty=((b.prefs||{}).sty)||"";
+  if(sty==="blw"||sty==="mix")return "Trozos";
+  if(sty==="pure"||/crema|puré|pure|papilla|gachas|porridge|sopa/.test(n))return "Puré";
+  if(/aplastad|chafad|mousse|hummus|yogur/.test(n))return "Grumos";
+  return mo<7?"Puré":mo<9?"Grumos":"Trozos"}
+function pubRate(v,ls){const all=[(v&&v.r)||"",...ls.map(l=>l.r)];if(all.includes("react"))return null;
+  const p=(v&&v.r)||ls.map(l=>l.r).find(x=>x&&x!=="pre")||"ok";return p==="love"?"love":p==="ok"?"like":"meh"}
+function pubItems(users,day){const out=[];
+  users.filter(u=>u&&!u.noStats&&!u.fam).forEach(u=>(Array.isArray(u.babies)?u.babies:[]).forEach((b,bi)=>{
+    if(!b||!b.bd)return;const ml=(b.ml||{})[day],ov=(b.ov||{})[day]||{};if(!ml||typeof ml!=="object")return;
+    const mo=Math.floor((new Date(day+"T12:00")-new Date(b.bd+"T12:00"))/2629800000);if(!(mo>=4&&mo<=36))return;
+    const log=(Array.isArray(b.log)?b.log:[]).filter(l=>l&&l.f&&l.d&&!l.pre),first={};log.forEach(l=>{if(!first[l.f]||l.d<first[l.f])first[l.f]=l.d});
+    Object.entries(ml).forEach(([m,v])=>{const meal=PUB_ML[m];if(!meal||!v||v.d!==true)return;
+      const ls=log.filter(l=>l.d===day&&l.ml===m),o=ov[m]||{};
+      const ings=[...new Set((Array.isArray(o.i)&&o.i.length?o.i:ls.map(l=>l.f)).filter(x=>typeof x==="string"))].slice(0,6);if(!ings.length)return;
+      const r=pubRate(v,ls);if(!r)return;
+      const nm=(typeof o.n==="string"&&!o.a&&PUB_CAT.has(o.n.trim()))?o.n.trim():ings.length===1?ings[0]:[ings[0],...ings.slice(1).map(x=>x.toLowerCase())].slice(0,-1).join(", ")+" y "+ings.at(-1).toLowerCase();
+      out.push({k:pubH(day+"|"+(u.__id||"")+"|"+bi+"|"+m),u:pubH(day+"|"+(u.__id||"")),b:pubH(day+"|"+(u.__id||"")+"|"+bi),ml:meal,m:mo,dish:nm,ings,tex:pubTex(b,mo,nm),r,nw:ings.some(f=>first[f]===day)?1:0})})}));
+  return out}
+async function pubComedor(users){let el=$("pubst");if(!el&&$("upd")){el=document.createElement("p");el.id="pubst";el.style.cssText="font-size:.8rem;opacity:.75;margin:4px 0";$("upd").after(el)}
+  try{const day=pubDay(new Date()),items=pubItems(users,day);
+    const yd=new Date(day+"T12:00:00Z");yd.setUTCDate(yd.getUTCDate()-1);const yday=yd.toISOString().slice(0,10);
+    const ayer=users.filter(u=>u&&!u.noStats&&!u.fam).reduce((n,u)=>n+(Array.isArray(u.babies)?u.babies:[]).filter(b=>b&&b.ml&&b.ml[yday]&&Object.values(b.ml[yday]).some(v=>v&&v.d===true)).length,0);
+    await setDoc(doc(db,"publico","comedor"),{day,items,n:items.length,ayer,at:serverTimestamp()});
+    if(el)el.textContent=`Comedor público actualizado: ${items.length} ${items.length===1?"comida":"comidas"} de hoy · ${new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"})}`}
+  catch(e){console.error(e);if(el)el.textContent=/permission/i.test(e.message||"")?"Comedor público: falta la regla de Firestore para «publico».":"Comedor público: no se pudo actualizar ("+(e.message||e)+")"}}
+setInterval(async()=>{try{if(!auth.currentUser)return;const snap=await getDocs(collection(db,"users"));pubComedor(snap.docs.map(d=>({...d.data(),__id:d.id})))}catch(e){}},5*60*1000);
+
 /* ---------- entrar ---------- */
 $("in").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>$("err").textContent="No se ha podido entrar: "+e.code);
 $("out").onclick=()=>signOut(auth);
@@ -261,7 +297,7 @@ onAuthStateChanged(auth,async u=>{
   $("login").classList.toggle("hide",!!u);document.body.classList.toggle("out",!u);$("app").classList.toggle("hide",!u);$("nav").classList.toggle("hide",!u);$("out").classList.toggle("hide",!u);$("sp").classList.toggle("hide",!!u);
   if(!u)return;
   $("upd").textContent="Cargando datos…";
-  try{const snap=await getDocs(collection(db,"users"));try{render(snap.docs.map(d=>{const x=d.data();x.__id=d.id;window.__UD=window.__UD||{};window.__UD[d.id]=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
+  try{const snap=await getDocs(collection(db,"users"));pubComedor(snap.docs.map(d=>({...d.data(),__id:d.id})));try{render(snap.docs.map(d=>{const x=d.data();x.__id=d.id;window.__UD=window.__UD||{};window.__UD[d.id]=d.data();return x.fam?{...x,babies:[]}:x}))}catch(re){console.error(re);$("t-uso").innerHTML=`<div class="card">Hay datos con un formato que no esperaba: ${esc(re.message)}</div>`}
     {const ns=snap.docs.filter(d=>(d.data()||{}).noStats).length;$("upd").textContent=`Datos de ${snap.size-ns} cuentas${ns?` (${ns} ${ns===1?"no comparte":"no comparten"} estadísticas y no se ${ns===1?"cuenta":"cuentan"})`:""} · actualizado ${new Date().toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"})}`}}
   catch(e){$("upd").textContent="";$("app").classList.add("hide");$("nav").classList.add("hide");$("login").classList.remove("hide");document.body.classList.add("out");
     $("err").innerHTML=e.code==="permission-denied"?`La cuenta <b>${esc(u.email)}</b> no tiene acceso a los datos. Revisa las reglas de Firestore.`:"Error al leer los datos: "+esc(e.code||e.message);}
